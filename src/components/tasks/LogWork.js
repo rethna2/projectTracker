@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { Typography, Button, withStyles } from '@material-ui/core';
+import { connect } from 'react-redux';
 import { DatePicker } from 'material-ui-pickers';
+
+import { Typography, Button, withStyles } from '@material-ui/core';
 import cx from 'classnames';
+import { Field, reduxForm } from 'redux-form';
+import Joi from 'joi';
 
 import { TextField } from '../../forms';
+import createValidator from '../../logic/joiReduxForm';
+import { logTime } from '../../routines';
 
 const styles = () => ({
   wrapper: {
@@ -26,13 +32,34 @@ const styles = () => ({
   }
 });
 
+const schema = {
+  timeSpent: Joi.number(),
+  pointsDone: Joi.number(),
+  //date: Joi.date(),
+  comments: Joi.string()
+    .min(6)
+    .max(3000)
+};
+
 class LogWork extends Component {
   state = {
-    date: new Date()
+    selectedDate: new Date()
   };
 
-  handleDateChange = date => {
-    this.setState({ selectedDate: date });
+  handleDateChange = selectedDate => {
+    this.setState({ selectedDate });
+  };
+
+  timeFormSubmit = values => {
+    const data = {
+      timeSpent: Number(values.timeSpent),
+      pointsDone: Number(values.pointsDone),
+      date: this.state.selectedDate,
+      comments: values.comments
+    };
+    const projectId = this.props.projectId;
+    const taskId = this.props.taskId;
+    this.props.logTime({ projectId, taskId, data });
   };
 
   render() {
@@ -44,18 +71,30 @@ class LogWork extends Component {
         <div style={{ margin: 50 }}> Select a Task to see more details </div>
       );
     }
-    const { classes } = this.props;
+    const { handleSubmit, classes } = this.props;
     return (
-      <div className={classes.wrapper}>
+      <form
+        className={classes.wrapper}
+        onSubmit={handleSubmit(this.timeFormSubmit)}
+      >
         <Typography variant="h5">Log Work</Typography>
         <div className={cx(classes.flex, classes.marginTop15)}>
-          <TextField label="Time Spent" type="number" width="100" />
-          <TextField
+          <Field
+            component={TextField}
+            name="timeSpent"
+            label="Time Spent"
+            type="number"
+            width="100"
+          />
+          <Field
+            component={TextField}
+            name="pointsDone"
             label="Points Done"
             type="number"
             className={classes.hspace}
           />
           <DatePicker
+            name="date"
             format="MMM DD, YY"
             animateYearScrolling={false}
             value={this.state.selectedDate}
@@ -63,16 +102,36 @@ class LogWork extends Component {
           />
         </div>
         <div>
-          <TextField label="Comments" multiline rows={5} fullWidth />
+          <Field
+            component={TextField}
+            name="comments"
+            label="Comments"
+            multiline
+            rows={5}
+            fullWidth
+          />
         </div>
         <div className={cx(classes.marginTop15, classes.right)}>
-          <Button variant="contained" color="primary">
+          <Button
+            submit
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit(this.timeFormSubmit)}
+          >
             Log Work
           </Button>
         </div>
-      </div>
+      </form>
     );
   }
 }
 
-export default withStyles(styles)(LogWork);
+LogWork = reduxForm({
+  form: 'time',
+  validate: createValidator(schema)
+})(LogWork);
+
+export default connect(
+  state => ({}),
+  { logTime }
+)(withStyles(styles)(LogWork));

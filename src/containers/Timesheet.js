@@ -2,12 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import GenerateTimesheetBar from '../components/reports/GenerateTimesheetBar';
-import TimeSheetList from '../components/reports/TimeSheetList';
-import TimeSheetApprovalList from '../components/reports/TimeSheetApprovalList';
-import TimeSheetPopup from '../components/reports/TimeSheetPopup';
+import GenerateTimesheetBar from '../components/timesheet/GenerateTimesheetBar';
+import TimeSheetList from '../components/timesheet/TimesheetList';
+import TimeSheetApprovalList from '../components/timesheet/TimesheetReviewList';
+import TimeSheetPopup from '../components/timesheet/TimesheetPopup';
 
-import { fetchReports } from '../routines';
+import {
+  fetchMyTimesheets,
+  fetchMyReviewTimesheets,
+  generateTimesheet,
+  editTimesheet,
+  deleteTimesheet,
+  reviewTimesheet
+} from '../routines';
 import Loader from '../components/Loader';
 
 import {
@@ -44,7 +51,7 @@ class Reports extends Component {
     isReviewer: null
   };
   componentDidMount() {
-    this.props.fetchReports();
+    //this.props.fetchMyTimesheets();
   }
 
   onOpenBar = () => {
@@ -60,15 +67,13 @@ class Reports extends Component {
   };
 
   render() {
-    if (this.props.reports.loading) {
+    if (this.props.loading) {
       return <Loader />;
     }
-    const { data } = this.props.reports;
     const { classes } = this.props;
 
     return (
       <div className={classes.wrapper}>
-        <h3 />
         <Button onClick={this.onOpenBar} color="primary">
           Generate TimeSheet
         </Button>
@@ -116,7 +121,14 @@ class Reports extends Component {
 
 export default connect(
   state => ({
-    reports: state.reports
+    loading: state.timesheet.loading && state.timesheet.loadingReview
   }),
-  { fetchReports }
+  {
+    fetchMyTimesheets,
+    fetchMyReviewTimesheets,
+    generateTimesheet,
+    editTimesheet,
+    deleteTimesheet,
+    reviewTimesheet
+  }
 )(withStyles(styles)(Reports));

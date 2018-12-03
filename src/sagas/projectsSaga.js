@@ -2,18 +2,19 @@ import { takeEvery, delay } from 'redux-saga';
 import { call, put, fork } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import api from '../api';
+import * as api from '../api';
 import {
   fetchProjects,
   addProject,
   editProject,
+  deleteProject,
   fetchProjectData
 } from '../routines';
 
 function* fetchProjectsSaga() {
   try {
     yield put(fetchProjects.request());
-    const response = yield call(api.fetchProjects);
+    const response = yield api.fetchProjects();
     yield call(delay, 2000);
     yield put(fetchProjects.success(response));
   } catch (error) {
@@ -36,10 +37,10 @@ function* fetchProjectDataSaga({ payload }) {
   }
 }
 
-function* addProjectSaga(data) {
+function* addProjectSaga({ payload }) {
   try {
     yield put(addProject.request());
-    const response = yield call(api.addProject.bind(null, data));
+    const response = yield api.addProject(payload);
     yield put(addProject.success(response));
     yield put(fetchProjects.trigger());
     yield put(push(`/project`));
@@ -50,12 +51,10 @@ function* addProjectSaga(data) {
   }
 }
 
-function* editProjectSaga(data) {
+function* editProjectSaga({ payload }) {
   try {
     yield put(editProject.request());
-    const response = yield call(
-      api.editProject.bind(null, data.payload.id, data.payload.data)
-    );
+    const response = yield api.editProject(payload.id, payload.data);
     yield put(editProject.success(response));
     yield put(fetchProjects.trigger());
     yield put(push(`/project`));
@@ -66,9 +65,24 @@ function* editProjectSaga(data) {
   }
 }
 
+function* deleteProjectSaga({ payload }) {
+  try {
+    yield put(deleteProject.request());
+    const response = yield api.deleteProject(payload.id);
+    yield put(deleteProject.success(response));
+    yield put(fetchProjects.trigger());
+    yield put(push(`/project`));
+  } catch (error) {
+    yield put(deleteProject.failure(error.message));
+  } finally {
+    yield put(deleteProject.fulfill());
+  }
+}
+
 export default [
   fork(takeEvery, fetchProjects.TRIGGER, fetchProjectsSaga),
   fork(takeEvery, fetchProjectData.TRIGGER, fetchProjectDataSaga),
   fork(takeEvery, addProject.TRIGGER, addProjectSaga),
-  fork(takeEvery, editProject.TRIGGER, editProjectSaga)
+  fork(takeEvery, editProject.TRIGGER, editProjectSaga),
+  fork(takeEvery, deleteProject.TRIGGER, deleteProjectSaga)
 ];

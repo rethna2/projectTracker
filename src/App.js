@@ -8,7 +8,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Projects from './containers/Projects';
 import Tasks from './containers/Tasks';
-import Reports from './containers/Reports';
+import Timesheet from './containers/Timesheet';
 import HomePage from './containers/HomePage';
 import AppBar from './components/AppBar';
 import { userInfo } from './routines';
@@ -67,7 +67,7 @@ class App extends Component {
                 <Route exact path="/" component={Projects} />
                 <Route path="/project/:projectId/task" component={Tasks} />
                 <Route path="/project" component={Projects} />
-                <Route path="/report" component={Reports} />
+                <Route path="/timesheet" component={Timesheet} />
                 <Route
                   path="/"
                   render={() => (

@@ -17,7 +17,7 @@ import createValidator from '../../logic/joiReduxForm';
 import { TextField } from '../../forms';
 import { validate } from '../../logic/project';
 import ManageTeam from './ManageTeam';
-import { addProject, editProject } from '../../routines';
+import { addProject, editProject, deleteProject } from '../../routines';
 import { Grid } from '@material-ui/core';
 
 const schema = {
@@ -49,6 +49,9 @@ const styles = theme => {
     },
     spacetop: {
       marginTop: 20
+    },
+    spaceLeft: {
+      marginLeft: 20
     }
   };
 };
@@ -57,7 +60,8 @@ class ProjectForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      people: (props.initialValues && props.initialValues.team) || []
+      people: (props.initialValues && props.initialValues.team) || [],
+      showConfirmDelete: false
     };
   }
 
@@ -70,6 +74,12 @@ class ProjectForm extends Component {
     const { people } = this.state;
     this.setState({
       people: [...people.slice(0, index), ...people.slice(index + 1)]
+    });
+  };
+
+  deleteProject = () => {
+    this.props.deleteProject({
+      id: this.props.match.params.projectId
     });
   };
 
@@ -91,7 +101,7 @@ class ProjectForm extends Component {
 
   render() {
     const { handleSubmit, pristine, reset, submitting, classes } = this.props;
-    console.log('ProjectForm render');
+    const projectId = this.props.match.params.projectId.toLowerCase();
     return (
       <Dialog
         open={true}
@@ -103,7 +113,7 @@ class ProjectForm extends Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title" className={classes.title}>
-          New Project
+          {`${projectId === 'new' ? 'New' : 'Edit'} Project`}
         </DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(this.projectFormSubmit.bind(this))}>
@@ -144,6 +154,37 @@ class ProjectForm extends Component {
           </form>
         </DialogContent>
         <DialogActions>
+          {this.state.showConfirmDelete ? (
+            <React.Fragment>
+              <span className={classes.spaceLeft}> Are you sure? </span>
+              <Button
+                className={classes.spaceLeft}
+                onClick={this.deleteProject}
+                color="error"
+                variant="contained"
+              >
+                Delete
+              </Button>
+              <Button
+                className={classes.spaceLeft}
+                onClick={() => this.setState({ showConfirmDelete: false })}
+                color="error"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+            </React.Fragment>
+          ) : (
+            <Button
+              onClick={() => this.setState({ showConfirmDelete: true })}
+              color="error"
+              variant="contained"
+            >
+              Delete Project
+            </Button>
+          )}
+
+          <div style={{ flexGrow: 1 }} />
           <Button onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
@@ -151,7 +192,7 @@ class ProjectForm extends Component {
             submit
             color="primary"
             variant="contained"
-            onClick={handleSubmit(this.projectFormSubmit.bind(this))}
+            onClick={handleSubmit(this.projectFormSubmit)}
           >
             Save
           </Button>
@@ -175,6 +216,6 @@ export default withRouter(
         project => project._id === props.match.params.projectId
       )
     }),
-    { addProject, editProject }
+    { addProject, editProject, deleteProject }
   )(withStyles(styles)(withMobileDialog()(ProjectForm)))
 );

@@ -48,7 +48,7 @@ class TaskTable extends Component {
                 >
                   <TableCell>
                     <Link
-                      to={`/project/${item.projectId}/task/${item._id}`}
+                      to={`/project/${this.props.projectId}/task/${item._id}`}
                       onClick={() => this.props.handleOpen()}
                     >
                       <Create />

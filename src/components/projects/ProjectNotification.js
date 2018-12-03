@@ -26,9 +26,9 @@ const comp = item => (
         fontSize: '0.7em'
       }}
     >
-      {item.type} :{' '}
-    </span>
-    {item.data.name}
+      {item.type} :
+    </span>{' '}
+    :<span style={{ padding: 5 }}>{item.data.name}</span>
   </span>
 );
 
@@ -57,7 +57,9 @@ class ProjectNotification extends Component {
     const { data } = this.props;
     return (
       <div style={{ borderLeft: '1px solid green' }}>
-        <Typography variant="h5">Recent Activities</Typography>
+        <Typography variant="h5" style={{ paddingLeft: 20 }}>
+          Recent Activities
+        </Typography>
         <List>
           {data.map(item => (
             <ListItem>

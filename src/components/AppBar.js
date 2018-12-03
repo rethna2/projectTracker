@@ -124,7 +124,7 @@ class MyAppBar extends Component {
     if (tabPos === 0) {
       this.props.history.push('/project');
     } else {
-      this.props.history.push('/report');
+      this.props.history.push('/timesheet');
     }
   };
 
@@ -149,7 +149,7 @@ class MyAppBar extends Component {
               style={{ alignSelf: 'flex-end' }}
             >
               <Tab label="Projects" />
-              <Tab label="Reports" />
+              <Tab label="Timesheet" />
             </Tabs>
             <IconButton color="inherit">
               <Badge badgeContent={17} color="secondary">

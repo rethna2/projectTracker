@@ -1,5 +1,5 @@
 {
-  "name": "Project Tracker",
+  "name": "project-tracker",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
@@ -18,10 +18,8 @@
     "react": "^16.6.3",
     "react-addons-shallow-compare": "^15.6.2",
     "react-bootstrap": "^0.31.5",
-    "react-dates": "^16.2.0",
     "react-dom": "^16.6.3",
     "react-redux": "^5.1.1",
-    "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.0.17",
     "redux": "^3.7.2",

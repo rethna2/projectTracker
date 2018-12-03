@@ -40,20 +40,19 @@ class Tasks extends Component {
     }
     const { index, selectedTask } = this.state;
     const { data } = this.props.tasks;
+    const projectId = this.props.match.params.projectId;
     return (
       <div className="page" style={{ margin: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
             <div className="headingTop" style={{ display: 'flex' }}>
               <h3 style={{ flexGrow: 1 }}>Tasks</h3>
-              <Link
-                to={
-                  '/project/' +
-                  `${this.props.match.params.projectId}` +
-                  '/task/new'
-                }
-              >
-                <Button color="primary" onClick={this.handleOpen}>
+              <Link to={`/project/${projectId}/task/new`}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={this.handleOpen}
+                >
                   Create New Task
                 </Button>
               </Link>
@@ -76,6 +75,7 @@ class Tasks extends Component {
                   selectedTask={selectedTask}
                   onSelect={selectedTask => this.setState({ selectedTask })}
                   handleOpen={this.handleOpen}
+                  projectId={projectId}
                 />
               </div>
               {/*
@@ -86,7 +86,7 @@ class Tasks extends Component {
             </div>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <LogWork taskId={selectedTask} />
+            <LogWork taskId={selectedTask} projectId={projectId} />
           </Grid>
         </Grid>
       </div>

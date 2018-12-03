@@ -58,10 +58,10 @@ class ProjectTable extends Component {
                       </Link>
                     </TableCell>
                     <TableCell>{item.name}</TableCell>
-                    <TableCell>{0}</TableCell>
+                    <TableCell>{item.noOfTasks}</TableCell>
                     <TableCell>{item.totalPoints}</TableCell>
                     <TableCell>{item.pointsDone}</TableCell>
-                    <TableCell>0</TableCell>
+                    <TableCell>{item.timeSpent}</TableCell>
                     <TableCell>
                       <Link to={`/project/${item._id}/task`}>Tasks</Link>
                     </TableCell>

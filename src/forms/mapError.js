@@ -11,13 +11,13 @@ const mapError = ({
           ...input,
           error: Boolean(error || warning)
         }
-      : { ...input, ...props }
+      : { ...input, ...props };
 
   if (touched && hasHelperText && (error || warning)) {
-    errorProps.helperText = error || warning
+    errorProps.helperText = error || warning;
   }
 
-  return errorProps
-}
+  return errorProps;
+};
 
-export default mapError
+export default mapError;

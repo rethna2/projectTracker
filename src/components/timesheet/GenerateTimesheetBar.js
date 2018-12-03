@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { withStyles } from '@material-ui/core/styles';
 import {
   MenuItem,
@@ -11,6 +13,8 @@ import { Close } from '@material-ui/icons';
 
 import WeekPicker from './WeekPicker';
 import DatePicker from './DatePicker';
+
+import { fetchProjectTime } from '../../routines';
 
 const styles = theme => ({
   flex: {
@@ -42,8 +46,14 @@ class GenerateTimesheetBar extends React.Component {
   };
 
   onGenerate = () => {
-    
-  }
+    this.props.fetchProjectTime({
+      projectId: this.state.projectId,
+      from: new Date(this.state.date[0]).getTime(),
+      to: new Date(this.state.date[1]).getTime(),
+      user: this.props.emailId
+    });
+  };
+
   onDateChange = (index, newDate) => {
     const date = [...this.state.date];
     date[index] = newDate;
@@ -67,8 +77,9 @@ class GenerateTimesheetBar extends React.Component {
               }}
               value={this.state.projectId}
             >
-              <MenuItem value="proj1">Project 1</MenuItem>
-              <MenuItem value="proj2">Project 2</MenuItem>
+              {this.props.projects.map(item => (
+                <MenuItem value={item._id}>{item.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>
@@ -117,4 +128,10 @@ class GenerateTimesheetBar extends React.Component {
   }
 }
 
-export default withStyles(styles)(GenerateTimesheetBar);
+export default connect(
+  state => ({
+    projects: state.projects.data,
+    emailId: state.user.data.emailId
+  }),
+  { fetchProjectTime }
+)(withStyles(styles)(GenerateTimesheetBar));

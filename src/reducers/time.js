@@ -1,29 +1,30 @@
-import { fetchReports } from "../routines";
+import { fetchTasks, addTask, editTask, logTime } from '../routines';
 
 const initialState = {
   data: [],
   loading: false,
+  updating: false,
   error: null
 };
 
-export default function reportsReducer(state = initialState, action) {
+export default function timeReducer(state = initialState, action) {
   switch (action.type) {
-    case fetchReports.TRIGGER:
+    case logTime.TRIGGER:
       return {
         ...state,
         loading: true
       };
-    case fetchReports.SUCCESS:
+    case logTime.SUCCESS:
       return {
         ...state,
         data: action.payload
       };
-    case fetchReports.FAILURE:
+    case logTime.FAILURE:
       return {
         ...state,
         error: action.payload
       };
-    case fetchReports.FULFILL:
+    case logTime.FULFILL:
       return {
         ...state,
         loading: false

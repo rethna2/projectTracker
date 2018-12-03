@@ -19,7 +19,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Joi from 'joi';
 import createValidator from '../../logic/joiReduxForm';
 import { validate } from '../../logic/task';
-import { addTask, editTask, fetchUser } from '../../routines';
+import { addTask, editTask, deleteTask, fetchUser } from '../../routines';
 
 const schema = {
   name: Joi.string()
@@ -50,15 +50,28 @@ const styles = theme => ({
   },
   spacetop: {
     marginTop: 20
+  },
+  spaceLeft: {
+    marginLeft: 20
   }
 });
 
 class TaskForm extends Component {
+  state = {
+    showConfirmDelete: false
+  };
   componentDidMount() {
-    this.props.fetchUser();
+    //this.props.fetchUser();
   }
+
+  deleteTask = () => {
+    this.props.deleteTask({
+      id: this.props.match.params.taskId,
+      projectId: this.props.match.params.projectId
+    });
+  };
+
   taskFormSubmit = values => {
-    console.dir(values);
     const data = {
       name: values.name,
       description: values.description,
@@ -76,7 +89,9 @@ class TaskForm extends Component {
   };
 
   render() {
-    const { handleSubmit, pristine, reset, submitting, classes } = this.props;
+    const { handleSubmit, classes } = this.props;
+    const taskId = this.props.match.params.taskId.toLowerCase();
+    console.log('team', this.props.team);
     return (
       <Dialog
         open={true}
@@ -88,10 +103,10 @@ class TaskForm extends Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title" className={classes.title}>
-          New Task
+          {`${taskId === 'new' ? 'New' : 'Edit'} Task`}
         </DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmit(this.taskFormSubmit.bind(this))}>
+          <form onSubmit={handleSubmit(this.taskFormSubmit)}>
             <Grid container spacing={24} className={classes.wrapper}>
               <Grid item xs={12} sm={6}>
                 <div className={classes.spacetop}>
@@ -115,18 +130,9 @@ class TaskForm extends Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <div className={classes.spacetop}>
-                  <FormControl>
-                    <InputLabel htmlFor="age-simple">Status</InputLabel>
-                    <Field
-                      name="status"
-                      component={Select}
-                      label="Tasks Status"
-                      inputProps={{
-                        name: 'status',
-                        width: 200
-                      }}
-                      width="200"
-                    >
+                  <FormControl style={{ width: 200 }}>
+                    <InputLabel htmlFor="status">Status</InputLabel>
+                    <Field name="status" component={Select}>
                       <MenuItem value="backlog">Backlog</MenuItem>
                       <MenuItem value="new">New</MenuItem>
                       <MenuItem value="wip">WIP</MenuItem>
@@ -143,16 +149,14 @@ class TaskForm extends Component {
                   />
                 </div>
                 <div className={classes.spacetop}>
-                  <Field
-                    name="assignedTo"
-                    component={Select}
-                    label="AssignedTo User"
-                  >
-                    <option />
-                    {this.props.userData.map(item => (
-                      <option>{item.emailId}</option>
-                    ))}
-                  </Field>
+                  <FormControl style={{ width: 200 }}>
+                    <InputLabel htmlFor="assignedTo">Assigned To</InputLabel>
+                    <Field name="assignedTo" component={Select}>
+                      {this.props.team.map(item => (
+                        <MenuItem value={item}>{item}</MenuItem>
+                      ))}
+                    </Field>
+                  </FormControl>
                 </div>
               </Grid>
             </Grid>
@@ -162,15 +166,44 @@ class TaskForm extends Component {
           </form>
         </DialogContent>
         <DialogActions>
+          {this.state.showConfirmDelete ? (
+            <React.Fragment>
+              <span className={classes.spaceLeft}> Are you sure? </span>
+              <Button
+                className={classes.spaceLeft}
+                onClick={this.deleteTask}
+                color="error"
+                variant="contained"
+              >
+                Delete
+              </Button>
+              <Button
+                className={classes.spaceLeft}
+                onClick={() => this.setState({ showConfirmDelete: false })}
+                color="error"
+                variant="contained"
+              >
+                Cancel
+              </Button>
+            </React.Fragment>
+          ) : (
+            <Button
+              onClick={() => this.setState({ showConfirmDelete: true })}
+              color="error"
+              variant="contained"
+            >
+              Delete Task
+            </Button>
+          )}
+          <div style={{ flexGrow: 1 }} />
           <Button onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
           <Button
             submit
             color="primary"
-            autoFocus
             variant="contained"
-            onClick={handleSubmit(this.taskFormSubmit.bind(this))}
+            onClick={handleSubmit(this.taskFormSubmit)}
           >
             Save
           </Button>
@@ -187,16 +220,25 @@ TaskForm = reduxForm({
 
 export default withRouter(
   connect(
-    (state, props) => ({
-      userData: state.user.userData,
-      isUpdating: state.tasks.updating,
-      initialValues: state.tasks.data.find(
-        task => task._id === props.match.params.taskId
-      )
-      /*team: state.projects.data.find(
+    (state, props) => {
+      const project = state.projects.data.find(
         project => project._id === props.match.params.projectId
-      ).team*/
-    }),
-    { addTask, editTask, fetchUser }
+      );
+      let team;
+      if (project) {
+        team = project.team;
+      } else {
+        team = [];
+      }
+      return {
+        userData: state.user.userData,
+        isUpdating: state.tasks.updating,
+        initialValues: state.tasks.data.find(
+          task => task._id === props.match.params.taskId
+        ),
+        team
+      };
+    },
+    { addTask, editTask, deleteTask, fetchUser }
   )(withStyles(styles)(TaskForm))
 );

@@ -4,15 +4,17 @@ import { reducer as formReducer } from 'redux-form';
 
 import projects from './project';
 import tasks from './task';
+import time from './time';
 import user from './user';
-import reports from './report';
+import timesheet from './timesheet';
 
 export default history =>
   combineReducers({
     router: connectRouter(history),
+    user,
     projects,
     tasks,
-    user,
-    reports,
+    time,
+    timesheet,
     form: formReducer
   });

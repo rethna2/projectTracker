@@ -45,7 +45,11 @@ class Projects extends Component {
             <div className="headingTop" style={{ display: 'flex' }}>
               <h3 style={{ flexGrow: 1 }}>My Projects</h3>
               <Link to="/project/new">
-                <Button color="primary" onClick={this.handleOpen}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={this.handleOpen}
+                >
                   Create New Project
                 </Button>
               </Link>

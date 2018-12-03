@@ -2,8 +2,8 @@ import { takeEvery, delay } from 'redux-saga';
 import { call, put, fork } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { fetchTasks, addTask, editTask, updateTimelog } from '../routines';
-import api from '../api';
+import { fetchTasks, addTask, editTask, deleteTask } from '../routines';
+import * as api from '../api';
 
 function* fetchTasksSaga({ payload }) {
   try {
@@ -49,15 +49,17 @@ function* editTaskSaga({ payload }) {
   }
 }
 
-function* updateTimelogSaga({ payload }) {
+function* deleteTaskSaga({ payload }) {
   try {
-    yield put(updateTimelog.request());
-    const response = yield api.updateTimelog(payload.taskname, payload.logData);
-    yield put(updateTimelog.success(response));
+    yield put(deleteTask.request());
+    const response = yield api.deleteTask(payload.projectId, payload.id);
+    yield put(deleteTask.success(response));
+    yield put(fetchTasks.trigger(payload.projectId));
+    yield put(push(`/project/${payload.projectId}/task`));
   } catch (error) {
-    yield put(updateTimelog.failure(error.message));
+    yield put(deleteTask.failure(error.message));
   } finally {
-    yield put(updateTimelog.fulfill());
+    yield put(deleteTask.fulfill());
   }
 }
 
@@ -65,5 +67,5 @@ export default [
   fork(takeEvery, fetchTasks.TRIGGER, fetchTasksSaga),
   fork(takeEvery, addTask.TRIGGER, addTaskSaga),
   fork(takeEvery, editTask.TRIGGER, editTaskSaga),
-  fork(takeEvery, updateTimelog.TRIGGER, updateTimelogSaga)
+  fork(takeEvery, deleteTask.TRIGGER, deleteTaskSaga)
 ];

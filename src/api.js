@@ -14,97 +14,96 @@ axios.interceptors.request.use(
   error => Promise.reject(error)
 );
 
-const register = data =>
+// user -----------------------------------------------------------------------
+
+export const register = data =>
   axios
-    .post(`/api/user/register`, data.payload)
+    .post(`/api/user/register`, data)
     .then(res => ({ ...res.data, token: res.headers['x-auth'] }));
 
-const login = data =>
+export const login = data =>
   axios
-    .post(`/api/user/login`, data.payload)
+    .post(`/api/user/login`, data)
     .then(res => ({ ...res.data, token: res.headers['x-auth'] }));
 
-const forgotPassword = data =>
-  axios.post(`/api/user/forgotPassword`, data.payload).then(res => res.data);
+export const forgotPassword = data =>
+  axios.post(`/api/user/forgotPassword`, data).then(res => res.data);
 
-const resetPassword = ({ token, emailId, data }) =>
+export const resetPassword = ({ token, emailId, data }) =>
   axios
     .post(`/api/user/resetPassword/${emailId}/${token}`, data)
     .then(res => ({ ...res.data, token: res.headers['x-auth'] }));
 
-const userInfo = () => axios.get(`/api/user`).then(res => res.data);
+export const userInfo = () => axios.get(`/api/user`).then(res => res.data);
 
-const fetchUser = () => axios.get(`/api/users`).then(res => res.data);
+export const fetchUser = () => axios.get(`/api/users`).then(res => res.data);
 
-const logout = () => axios.get(`/api/user/logout`).then(res => res.data);
+export const logout = () => axios.get(`/api/user/logout`).then(res => res.data);
 
-const fetchProjects = () => axios.get(`/api/project`).then(res => res.data);
+// project -----------------------------------------------------------------------
 
-const addProject = data =>
-  axios
-    .post(`/api/project`, data.payload)
-    .then(res => res.data)
-    .catch(err => err);
+export const fetchProjects = () =>
+  axios.get(`/api/project`).then(res => res.data);
 
-const editProject = (projectId, data) =>
+export const addProject = data =>
+  axios.post(`/api/project`, data).then(res => res.data);
+
+export const editProject = (projectId, data) =>
   axios.post(`/api/project/${projectId}`, data).then(res => res.data);
 
-const fetchTasks = projectId =>
+export const deleteProject = projectId =>
+  axios.delete(`/api/project/${projectId}`).then(res => res.data);
+
+export const fetchProjectData = projectId =>
+  axios.get(`/api/recentactivity/${projectId}`).then(res => res.data);
+
+// task  -----------------------------------------------------------------------
+
+export const fetchTasks = projectId =>
   axios.get(`/api/task/${projectId}`).then(res => res.data);
 
-const addTask = (projectId, data) =>
+export const addTask = (projectId, data) =>
   axios.post(`/api/task/${projectId}`, data).then(res => res.data);
 
-const editTask = (projectId, taskId, data) =>
+export const editTask = (projectId, taskId, data) =>
   axios.post(`/api/task/${projectId}/${taskId}`, data).then(res => res.data);
 
-const updateTimelog = (taskname, data) =>
-  axios.post(`/api/task/${taskname}`, data).then(res => res.data);
+export const deleteTask = (projectId, taskId) =>
+  axios.delete(`/api/task/${projectId}/${taskId}`).then(res => res.data);
 
-const fetchPeople = () => axios.get(`/api/people`).then(res => res.data);
+// time -----------------------------------------------------------------------
 
-const addPeople = data =>
-  axios.post(`/api/people`, data.payload).then(res => res.data);
+export const logTime = (projectId, taskId, data) =>
+  axios.post(`/api/time/${projectId}/${taskId}`, data).then(res => res.data);
 
-const editPeople = (peopleId, data) =>
-  axios.post(`/api/people/${peopleId}`, data).then(res => res.data);
-
-const fetchProjectData = projectId =>
-  axios.get(`/api/recentActivity/${projectId}`).then(res => res.data);
-
-const fetchTimesheets = () => axios.get(`/api/timesheet`).then(res => res.data);
-
-const addTimesheet = data =>
-  axios.post(`/api/timesheet`, data.payload).then(res => res.data);
-
-const editTimesheet = (timesheetIndex, timesheetId, data) =>
+export const editTime = (projectId, taskId, timeId, data) =>
   axios
-    .post(`/api/timesheet/${timesheetIndex}/${timesheetId}`, data)
+    .post(`/api/time/${projectId}/${taskId}/${timeId}`, data)
     .then(res => res.data);
 
-const fetchReports = () => axios.get(`/api/reports`).then(res => res.data);
+export const fetchProjectTime = ({ projectId, from, to, user }) =>
+  axios
+    .get(`/api/time/project/${projectId}?from=${from}&to=${to}&user=${user}`)
+    .then(res => res.data);
 
-export default {
-  fetchProjects,
-  addProject,
-  editProject,
-  fetchTasks,
-  addTask,
-  editTask,
-  updateTimelog,
-  fetchPeople,
-  addPeople,
-  editPeople,
-  fetchTimesheets,
-  fetchProjectData,
-  addTimesheet,
-  editTimesheet,
-  register,
-  login,
-  userInfo,
-  fetchUser,
-  forgotPassword,
-  resetPassword,
-  logout,
-  fetchReports
-};
+// timesheet -----------------------------------------------------------------------
+
+export const fetchMyTimesheets = () =>
+  axios.get(`/api/timesheet/me`).then(res => res.data);
+
+export const fetchMyReviewTimesheets = () =>
+  axios.get(`/api/timesheet/review`).then(res => res.data);
+
+export const generateTimesheet = data =>
+  axios.post(`/api/timesheet`, data).then(res => res.data);
+
+export const editTimesheet = (timesheetId, data) =>
+  axios.post(`/api/timesheet/${timesheetId}`, data).then(res => res.data);
+
+export const deleteTimesheet = timesheetId =>
+  axios.delete(`/api/timesheet/${timesheetId}`).then(res => res.data);
+
+export const reviewTimesheet = (timesheetId, data) =>
+  axios
+    .post(`/api/timesheet/review/${timesheetId}`, data)
+    .then(res => res.data);

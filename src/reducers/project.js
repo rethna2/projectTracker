@@ -2,6 +2,7 @@ import {
   fetchProjects,
   addProject,
   editProject,
+  deleteProject,
   fetchProjectData
 } from '../routines';
 
@@ -60,12 +61,14 @@ export default function projectsReducer(state = initialState, action) {
 
     case addProject.TRIGGER:
     case editProject.TRIGGER:
+    case deleteProject.TRIGGER:
       return {
         ...state,
         updating: true
       };
     case addProject.FULFILL:
     case editProject.FULFILL:
+    case deleteProject.FULFILL:
       return {
         ...state,
         updating: false

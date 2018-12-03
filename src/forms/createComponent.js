@@ -1,4 +1,4 @@
-import { Component, createElement } from 'react'
+import { Component, createElement } from 'react';
 import { isStateLess } from './utils';
 
 /**
@@ -11,16 +11,18 @@ import { isStateLess } from './utils';
 export default function createComponent(MaterialUIComponent, mapProps) {
   class InputComponent extends Component {
     getRenderedComponent() {
-      return this.component
+      return this.component;
     }
 
     render() {
       return createElement(MaterialUIComponent, {
         ...mapProps(this.props),
-        ref: (!isStateLess(MaterialUIComponent) ? el => this.component = el : null)
-      })
+        ref: !isStateLess(MaterialUIComponent)
+          ? el => (this.component = el)
+          : null
+      });
     }
   }
-  InputComponent.displayName = `ReduxFormMaterialUI${MaterialUIComponent.name}`
-  return InputComponent
+  InputComponent.displayName = `ReduxFormMaterialUI${MaterialUIComponent.name}`;
+  return InputComponent;
 }
