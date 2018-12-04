@@ -16,7 +16,7 @@ function* fetchMyTimesheetsSaga() {
     const response = yield api.fetchMyTimesheets();
     yield put(fetchMyTimesheets.success(response));
   } catch (error) {
-    yield put(fetchMyTimesheets.failure(error.message));
+    yield put(fetchMyTimesheets.failure(error.msg));
   } finally {
     yield put(fetchMyTimesheets.fulfill());
   }
@@ -28,19 +28,19 @@ function* fetchMyReviewTimesheetsSaga() {
     const response = yield api.fetchMyReviewTimesheets();
     yield put(fetchMyReviewTimesheets.success(response));
   } catch (error) {
-    yield put(fetchMyReviewTimesheets.failure(error.message));
+    yield put(fetchMyReviewTimesheets.failure(error.msg));
   } finally {
     yield put(fetchMyReviewTimesheets.fulfill());
   }
 }
 
-function* generateTimesheetSaga() {
+function* generateTimesheetSaga({ payload }) {
   try {
     yield put(generateTimesheet.request());
-    const response = yield api.generateTimesheet();
+    const response = yield api.generateTimesheet(payload);
     yield put(generateTimesheet.success(response));
   } catch (error) {
-    yield put(generateTimesheet.failure(error.message));
+    yield put(generateTimesheet.failure(error.msg));
   } finally {
     yield put(generateTimesheet.fulfill());
   }
@@ -52,7 +52,7 @@ function* editTimesheetSaga() {
     const response = yield api.editTimesheet();
     yield put(editTimesheet.success(response));
   } catch (error) {
-    yield put(editTimesheet.failure(error.message));
+    yield put(editTimesheet.failure(error.msg));
   } finally {
     yield put(editTimesheet.fulfill());
   }
@@ -64,7 +64,7 @@ function* deleteTimesheetSaga() {
     const response = yield api.deleteTimesheet();
     yield put(deleteTimesheet.success(response));
   } catch (error) {
-    yield put(deleteTimesheet.failure(error.message));
+    yield put(deleteTimesheet.failure(error.msg));
   } finally {
     yield put(deleteTimesheet.fulfill());
   }
@@ -76,7 +76,7 @@ function* reviewTimesheetSaga() {
     const response = yield api.reviewTimesheet();
     yield put(reviewTimesheet.success(response));
   } catch (error) {
-    yield put(reviewTimesheet.failure(error.message));
+    yield put(reviewTimesheet.failure(error.msg));
   } finally {
     yield put(reviewTimesheet.fulfill());
   }

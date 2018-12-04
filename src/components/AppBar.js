@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import MenuList from '@material-ui/core/MenuList';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Avatar from '@material-ui/core/Avatar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import {
+  Tabs,
+  Tab,
+  AppBar,
+  Toolbar,
+  Menu,
+  MenuItem,
+  IconButton,
+  Badge,
+  Typography
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Badge from '@material-ui/core/Badge';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import Typography from '@material-ui/core/Typography';
-import { connect } from 'react-redux';
-//import AccountCircle from 'material-ui/svg-icons/action/account-circle';
-//import Menu from 'material-ui/svg-icons/navigation/menu';
-import { userInfo } from '../routines';
-import { logout } from '../routines';
+import { AccountCircle, Notifications } from '@material-ui/icons';
 
 const styles = theme => ({
   root: {
@@ -153,7 +146,7 @@ class MyAppBar extends Component {
             </Tabs>
             <IconButton color="inherit">
               <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
+                <Notifications />
               </Badge>
             </IconButton>
             <IconButton
@@ -182,12 +175,3 @@ class MyAppBar extends Component {
 }
 
 export default withRouter(withStyles(styles)(MyAppBar));
-
-/*
-export default connect(
-  (state, props) => ({
-    userData: state.user.data
-  }),
-  { userInfo, logout }
-)(Navigation);
-*/

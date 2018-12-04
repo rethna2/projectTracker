@@ -12,7 +12,8 @@ import Create from '@material-ui/icons/Create';
 
 class TaskTable extends Component {
   render() {
-    if (!this.props.taskData.length) {
+    const { list } = this.props;
+    if (!list.length) {
       return (
         <div>
           <p className="noProject">No Tasks Available</p>
@@ -38,7 +39,7 @@ class TaskTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody displayRowCheckbox={false}>
-              {this.props.taskData.map(item => (
+              {list.map(item => (
                 <TableRow
                   style={{
                     cursor: 'pointer',

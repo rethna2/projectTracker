@@ -11,9 +11,9 @@ import Create from '@material-ui/icons/Create';
 
 class ProjectTable extends Component {
   render() {
-    const { selectedProject, onSelect } = this.props;
+    const { list, selectedProject, onSelect } = this.props;
 
-    if (!this.props.projectData.length) {
+    if (!list.length) {
       return (
         <div>
           <p className="noProject">No Projects Available</p>
@@ -36,7 +36,7 @@ class ProjectTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody displayRowCheckbox={false}>
-              {this.props.projectData.map(item => {
+              {list.map(item => {
                 return (
                   <TableRow
                     style={{

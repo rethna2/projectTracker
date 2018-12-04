@@ -18,7 +18,7 @@ function* fetchProjectsSaga() {
     yield call(delay, 2000);
     yield put(fetchProjects.success(response));
   } catch (error) {
-    yield put(fetchProjects.failure(error.message));
+    yield put(fetchProjects.failure(error.msg));
   } finally {
     yield put(fetchProjects.fulfill());
   }
@@ -27,11 +27,10 @@ function* fetchProjectsSaga() {
 function* fetchProjectDataSaga({ payload }) {
   try {
     yield put(fetchProjectData.request());
-    console.log('payload', payload);
-    const response = yield api.fetchProjectData(payload.projectId);
+    const response = yield api.fetchProjectData(payload);
     yield put(fetchProjectData.success(response));
   } catch (error) {
-    yield put(fetchProjectData.failure(error.message));
+    yield put(fetchProjectData.failure(error.msg));
   } finally {
     yield put(fetchProjectData.fulfill());
   }
@@ -45,7 +44,7 @@ function* addProjectSaga({ payload }) {
     yield put(fetchProjects.trigger());
     yield put(push(`/project`));
   } catch (error) {
-    yield put(addProject.failure(error.message));
+    yield put(addProject.failure(error.msg));
   } finally {
     yield put(addProject.fulfill());
   }
@@ -54,12 +53,12 @@ function* addProjectSaga({ payload }) {
 function* editProjectSaga({ payload }) {
   try {
     yield put(editProject.request());
-    const response = yield api.editProject(payload.id, payload.data);
+    const response = yield api.editProject(payload);
     yield put(editProject.success(response));
     yield put(fetchProjects.trigger());
     yield put(push(`/project`));
   } catch (error) {
-    yield put(editProject.failure(error.message));
+    yield put(editProject.failure(error.msg));
   } finally {
     yield put(editProject.fulfill());
   }
@@ -68,12 +67,12 @@ function* editProjectSaga({ payload }) {
 function* deleteProjectSaga({ payload }) {
   try {
     yield put(deleteProject.request());
-    const response = yield api.deleteProject(payload.id);
+    const response = yield api.deleteProject(payload);
     yield put(deleteProject.success(response));
     yield put(fetchProjects.trigger());
     yield put(push(`/project`));
   } catch (error) {
-    yield put(deleteProject.failure(error.message));
+    yield put(deleteProject.failure(error.msg));
   } finally {
     yield put(deleteProject.fulfill());
   }

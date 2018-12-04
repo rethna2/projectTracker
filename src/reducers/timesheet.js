@@ -8,10 +8,11 @@ import {
 } from '../routines';
 
 const initialState = {
-  timesheet: [],
-  timesheetReview: [],
+  list: [],
+  reviewList: [],
   loading: false,
   loadingReview: false,
+  updating: false,
   error: null
 };
 
@@ -22,7 +23,7 @@ export default function timesheetReducer(state = initialState, action) {
     case fetchMyTimesheets.SUCCESS:
       return {
         ...state,
-        timesheet: action.payload
+        list: action.payload
       };
     case fetchMyTimesheets.FAILURE:
       return {
@@ -39,7 +40,7 @@ export default function timesheetReducer(state = initialState, action) {
     case fetchMyReviewTimesheets.SUCCESS:
       return {
         ...state,
-        timesheetReview: action.payload
+        reviewList: action.payload
       };
     case fetchMyReviewTimesheets.FAILURE:
       return {
@@ -50,6 +51,27 @@ export default function timesheetReducer(state = initialState, action) {
       return {
         ...state,
         loadingReview: false
+      };
+    case generateTimesheet.TRIGGER:
+    case editTimesheet.TRIGGER:
+    case deleteTimesheet.TRIGGER:
+    case reviewTimesheet.TRIGGER:
+      return { ...state, updating: true };
+    case generateTimesheet.FAILURE:
+    case editTimesheet.FAILURE:
+    case deleteTimesheet.FAILURE:
+    case reviewTimesheet.FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case generateTimesheet.FULFILL:
+    case editTimesheet.FULFILL:
+    case deleteTimesheet.FULFILL:
+    case reviewTimesheet.FULFILL:
+      return {
+        ...state,
+        updating: false
       };
     default:
       return state;

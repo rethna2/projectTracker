@@ -7,10 +7,10 @@ import {
 } from '../routines';
 
 const initialState = {
-  data: [],
-  projectData: [],
+  list: null,
+  data: null,
+  loadingList: false,
   loading: false,
-  loadingProjectData: false,
   updating: false,
   error: null
 };
@@ -20,12 +20,12 @@ export default function projectsReducer(state = initialState, action) {
     case fetchProjects.TRIGGER:
       return {
         ...state,
-        loading: true
+        loadingList: true
       };
     case fetchProjects.SUCCESS:
       return {
         ...state,
-        data: action.payload
+        list: action.payload
       };
     case fetchProjects.FAILURE:
       return {
@@ -35,18 +35,18 @@ export default function projectsReducer(state = initialState, action) {
     case fetchProjects.FULFILL:
       return {
         ...state,
-        loading: false
+        loadingList: false
       };
 
     case fetchProjectData.TRIGGER:
       return {
         ...state,
-        loadingProjectData: true
+        loading: true
       };
     case fetchProjectData.SUCCESS:
       return {
         ...state,
-        projectData: action.payload
+        data: action.payload
       };
     case fetchProjectData.FAILURE:
       return {
@@ -56,7 +56,7 @@ export default function projectsReducer(state = initialState, action) {
     case fetchProjectData.FULFILL:
       return {
         ...state,
-        loadingProjectData: false
+        loading: false
       };
 
     case addProject.TRIGGER:

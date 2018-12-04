@@ -18,10 +18,13 @@ export const fetchTasks = createRoutine('FETCH_TASKS');
 export const addTask = createRoutine('ADD_TASK');
 export const editTask = createRoutine('EDIT_TASK');
 export const deleteTask = createRoutine('DELETE_TASK');
+export const fetchTaskData = createRoutine('FETCH_TASK_DATA');
 
 export const logTime = createRoutine('LOG_TIME');
 export const editTime = createRoutine('EDIT_TIME');
+export const deleteTime = createRoutine('DELETE_TIME');
 export const fetchProjectTime = createRoutine('FETCH_PROJECT_TIME');
+export const fetchTaskTime = createRoutine('FETCH_TASK_TIME');
 
 export const fetchMyTimesheets = createRoutine('FETCH_MY_TIMESHEETS');
 export const fetchMyReviewTimesheets = createRoutine(

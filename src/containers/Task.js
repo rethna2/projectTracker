@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Route, withRouter } from 'react-router-dom';
-import Button from '@material-ui/core/Button/Button';
+import { Button, Grid } from '@material-ui/core';
 
-import TaskTable from '../components/tasks/TaskTable';
-import TaskForm from '../components/tasks/TaskForm';
 import { fetchTasks } from '../routines';
 import Loader from '../components/Loader';
-import { Grid } from '@material-ui/core';
-import LogWork from '../components/tasks/LogWork';
+import TaskTable from '../components/task/TaskTable';
+import TaskForm from '../components/task/TaskForm';
+import TaskDetails from './TaskDetails';
 
 class Tasks extends Component {
   constructor(props) {
@@ -35,11 +34,12 @@ class Tasks extends Component {
   };
 
   render() {
-    if (this.props.tasks.loading) {
+    const { list, loadingList } = this.props;
+
+    if (!list || loadingList) {
       return <Loader />;
     }
     const { index, selectedTask } = this.state;
-    const { data } = this.props.tasks;
     const projectId = this.props.match.params.projectId;
     return (
       <div className="page" style={{ margin: 20 }}>
@@ -64,29 +64,24 @@ class Tasks extends Component {
                 render={() => (
                   <TaskForm
                     handleClose={this.handleClose}
-                    data={index === -1 ? {} : data[index]}
+                    data={index === -1 ? {} : list[index]}
                     taskFormSubmit={this.taskFormSubmit}
                   />
                 )}
               />
               <div className="table">
                 <TaskTable
-                  taskData={data}
+                  list={list}
                   selectedTask={selectedTask}
                   onSelect={selectedTask => this.setState({ selectedTask })}
                   handleOpen={this.handleOpen}
                   projectId={projectId}
                 />
               </div>
-              {/*
-              <div className="mobtable">
-            <MobTable mobTaskData={data} />
-          </div>
-            */}
             </div>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <LogWork taskId={selectedTask} projectId={projectId} />
+            <TaskDetails taskId={selectedTask} projectId={projectId} />
           </Grid>
         </Grid>
       </div>
@@ -96,7 +91,8 @@ class Tasks extends Component {
 
 export default connect(
   state => ({
-    tasks: state.tasks
+    list: state.task.list,
+    loadingList: state.task.loadingList
   }),
   { fetchTasks }
 )(withRouter(Tasks));

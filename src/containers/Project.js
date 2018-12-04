@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import { Link, Route, withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
-import ProjectTable from '../components/projects/ProjectTable';
-import ProjectForm from '../components/projects/ProjectForm';
-import { fetchProjects } from '../routines';
+import ProjectTable from '../components/project/ProjectTable';
+import ProjectForm from '../components/project/ProjectForm';
 import Loader from '../components/Loader';
 import { Grid, Divider } from '@material-ui/core';
-import ProjectNotification from '../components/projects/ProjectNotification';
+import ProjectNotification from '../components/project/ProjectNotification';
 
 class Projects extends Component {
   constructor(props) {
@@ -20,10 +19,6 @@ class Projects extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.fetchProjects();
-  }
-
   handleOpen = () => {
     this.setState({ index: -1 });
   };
@@ -33,11 +28,11 @@ class Projects extends Component {
   };
 
   render() {
-    if (this.props.projects.loading) {
+    const { list, loadingList } = this.props;
+    if (!list || loadingList) {
       return <Loader />;
     }
     const { index, selectedProject } = this.state;
-    const { data } = this.props.projects;
     return (
       <div className="page" style={{ margin: 20 }}>
         <Grid container spacing={24}>
@@ -62,14 +57,14 @@ class Projects extends Component {
                   render={() => (
                     <ProjectForm
                       handleClose={this.handleClose}
-                      data={index === -1 ? {} : data[index]}
+                      data={index === -1 ? {} : list[index]}
                       projectFormSubmit={this.projectFormSubmit}
                     />
                   )}
                 />
                 <div className="table">
                   <ProjectTable
-                    projectData={data}
+                    list={list}
                     selectedProject={selectedProject}
                     onSelect={selectedProject =>
                       this.setState({ selectedProject })
@@ -90,9 +85,7 @@ class Projects extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    projects: state.projects
-  }),
-  { fetchProjects }
-)(withRouter(Projects));
+export default connect(state => ({
+  list: state.project.list,
+  loadingList: state.project.loadingList
+}))(withRouter(Projects));

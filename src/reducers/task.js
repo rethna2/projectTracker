@@ -1,7 +1,15 @@
-import { fetchTasks, addTask, editTask, deleteTask } from '../routines';
+import {
+  fetchTasks,
+  addTask,
+  editTask,
+  deleteTask,
+  fetchTaskData
+} from '../routines';
 
 const initialState = {
-  data: [],
+  list: null,
+  data: null,
+  loadingList: false,
   loading: false,
   updating: false,
   error: null
@@ -12,12 +20,12 @@ export default function tasksReducer(state = initialState, action) {
     case fetchTasks.TRIGGER:
       return {
         ...state,
-        loading: true
+        loadingList: true
       };
     case fetchTasks.SUCCESS:
       return {
         ...state,
-        data: action.payload
+        list: action.payload
       };
     case fetchTasks.FAILURE:
       return {
@@ -25,6 +33,26 @@ export default function tasksReducer(state = initialState, action) {
         error: action.payload
       };
     case fetchTasks.FULFILL:
+      return {
+        ...state,
+        loadingList: false
+      };
+    case fetchTaskData.TRIGGER:
+      return {
+        ...state,
+        loading: true
+      };
+    case fetchTaskData.SUCCESS:
+      return {
+        ...state,
+        data: action.payload
+      };
+    case fetchTaskData.FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case fetchTaskData.FULFILL:
       return {
         ...state,
         loading: false

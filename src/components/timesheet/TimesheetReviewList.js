@@ -38,11 +38,13 @@ const mockData = [
 
 class TimeSheetApprovalList extends Component {
   render() {
-    const data = mockData; //this.props.projectData;
+    const data = this.props.list; // mockData;
     if (!data.length) {
       return (
         <div>
-          <p className="noProject">No Data</p>
+          <p className="noProject" style={{ margin: 50 }}>
+            No Data
+          </p>
         </div>
       );
     } else {

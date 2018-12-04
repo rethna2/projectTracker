@@ -90,11 +90,11 @@ class ProjectForm extends Component {
         description: values.description,
         team: this.state.people
       };
-      const id = this.props.match.params.projectId;
-      if (id === 'new') {
+      const projectId = this.props.match.params.projectId;
+      if (projectId === 'new') {
         this.props.addProject(data);
       } else {
-        this.props.editProject({ id, data });
+        this.props.editProject({ projectId, data });
       }
     }
   };
@@ -154,35 +154,36 @@ class ProjectForm extends Component {
           </form>
         </DialogContent>
         <DialogActions>
-          {this.state.showConfirmDelete ? (
-            <React.Fragment>
-              <span className={classes.spaceLeft}> Are you sure? </span>
+          {projectId !== 'new' &&
+            (this.state.showConfirmDelete ? (
+              <React.Fragment>
+                <span className={classes.spaceLeft}> Are you sure? </span>
+                <Button
+                  className={classes.spaceLeft}
+                  onClick={this.deleteProject}
+                  color="error"
+                  variant="contained"
+                >
+                  Delete
+                </Button>
+                <Button
+                  className={classes.spaceLeft}
+                  onClick={() => this.setState({ showConfirmDelete: false })}
+                  color="error"
+                  variant="contained"
+                >
+                  Cancel
+                </Button>
+              </React.Fragment>
+            ) : (
               <Button
-                className={classes.spaceLeft}
-                onClick={this.deleteProject}
+                onClick={() => this.setState({ showConfirmDelete: true })}
                 color="error"
                 variant="contained"
               >
-                Delete
+                Delete Project
               </Button>
-              <Button
-                className={classes.spaceLeft}
-                onClick={() => this.setState({ showConfirmDelete: false })}
-                color="error"
-                variant="contained"
-              >
-                Cancel
-              </Button>
-            </React.Fragment>
-          ) : (
-            <Button
-              onClick={() => this.setState({ showConfirmDelete: true })}
-              color="error"
-              variant="contained"
-            >
-              Delete Project
-            </Button>
-          )}
+            ))}
 
           <div style={{ flexGrow: 1 }} />
           <Button onClick={this.props.handleClose} color="primary">
@@ -210,9 +211,9 @@ ProjectForm = reduxForm({
 export default withRouter(
   connect(
     (state, props) => ({
-      isUpdating: state.tasks.updating,
-      error: state.projects.error,
-      initialValues: state.projects.data.find(
+      isUpdating: state.project.updating,
+      error: state.project.error,
+      initialValues: state.project.list.find(
         project => project._id === props.match.params.projectId
       )
     }),

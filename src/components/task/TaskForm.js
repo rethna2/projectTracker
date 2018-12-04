@@ -166,35 +166,36 @@ class TaskForm extends Component {
           </form>
         </DialogContent>
         <DialogActions>
-          {this.state.showConfirmDelete ? (
-            <React.Fragment>
-              <span className={classes.spaceLeft}> Are you sure? </span>
+          {taskId !== 'new' &&
+            (this.state.showConfirmDelete ? (
+              <React.Fragment>
+                <span className={classes.spaceLeft}> Are you sure? </span>
+                <Button
+                  className={classes.spaceLeft}
+                  onClick={this.deleteTask}
+                  color="error"
+                  variant="contained"
+                >
+                  Delete
+                </Button>
+                <Button
+                  className={classes.spaceLeft}
+                  onClick={() => this.setState({ showConfirmDelete: false })}
+                  color="error"
+                  variant="contained"
+                >
+                  Cancel
+                </Button>
+              </React.Fragment>
+            ) : (
               <Button
-                className={classes.spaceLeft}
-                onClick={this.deleteTask}
+                onClick={() => this.setState({ showConfirmDelete: true })}
                 color="error"
                 variant="contained"
               >
-                Delete
+                Delete Task
               </Button>
-              <Button
-                className={classes.spaceLeft}
-                onClick={() => this.setState({ showConfirmDelete: false })}
-                color="error"
-                variant="contained"
-              >
-                Cancel
-              </Button>
-            </React.Fragment>
-          ) : (
-            <Button
-              onClick={() => this.setState({ showConfirmDelete: true })}
-              color="error"
-              variant="contained"
-            >
-              Delete Task
-            </Button>
-          )}
+            ))}
           <div style={{ flexGrow: 1 }} />
           <Button onClick={this.props.handleClose} color="primary">
             Cancel
@@ -221,9 +222,11 @@ TaskForm = reduxForm({
 export default withRouter(
   connect(
     (state, props) => {
-      const project = state.projects.data.find(
-        project => project._id === props.match.params.projectId
-      );
+      const project =
+        state.project.list &&
+        state.project.list.find(
+          project => project._id === props.match.params.projectId
+        );
       let team;
       if (project) {
         team = project.team;
@@ -232,10 +235,10 @@ export default withRouter(
       }
       return {
         userData: state.user.userData,
-        isUpdating: state.tasks.updating,
-        initialValues: state.tasks.data.find(
-          task => task._id === props.match.params.taskId
-        ),
+        isUpdating: state.task.updating,
+        initialValues:
+          state.task.list &&
+          state.task.list.find(task => task._id === props.match.params.taskId),
         team
       };
     },

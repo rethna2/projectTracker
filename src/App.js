@@ -6,16 +6,14 @@ import { history } from './store';
 
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
-import Projects from './containers/Projects';
-import Tasks from './containers/Tasks';
+import Project from './containers/Project';
+import Task from './containers/Task';
 import Timesheet from './containers/Timesheet';
 import HomePage from './containers/HomePage';
 import AppBar from './components/AppBar';
-import { userInfo } from './routines';
+import { userInfo, fetchProjects } from './routines';
 import Loader from './components/Loader';
-import blue from '@material-ui/core/colors/blue';
-import pink from '@material-ui/core/colors/pink';
-import red from '@material-ui/core/colors/red';
+import { blue, pink, red } from '@material-ui/core/colors';
 
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
@@ -32,6 +30,7 @@ class App extends Component {
     this.token = window.localStorage.getItem('token');
     if (this.token) {
       this.props.userInfo();
+      this.props.fetchProjects();
     }
   }
 
@@ -64,9 +63,9 @@ class App extends Component {
             <div className="App">
               <AppBar />
               <Switch>
-                <Route exact path="/" component={Projects} />
-                <Route path="/project/:projectId/task" component={Tasks} />
-                <Route path="/project" component={Projects} />
+                <Route exact path="/" component={Project} />
+                <Route path="/project/:projectId/task" component={Task} />
+                <Route path="/project" component={Project} />
                 <Route path="/timesheet" component={Timesheet} />
                 <Route
                   path="/"
@@ -88,5 +87,5 @@ export default connect(
     loading: user.loading,
     userId: user.data.emailId
   }),
-  { userInfo }
+  { userInfo, fetchProjects }
 )(App);

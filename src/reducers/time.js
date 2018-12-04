@@ -1,7 +1,13 @@
-import { fetchTasks, addTask, editTask, logTime } from '../routines';
+import {
+  fetchProjectTime,
+  fetchTaskTime,
+  logTime,
+  editTime,
+  deleteTime
+} from '../routines';
 
 const initialState = {
-  data: [],
+  data: null, //will be used to store projectTime or taskTime
   loading: false,
   updating: false,
   error: null
@@ -10,21 +16,46 @@ const initialState = {
 export default function timeReducer(state = initialState, action) {
   switch (action.type) {
     case logTime.TRIGGER:
+    case editTime.TRIGGER:
+    case deleteTime.TRIGGER:
       return {
         ...state,
         loading: true
       };
-    case logTime.SUCCESS:
-      return {
-        ...state,
-        data: action.payload
-      };
     case logTime.FAILURE:
+    case editTime.FAILURE:
+    case deleteTime.FAILURE:
       return {
         ...state,
         error: action.payload
       };
     case logTime.FULFILL:
+    case editTime.FULFILL:
+    case deleteTime.FULFILL:
+      return {
+        ...state,
+        loading: false
+      };
+    case fetchProjectTime.TRIGGER:
+    case fetchTaskTime.TRIGGER:
+      return {
+        ...state,
+        loading: true
+      };
+    case fetchProjectTime.SUCCESS:
+    case fetchTaskTime.SUCCESS:
+      return {
+        ...state,
+        data: action.payload
+      };
+    case fetchProjectTime.FAILURE:
+    case fetchTaskTime.FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case fetchProjectTime.FULFILL:
+    case fetchTaskTime.FULFILL:
       return {
         ...state,
         loading: false

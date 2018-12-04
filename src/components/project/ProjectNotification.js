@@ -9,7 +9,7 @@ import {
   ListItemText,
   Avatar
 } from '@material-ui/core';
-import ImageIcon from '@material-ui/icons/Image';
+import { AccountCircle } from '@material-ui/icons';
 
 import { fetchProjectData } from '../../routines';
 
@@ -46,25 +46,29 @@ class ProjectNotification extends Component {
   }
 
   render() {
-    if (this.props.loading) {
-      return <div style={{ margin: 50 }}> Loading... </div>;
-    }
     if (!this.props.projectId) {
       return (
         <div style={{ margin: 50 }}> Select a Project to see more details </div>
       );
     }
-    const { data } = this.props;
+    const { recentActivities } = this.props;
+    if (!recentActivities || this.props.loading) {
+      return <div style={{ margin: 50 }}> Loading... </div>;
+    }
+    if (!recentActivities.length) {
+      return <div style={{ margin: 50 }}> No Recent Activities </div>;
+    }
+
     return (
       <div style={{ borderLeft: '1px solid green' }}>
         <Typography variant="h5" style={{ paddingLeft: 20 }}>
           Recent Activities
         </Typography>
         <List>
-          {data.map(item => (
+          {recentActivities.map(item => (
             <ListItem>
               <Avatar>
-                <ImageIcon />
+                <AccountCircle />
               </Avatar>
               <ListItemText primary={comp(item)} secondary="Jan 9, 2014" />
               <Divider />
@@ -78,8 +82,8 @@ class ProjectNotification extends Component {
 
 export default connect(
   state => ({
-    data: state.projects.projectData,
-    loading: state.projects.loadingProjectData
+    recentActivities: state.project.data,
+    loading: state.project.loading
   }),
   { fetchProjectData }
 )(ProjectNotification);

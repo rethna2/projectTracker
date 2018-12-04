@@ -48,13 +48,13 @@ export const fetchProjects = () =>
 export const addProject = data =>
   axios.post(`/api/project`, data).then(res => res.data);
 
-export const editProject = (projectId, data) =>
+export const editProject = ({ projectId, data }) =>
   axios.post(`/api/project/${projectId}`, data).then(res => res.data);
 
-export const deleteProject = projectId =>
+export const deleteProject = ({ projectId }) =>
   axios.delete(`/api/project/${projectId}`).then(res => res.data);
 
-export const fetchProjectData = projectId =>
+export const fetchProjectData = ({ projectId }) =>
   axios.get(`/api/recentactivity/${projectId}`).then(res => res.data);
 
 // task  -----------------------------------------------------------------------
@@ -71,20 +71,31 @@ export const editTask = (projectId, taskId, data) =>
 export const deleteTask = (projectId, taskId) =>
   axios.delete(`/api/task/${projectId}/${taskId}`).then(res => res.data);
 
+export const fetchTaskData = ({ taskId }) =>
+  axios.get(`/api/recentactivity/task/${taskId}`).then(res => res.data);
+
 // time -----------------------------------------------------------------------
 
-export const logTime = (projectId, taskId, data) =>
+export const logTime = ({ projectId, taskId, data }) =>
   axios.post(`/api/time/${projectId}/${taskId}`, data).then(res => res.data);
 
-export const editTime = (projectId, taskId, timeId, data) =>
+export const editTime = ({ projectId, taskId, timeId, data }) =>
   axios
     .post(`/api/time/${projectId}/${taskId}/${timeId}`, data)
+    .then(res => res.data);
+
+export const deleteTime = ({ projectId, taskId, timeId }) =>
+  axios
+    .delete(`/api/time/${projectId}/${taskId}/${timeId}`)
     .then(res => res.data);
 
 export const fetchProjectTime = ({ projectId, from, to, user }) =>
   axios
     .get(`/api/time/project/${projectId}?from=${from}&to=${to}&user=${user}`)
     .then(res => res.data);
+
+export const fetchTaskTime = ({ taskId }) =>
+  axios.get(`/api/time/task/${taskId}`).then(res => res.data);
 
 // timesheet -----------------------------------------------------------------------
 

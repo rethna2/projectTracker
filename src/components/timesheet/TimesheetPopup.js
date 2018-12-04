@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import {
   Dialog,
   DialogActions,
@@ -6,7 +8,6 @@ import {
   DialogTitle,
   Slide,
   Button,
-  withMobileDialog,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +16,14 @@ import {
   TextField
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+import {
+  fetchProjectTime,
+  generateTimesheet,
+  editTimesheet,
+  deleteTimesheet,
+  reviewTimesheet
+} from '../../routines';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -86,8 +95,13 @@ class TimeSheetPopup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      people: (props.initialValues && props.initialValues.team) || []
+      comments: ''
     };
+  }
+
+  componentDidMount() {
+    const { projectId, from, to, user } = this.props.timesheetData;
+    this.props.fetchProjectTime({ projectId, from, to, user });
   }
 
   onAddPerson = person => {
@@ -117,6 +131,23 @@ class TimeSheetPopup extends Component {
       }
     }
   };
+
+  onTimesheetSubmit = () => {
+    const { projectId, from, to } = this.props.timesheetData;
+    this.props.generateTimesheet({
+      startDate: from,
+      endDate: to,
+      comments: this.state.comments,
+      project: {
+        id: projectId,
+        name: this.props.projects.find(p => p._id === projectId).name
+      }
+    });
+  };
+
+  onTimesheetReject = () => {};
+
+  onTimesheetApprove = () => {};
 
   render() {
     const { handleSubmit, pristine, reset, submitting, classes } = this.props;
@@ -183,6 +214,8 @@ class TimeSheetPopup extends Component {
               rows={5}
               multiline
               label="Comments"
+              value={this.state.comments}
+              onChange={e => this.setState({ comments: e.target.value })}
               disabled={this.props.isReviewer}
             />
             <TextField
@@ -204,7 +237,7 @@ class TimeSheetPopup extends Component {
                 submit
                 color="primary"
                 autoFocus
-                onClick={this.props.onSubmit}
+                onClick={this.props.onTimesheetReject}
               >
                 Reject
               </Button>
@@ -212,7 +245,7 @@ class TimeSheetPopup extends Component {
                 submit
                 color="primary"
                 autoFocus
-                onClick={this.props.onSubmit}
+                onClick={this.props.onTimesheetApprove}
               >
                 Approve
               </Button>
@@ -222,7 +255,7 @@ class TimeSheetPopup extends Component {
               submit
               color="primary"
               autoFocus
-              onClick={this.props.onSubmit}
+              onClick={this.onTimesheetSubmit}
             >
               Submit
             </Button>
@@ -233,4 +266,16 @@ class TimeSheetPopup extends Component {
   }
 }
 
-export default withStyles(styles)(withMobileDialog()(TimeSheetPopup));
+export default connect(
+  state => ({
+    projects: state.project.list || [],
+    emailId: state.user.data.emailId
+  }),
+  {
+    fetchProjectTime,
+    generateTimesheet,
+    editTimesheet,
+    deleteTimesheet,
+    reviewTimesheet
+  }
+)(withStyles(styles)(TimeSheetPopup));

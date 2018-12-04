@@ -4,17 +4,10 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import GenerateTimesheetBar from '../components/timesheet/GenerateTimesheetBar';
 import TimeSheetList from '../components/timesheet/TimesheetList';
-import TimeSheetApprovalList from '../components/timesheet/TimesheetReviewList';
+import TimesheetReviewList from '../components/timesheet/TimesheetReviewList';
 import TimeSheetPopup from '../components/timesheet/TimesheetPopup';
 
-import {
-  fetchMyTimesheets,
-  fetchMyReviewTimesheets,
-  generateTimesheet,
-  editTimesheet,
-  deleteTimesheet,
-  reviewTimesheet
-} from '../routines';
+import { fetchMyTimesheets, fetchMyReviewTimesheets } from '../routines';
 import Loader from '../components/Loader';
 
 import {
@@ -48,11 +41,17 @@ class Reports extends Component {
   state = {
     showTimesheetActionBar: false,
     showTimesheetPopup: false,
-    isReviewer: null
+    isReviewer: null,
+    timesheetData: null
   };
   componentDidMount() {
-    //this.props.fetchMyTimesheets();
+    this.props.fetchMyTimesheets();
+    this.props.fetchMyReviewTimesheets();
   }
+
+  onGenerate = timesheetData => {
+    this.setState({ timesheetData, showTimesheetPopup: true });
+  };
 
   onOpenBar = () => {
     if (!this.state.showTimesheetActionBar) {
@@ -84,28 +83,31 @@ class Reports extends Component {
           />
         )}
         <div>
-          <h6 className={classes.spacetop}>My Recent Timesheets </h6>
+          <h4 className={classes.spacetop}>My Recent Timesheets </h4>
           <div>
             <TimeSheetList
               onEdit={e => {
                 this.setState({ showTimesheetPopup: true, isReviewer: false });
               }}
+              list={this.props.list}
             />
           </div>
         </div>
         <div>
-          <h6 className={classes.spacetop}>Timesheets waiting for approval </h6>
+          <h4 className={classes.spacetop}>Timesheets waiting for approval </h4>
           <div>
-            <TimeSheetApprovalList
+            <TimesheetReviewList
               onView={e => {
                 this.setState({ showTimesheetPopup: true, isReviewer: true });
               }}
+              list={this.props.reviewList}
             />
           </div>
         </div>
         {this.state.showTimesheetPopup && (
           <TimeSheetPopup
             isReviewer={this.state.isReviewer}
+            timesheetData={this.state.timesheetData}
             onClose={() => {
               this.setState({ showTimesheetPopup: false });
             }}
@@ -121,14 +123,12 @@ class Reports extends Component {
 
 export default connect(
   state => ({
-    loading: state.timesheet.loading && state.timesheet.loadingReview
+    loading: state.timesheet.loading && state.timesheet.loadingReview,
+    list: state.timesheet.list,
+    reviewList: state.timesheet.reviewList
   }),
   {
     fetchMyTimesheets,
-    fetchMyReviewTimesheets,
-    generateTimesheet,
-    editTimesheet,
-    deleteTimesheet,
-    reviewTimesheet
+    fetchMyReviewTimesheets
   }
 )(withStyles(styles)(Reports));

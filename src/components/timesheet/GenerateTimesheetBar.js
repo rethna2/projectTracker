@@ -14,8 +14,6 @@ import { Close } from '@material-ui/icons';
 import WeekPicker from './WeekPicker';
 import DatePicker from './DatePicker';
 
-import { fetchProjectTime } from '../../routines';
-
 const styles = theme => ({
   flex: {
     display: 'flex'
@@ -46,7 +44,7 @@ class GenerateTimesheetBar extends React.Component {
   };
 
   onGenerate = () => {
-    this.props.fetchProjectTime({
+    this.props.onGenerate({
       projectId: this.state.projectId,
       from: new Date(this.state.date[0]).getTime(),
       to: new Date(this.state.date[1]).getTime(),
@@ -128,10 +126,7 @@ class GenerateTimesheetBar extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
-    projects: state.projects.data,
-    emailId: state.user.data.emailId
-  }),
-  { fetchProjectTime }
-)(withStyles(styles)(GenerateTimesheetBar));
+export default connect(state => ({
+  projects: state.project.list || [],
+  emailId: state.user.data.emailId
+}))(withStyles(styles)(GenerateTimesheetBar));

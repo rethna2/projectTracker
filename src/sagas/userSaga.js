@@ -20,7 +20,7 @@ function* registerSaga({ payload }) {
     yield put(register.success(response));
     localStorage.setItem('token', JSON.stringify(response));
   } catch (error) {
-    yield put(register.failure(error.message));
+    yield put(register.failure(error.msg));
   } finally {
     yield put(register.fulfill());
   }
@@ -33,7 +33,7 @@ function* loginSaga({ payload }) {
     yield put(login.success(response));
     localStorage.setItem('token', JSON.stringify(response));
   } catch (error) {
-    yield put(login.failure(error.message));
+    yield put(login.failure(error.msg));
   } finally {
     yield put(login.fulfill());
   }
@@ -45,7 +45,7 @@ function* forgotPasswordSaga({ payload }) {
     const response = yield api.forgotPassword(payload);
     yield put(forgotPassword.success(response));
   } catch (error) {
-    yield put(forgotPassword.failure(error.message));
+    yield put(forgotPassword.failure(error.msg));
   } finally {
     yield put(forgotPassword.fulfill());
   }
@@ -59,7 +59,7 @@ function* resetPasswordSaga({ payload }) {
     localStorage.setItem('token', JSON.stringify(response));
     yield put(push('/project'));
   } catch (error) {
-    yield put(resetPassword.failure(error.message));
+    yield put(resetPassword.failure(error.msg));
   } finally {
     yield put(resetPassword.fulfill());
   }
@@ -71,7 +71,7 @@ function* userInfoSaga() {
     const response = yield api.userInfo();
     yield put(userInfo.success(response));
   } catch (error) {
-    yield put(userInfo.failure(error.message));
+    yield put(userInfo.failure(error.msg));
   } finally {
     yield put(userInfo.fulfill());
   }
@@ -83,7 +83,7 @@ function* fetchUserSaga() {
     const response = yield api.fetchUser();
     yield put(fetchUser.success(response));
   } catch (error) {
-    yield put(fetchUser.failure(error.message));
+    yield put(fetchUser.failure(error.msg));
   } finally {
     yield put(fetchUser.fulfill());
   }
@@ -97,7 +97,7 @@ function* logoutSaga() {
     yield put(userInfo.trigger());
     yield put(push('/'));
   } catch (error) {
-    yield put(logout.failure(error.message));
+    yield put(logout.failure(error.msg));
   } finally {
     yield put(logout.fulfill());
   }
