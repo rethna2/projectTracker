@@ -17,7 +17,6 @@ const initialState = {
 };
 
 export default function registerReducer(state = initialState, action) {
-  console.log('action.type reducer:' + action.type);
   switch (action.type) {
     case register.FAILURE:
       return {

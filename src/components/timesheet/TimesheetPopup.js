@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import {
   Dialog,
@@ -30,7 +31,6 @@ function Transition(props) {
 }
 
 const styles = theme => {
-  console.log('theme', theme);
   return {
     wrapper: {
       width: '80vw',
@@ -38,11 +38,16 @@ const styles = theme => {
       minWidth: 400
     },
     title: {
-      backgroundColor: theme.palette.primary.light,
-      color: 'white !important'
+      backgroundColor: theme.palette.primary.light
+    },
+    titleTxt: {
+      color: 'white'
     },
     spacetop: {
       marginTop: 20
+    },
+    spaceLeft: {
+      marginLeft: 20
     },
     flex: {
       display: 'flex'
@@ -91,17 +96,61 @@ const data = [
   }
 ];
 
+const transformData = data => {
+  const list = [];
+  let totalTimeSpent = 0;
+  let totalPointsDone = 0;
+  for (let i = 0; i < data.length; i++) {
+    const d = data[i];
+    const dateStr = moment(d.date).format('MMM DD, YYYY');
+    const obj = {
+      taskName: 'yet to come',
+      timeSpent: d.timeSpent,
+      pointsDone: d.pointsDone,
+      comments: d.comments
+    };
+    totalTimeSpent += d.timeSpent;
+    totalPointsDone += d.pointsDone;
+    const present = list.find(item => item.date === dateStr);
+    if (present) {
+      present.entries.push(obj);
+    } else {
+      list.push({
+        date: dateStr,
+        entries: [obj]
+      });
+    }
+  }
+  return {
+    data: list,
+    totalTimeSpent,
+    totalPointsDone
+  };
+};
+
 class TimeSheetPopup extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      comments: ''
-    };
-  }
+    const {
+      projectId,
+      from,
+      to,
+      user,
+      comments,
+      approverComments
+    } = props.timesheetData;
+    this.props.fetchProjectTime({
+      projectId,
+      from,
+      to,
+      user
+    });
 
-  componentDidMount() {
-    const { projectId, from, to, user } = this.props.timesheetData;
-    this.props.fetchProjectTime({ projectId, from, to, user });
+    this.state = {
+      comments: comments || '',
+      approverComments: approverComments || '',
+      showConfirmDelete: false
+    };
   }
 
   onAddPerson = person => {
@@ -116,45 +165,60 @@ class TimeSheetPopup extends Component {
     });
   };
 
-  projectFormSubmit = values => {
-    if (!this.props.error) {
-      const data = {
-        name: values.name,
-        description: values.description,
-        team: this.state.people
-      };
-      const id = this.props.match.params.projectId;
-      if (id === 'new') {
-        this.props.addProject(data);
-      } else {
-        this.props.editProject({ id, data });
-      }
+  onTimesheetSubmit = () => {
+    const { projectId, from, to, timesheetId } = this.props.timesheetData;
+    if (timesheetId) {
+      this.props.editTimesheet({
+        timesheetId,
+        data: {
+          comments: this.state.comments
+        }
+      });
+    } else {
+      this.props.generateTimesheet({
+        startDate: from,
+        endDate: to,
+        comments: this.state.comments,
+        pointsDone: this.totalPointsDone,
+        timeSpent: this.totalTimeSpent,
+        project: {
+          id: projectId,
+          name: this.props.projects.find(p => p._id === projectId).name
+        }
+      });
     }
   };
 
-  onTimesheetSubmit = () => {
-    const { projectId, from, to } = this.props.timesheetData;
-    this.props.generateTimesheet({
-      startDate: from,
-      endDate: to,
-      comments: this.state.comments,
-      project: {
-        id: projectId,
-        name: this.props.projects.find(p => p._id === projectId).name
-      }
+  onTimesheetDelete = () => {
+    const { timesheetId } = this.props.timesheetData;
+    this.props.deleteTimesheet({
+      timesheetId
     });
   };
 
-  onTimesheetReject = () => {};
+  onTimesheetAction = isApprove => {
+    const { timesheetId } = this.props.timesheetData;
+    this.props.reviewTimesheet({
+      timesheetId,
+      data: {
+        approverComments: this.state.approverComments,
+        status: isApprove ? 'approved' : 'rejected'
+      }
+    });
+  };
 
   onTimesheetApprove = () => {};
 
   render() {
     const { handleSubmit, pristine, reset, submitting, classes } = this.props;
-    if (this.props.isPopup) {
-      this.props.history.push('/projects');
+
+    let data = [];
+    if (this.props.data) {
+      const generatedData = transformData(this.props.data);
+      data = generatedData.data;
+      this.totalTimeSpent = generatedData.totalTimeSpent;
+      this.totalPointsDone = generatedData.totalPointsDone;
     }
-    console.log(this.props.error);
     return (
       <Dialog
         open={true}
@@ -166,7 +230,7 @@ class TimeSheetPopup extends Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title" className={classes.title}>
-          TimeSheet
+          <div className={classes.titleTxt}>TimeSheet</div>
         </DialogTitle>
         <DialogContent>
           <Table>
@@ -174,8 +238,8 @@ class TimeSheetPopup extends Component {
               <TableRow>
                 <TableCell style={{ width: 200 }}>Date</TableCell>
                 <TableCell style={{ width: 400 }}>Task</TableCell>
-                <TableCell style={{ width: 50 }}>Total Points</TableCell>
-                <TableCell style={{ width: 50 }}>Points Completed</TableCell>
+                <TableCell style={{ width: 50 }}>Time Spent</TableCell>
+                <TableCell style={{ width: 50 }}>Points Done</TableCell>
                 <TableCell style={{ width: 400 }}>Comments</TableCell>
 
                 <TableCell />
@@ -189,7 +253,7 @@ class TimeSheetPopup extends Component {
                       {item.date}
                     </TableCell>
                     <TableCell>{item.entries[0].taskName}</TableCell>
-                    <TableCell>{item.entries[0].hoursSpent}</TableCell>
+                    <TableCell>{item.entries[0].timeSpent}</TableCell>
                     <TableCell>{item.entries[0].pointsDone}</TableCell>
                     <TableCell>{item.entries[0].comments}</TableCell>
                   </TableRow>
@@ -198,7 +262,7 @@ class TimeSheetPopup extends Component {
                       i !== 0 && (
                         <TableRow>
                           <TableCell>{entry.taskName}</TableCell>
-                          <TableCell>{entry.hoursSpent}</TableCell>
+                          <TableCell>{entry.timeSpent}</TableCell>
                           <TableCell>{entry.pointsDone}</TableCell>
                           <TableCell>{entry.comments}</TableCell>
                         </TableRow>
@@ -228,33 +292,65 @@ class TimeSheetPopup extends Component {
           </div>
         </DialogContent>
         <DialogActions>
+          {!this.props.isReviewer &&
+            this.props.timesheetData.timesheetId &&
+            (this.state.showConfirmDelete ? (
+              <React.Fragment>
+                <span className={classes.spaceLeft}> Are you sure? </span>
+                <Button
+                  className={classes.spaceLeft}
+                  onClick={this.onTimesheetDelete}
+                  color="error"
+                  variant="contained"
+                >
+                  Delete
+                </Button>
+                <Button
+                  className={classes.spaceLeft}
+                  onClick={() => this.setState({ showConfirmDelete: false })}
+                  color="error"
+                  variant="contained"
+                >
+                  Cancel
+                </Button>
+              </React.Fragment>
+            ) : (
+              <Button
+                onClick={() => this.setState({ showConfirmDelete: true })}
+                color="error"
+                variant="contained"
+              >
+                Delete Timesheet
+              </Button>
+            ))}
+          <div style={{ flexGrow: 1 }} />
+
+          {this.props.updating && <div style={{ padding: 5 }}>Updating...</div>}
           <Button onClick={this.props.onClose} color="primary">
             Cancel
           </Button>
           {this.props.isReviewer ? (
             <React.Fragment>
               <Button
-                submit
-                color="primary"
-                autoFocus
-                onClick={this.props.onTimesheetReject}
+                color="error"
+                variant="contained"
+                onClick={() => this.onTimesheetAction(false)}
               >
                 Reject
               </Button>
               <Button
-                submit
                 color="primary"
-                autoFocus
-                onClick={this.props.onTimesheetApprove}
+                variant="contained"
+                className={classes.spaceLeft}
+                onClick={() => this.onTimesheetAction(true)}
               >
                 Approve
               </Button>
             </React.Fragment>
           ) : (
             <Button
-              submit
-              color="primary"
-              autoFocus
+              variant="contained"
+              className={classes.spaceLeft}
               onClick={this.onTimesheetSubmit}
             >
               Submit
@@ -269,7 +365,8 @@ class TimeSheetPopup extends Component {
 export default connect(
   state => ({
     projects: state.project.list || [],
-    emailId: state.user.data.emailId
+    emailId: state.user.data.emailId,
+    data: state.time.data
   }),
   {
     fetchProjectTime,

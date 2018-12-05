@@ -16,8 +16,7 @@ class CustomElements extends PureComponent {
   };
 
   handleWeekChange = date => {
-    console.log('handleWeekChange', date);
-    this.setState({ selectedDate: date.startOf('isoWeek') });
+    this.props.onDateChange([date.startOf('isoWeek'), date.endOf('isoWeek')]);
   };
 
   formatWeekSelectLabel = (date, invalidLabel) => {
@@ -25,7 +24,11 @@ class CustomElements extends PureComponent {
       return '';
     }
 
-    return date ? `CW ${date.isoWeek()}, ${date.format('YYYY')}` : invalidLabel;
+    return date
+      ? `${date.startOf('isoWeek').format('MMM DD')} - ${date
+          .endOf('isoWeek')
+          .format('MMM DD')}`
+      : invalidLabel;
   };
 
   renderWrappedWeekDay = (date, selectedDate, dayInCurrentMonth) => {
@@ -60,15 +63,14 @@ class CustomElements extends PureComponent {
 
   render() {
     const { selectedDate } = this.state;
-    console.log('selectedDate', selectedDate);
     return (
       <div className="picker">
         <DatePicker
           label="Week picker"
-          value={selectedDate}
+          value={this.props.date[1]}
           onChange={this.handleWeekChange}
           renderDay={this.renderWrappedWeekDay}
-          format="MMM DD, YY"
+          labelFunc={this.formatWeekSelectLabel}
         />
       </div>
     );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -40,14 +41,19 @@ class GenerateTimesheetBar extends React.Component {
     showTimesheetForm: false,
     projectId: null,
     durationType: 'weekly',
-    date: [new Date(), new Date()]
+    date: [moment().startOf('isoWeek'), moment().endOf('isoWeek')],
+    pickProjectError: false
   };
 
   onGenerate = () => {
+    if (!this.state.projectId) {
+      this.setState({ pickProjectError: true });
+      return;
+    }
     this.props.onGenerate({
       projectId: this.state.projectId,
-      from: new Date(this.state.date[0]).getTime(),
-      to: new Date(this.state.date[1]).getTime(),
+      from: this.state.date[0].format('MMM DD, YYYY'),
+      to: this.state.date[1].format('MMM DD, YYYY'),
       user: this.props.emailId
     });
   };
@@ -60,6 +66,12 @@ class GenerateTimesheetBar extends React.Component {
     });
   };
 
+  onWeekChange = date => {
+    this.setState({
+      date
+    });
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -67,13 +79,18 @@ class GenerateTimesheetBar extends React.Component {
       <div className={classes.flex}>
         <div className={classes.select}>
           <FormControl fullWidth>
-            <InputLabel htmlFor="project">Project</InputLabel>
+            <InputLabel htmlFor="project" error={this.state.pickProjectError}>
+              Project
+            </InputLabel>
             <Select
               name="project"
               onChange={e => {
-                this.setState({ projectId: e.target.value });
+                this.setState({
+                  projectId: e.target.value,
+                  pickProjectError: false
+                });
               }}
-              value={this.state.projectId}
+              value={this.state.projectId || ''}
             >
               {this.props.projects.map(item => (
                 <MenuItem value={item._id}>{item.name}</MenuItem>
@@ -99,8 +116,8 @@ class GenerateTimesheetBar extends React.Component {
         <div>
           {this.state.durationType === 'weekly' ? (
             <WeekPicker
-              date={this.state.date[0]}
-              onDateChange={date => this.onDateChange(0, date)}
+              date={this.state.date}
+              onDateChange={this.onWeekChange}
             />
           ) : (
             <div className={classes.flex}>

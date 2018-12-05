@@ -49,6 +49,19 @@ class Reports extends Component {
     this.props.fetchMyReviewTimesheets();
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.updating && !nextProps.updating) {
+      this.props.fetchMyTimesheets();
+      this.props.fetchMyReviewTimesheets();
+      this.setState({
+        showTimesheetActionBar: false,
+        showTimesheetPopup: false,
+        isReviewer: null,
+        timesheetData: null
+      });
+    }
+  }
+
   onGenerate = timesheetData => {
     this.setState({ timesheetData, showTimesheetPopup: true });
   };
@@ -65,6 +78,24 @@ class Reports extends Component {
     }
   };
 
+  onEditTimesheet = (id, isReviewer = false) => {
+    const data = this.props.list.find(item => item.project.id === id);
+    const timesheetData = {
+      projectId: id,
+      from: new Date(data.startDate).getTime(),
+      to: new Date(data.endDate).getTime(),
+      user: data.people.id,
+      comments: data.comments,
+      approverComments: data.approverComments,
+      timesheetId: data._id
+    };
+    this.setState({
+      showTimesheetPopup: true,
+      isReviewer,
+      timesheetData
+    });
+  };
+
   render() {
     if (this.props.loading) {
       return <Loader />;
@@ -73,22 +104,21 @@ class Reports extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <Button onClick={this.onOpenBar} color="primary">
-          Generate TimeSheet
-        </Button>
-        {this.state.showTimesheetActionBar && (
+        {this.state.showTimesheetActionBar ? (
           <GenerateTimesheetBar
             onGenerate={this.onGenerate}
             onCloseBar={this.onCloseBar}
           />
+        ) : (
+          <Button onClick={this.onOpenBar} color="primary" variant="contained">
+            Generate TimeSheet
+          </Button>
         )}
         <div>
           <h4 className={classes.spacetop}>My Recent Timesheets </h4>
           <div>
             <TimeSheetList
-              onEdit={e => {
-                this.setState({ showTimesheetPopup: true, isReviewer: false });
-              }}
+              onEdit={this.onEditTimesheet}
               list={this.props.list}
             />
           </div>
@@ -97,9 +127,7 @@ class Reports extends Component {
           <h4 className={classes.spacetop}>Timesheets waiting for approval </h4>
           <div>
             <TimesheetReviewList
-              onView={e => {
-                this.setState({ showTimesheetPopup: true, isReviewer: true });
-              }}
+              onView={id => this.onEditTimesheet(id, true)}
               list={this.props.reviewList}
             />
           </div>
@@ -108,6 +136,7 @@ class Reports extends Component {
           <TimeSheetPopup
             isReviewer={this.state.isReviewer}
             timesheetData={this.state.timesheetData}
+            updating={this.props.updating}
             onClose={() => {
               this.setState({ showTimesheetPopup: false });
             }}
@@ -124,6 +153,7 @@ class Reports extends Component {
 export default connect(
   state => ({
     loading: state.timesheet.loading && state.timesheet.loadingReview,
+    updating: state.timesheet.updating,
     list: state.timesheet.list,
     reviewList: state.timesheet.reviewList
   }),

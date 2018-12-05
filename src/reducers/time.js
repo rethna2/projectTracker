@@ -20,7 +20,7 @@ export default function timeReducer(state = initialState, action) {
     case deleteTime.TRIGGER:
       return {
         ...state,
-        loading: true
+        updating: true
       };
     case logTime.FAILURE:
     case editTime.FAILURE:
@@ -34,13 +34,14 @@ export default function timeReducer(state = initialState, action) {
     case deleteTime.FULFILL:
       return {
         ...state,
-        loading: false
+        updating: false
       };
     case fetchProjectTime.TRIGGER:
     case fetchTaskTime.TRIGGER:
       return {
         ...state,
-        loading: true
+        loading: true,
+        data: null
       };
     case fetchProjectTime.SUCCESS:
     case fetchTaskTime.SUCCESS:

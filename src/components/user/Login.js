@@ -34,7 +34,6 @@ class LoginForm extends Component {
       emailId: values.emailId,
       password: values.password
     };
-    console.log(data);
     if (values.checker == true) {
       localStorage.setItem('rememberMe', JSON.stringify(data));
     }

@@ -45,8 +45,10 @@ const styles = theme => ({
     minWidth: 400
   },
   title: {
-    backgroundColor: theme.palette.primary.light,
-    color: 'white !important'
+    backgroundColor: theme.palette.primary.light
+  },
+  titleTxt: {
+    color: 'white'
   },
   spacetop: {
     marginTop: 20
@@ -91,7 +93,6 @@ class TaskForm extends Component {
   render() {
     const { handleSubmit, classes } = this.props;
     const taskId = this.props.match.params.taskId.toLowerCase();
-    console.log('team', this.props.team);
     return (
       <Dialog
         open={true}
@@ -103,7 +104,9 @@ class TaskForm extends Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title" className={classes.title}>
-          {`${taskId === 'new' ? 'New' : 'Edit'} Task`}
+          <div className={classes.titleTxt}>
+            {taskId === 'new' ? 'New' : 'Edit'} Task
+          </div>
         </DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(this.taskFormSubmit)}>
@@ -201,7 +204,6 @@ class TaskForm extends Component {
             Cancel
           </Button>
           <Button
-            submit
             color="primary"
             variant="contained"
             onClick={handleSubmit(this.taskFormSubmit)}

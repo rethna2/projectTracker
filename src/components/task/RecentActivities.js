@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import {
   Typography,
   Divider,
@@ -22,7 +23,7 @@ const comp = item => (
         fontSize: '0.7em'
       }}
     >
-      {item.type} 
+      {item.type}
     </span>
   </span>
 );
@@ -46,7 +47,10 @@ class RecentActivities extends Component {
               <Avatar>
                 <AccountCircle />
               </Avatar>
-              <ListItemText primary={comp(item)} secondary="Jan 9, 2014" />
+              <ListItemText
+                primary={comp(item)}
+                secondary={moment(item.createdAt).fromNow()}
+              />
               <Divider />
             </ListItem>
           ))}

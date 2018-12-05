@@ -8,33 +8,7 @@ import {
   TableRow
 } from '@material-ui/core';
 import Search from '@material-ui/icons/Search';
-
-const mockData = [
-  {
-    name: 'Alex',
-    projectName: 'First Project',
-    duration: 'Nov 12 - Nov 18',
-    hoursSpent: 25,
-    pointsDone: 18,
-    status: 'approved'
-  },
-  {
-    name: 'John',
-    projectName: 'Second Project',
-    duration: 'Nov 19 - Nov 25',
-    hoursSpent: 35,
-    pointsDone: 25,
-    status: 'pending'
-  },
-  {
-    name: 'Jack',
-    projectName: 'Second Project',
-    duration: 'Nov 19 - Nov 25',
-    hoursSpent: 35,
-    pointsDone: 25,
-    status: 'rejected'
-  }
-];
+import moment from 'moment';
 
 class TimeSheetApprovalList extends Component {
   render() {
@@ -66,14 +40,18 @@ class TimeSheetApprovalList extends Component {
               {data.map(item => {
                 return (
                   <TableRow>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.projectName}</TableCell>
-                    <TableCell>{item.duration}</TableCell>
+                    <TableCell>{item.people.name}</TableCell>
+                    <TableCell>{item.project.name}</TableCell>
+                    <TableCell>{`${moment(item.startDate).format(
+                      'MMM DD'
+                    )} - ${moment(item.startDate).format(
+                      'MMM DD'
+                    )}`}</TableCell>
                     <TableCell>{item.hoursSpent}</TableCell>
                     <TableCell>{item.pointsDone}</TableCell>
                     <TableCell>
                       <Search
-                        onClick={() => this.props.onView(item._id)}
+                        onClick={() => this.props.onView(item.project.id)}
                         style={{ cursor: 'pointer' }}
                       />
                     </TableCell>

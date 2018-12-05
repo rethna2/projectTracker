@@ -36,7 +36,6 @@ function Transition(props) {
 }
 
 const styles = theme => {
-  console.log('theme', theme);
   return {
     wrapper: {
       width: '80vw',
@@ -44,8 +43,10 @@ const styles = theme => {
       minWidth: 400
     },
     title: {
-      backgroundColor: theme.palette.primary.light,
-      color: 'white !important'
+      backgroundColor: theme.palette.primary.light
+    },
+    titleTxt: {
+      color: 'white'
     },
     spacetop: {
       marginTop: 20
@@ -113,10 +114,12 @@ class ProjectForm extends Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title" className={classes.title}>
-          {`${projectId === 'new' ? 'New' : 'Edit'} Project`}
+          <div className={classes.titleTxt}>
+            {projectId === 'new' ? 'New' : 'Edit'} Project
+          </div>
         </DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmit(this.projectFormSubmit.bind(this))}>
+          <form onSubmit={handleSubmit(this.projectFormSubmit)}>
             <Grid container spacing={24} className={classes.wrapper}>
               <Grid item xs={12} sm={6}>
                 <div className={classes.spacetop}>
@@ -190,7 +193,6 @@ class ProjectForm extends Component {
             Cancel
           </Button>
           <Button
-            submit
             color="primary"
             variant="contained"
             onClick={handleSubmit(this.projectFormSubmit)}

@@ -108,13 +108,13 @@ export const fetchMyReviewTimesheets = () =>
 export const generateTimesheet = data =>
   axios.post(`/api/timesheet`, data).then(res => res.data);
 
-export const editTimesheet = (timesheetId, data) =>
+export const editTimesheet = ({ timesheetId, data }) =>
   axios.post(`/api/timesheet/${timesheetId}`, data).then(res => res.data);
 
-export const deleteTimesheet = timesheetId =>
+export const deleteTimesheet = ({ timesheetId }) =>
   axios.delete(`/api/timesheet/${timesheetId}`).then(res => res.data);
 
-export const reviewTimesheet = (timesheetId, data) =>
+export const reviewTimesheet = ({ timesheetId, data }) =>
   axios
     .post(`/api/timesheet/review/${timesheetId}`, data)
     .then(res => res.data);

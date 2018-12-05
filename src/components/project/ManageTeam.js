@@ -18,8 +18,26 @@ const styles = theme => ({
   }
 });
 
-const ManageTeam = ({ people, onAdd, onRemove, classes }) => (
-  <div className="person">
+class ManageTeam extends React.Component {
+
+  state={
+    emailId: '',
+    error:false
+  }
+  onAdd =() => {
+    const present = this.props.people.find(item => item === this.state.emailId);
+    if(present){
+      this.setState({error: true, errorMsg: 'Already in team'})
+    }else{
+      this.props.onAdd(this.state.emailId);
+    this.setState({emailId: ''})
+    }
+    
+  }
+  render(){
+    const { people, onAdd, onRemove, classes } = this.props;
+    return (
+      <div className="person">
     <Typography variant="subheading">Manage Team</Typography>
 
     <Typography variant="subtitle1" className={classes.smallFont}>
@@ -28,11 +46,17 @@ const ManageTeam = ({ people, onAdd, onRemove, classes }) => (
     <div className={classes.flex}>
       <TextField
         name="userList"
-        inputRef={n => (addRef = n)}
+        error={this.state.error}
+        label={this.state.error && this.state.errorMsg}
+        onChange={e=>this.setState({emailId: e.target.value, error: false})}
+        value={this.state.emailId}
         className={classes.grow}
-        onKeyPress={e => e.charCode === 13 && onAdd(addRef.value)}
+        onKeyPress={e => e.charCode === 13 && this.onAdd()}
       />
-      <AddCircle onClick={() => onAdd(addRef.value)} color="primary" />
+      <AddCircle
+        onClick={this.onAdd}
+        color="primary"
+      />
     </div>
     <div>
       {people && (
@@ -55,6 +79,8 @@ const ManageTeam = ({ people, onAdd, onRemove, classes }) => (
       )}
     </div>
   </div>
-);
+    )
+  }
+}
 
 export default withStyles(styles)(ManageTeam);

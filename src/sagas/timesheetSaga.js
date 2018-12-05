@@ -1,5 +1,6 @@
 import { takeEvery, delay } from 'redux-saga';
 import { call, put, fork } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import * as api from '../api';
 import {
   fetchMyTimesheets,
@@ -46,11 +47,12 @@ function* generateTimesheetSaga({ payload }) {
   }
 }
 
-function* editTimesheetSaga() {
+function* editTimesheetSaga({ payload }) {
   try {
     yield put(editTimesheet.request());
-    const response = yield api.editTimesheet();
+    const response = yield api.editTimesheet(payload);
     yield put(editTimesheet.success(response));
+    yield put(push('/timesheet'));
   } catch (error) {
     yield put(editTimesheet.failure(error.msg));
   } finally {
@@ -58,10 +60,10 @@ function* editTimesheetSaga() {
   }
 }
 
-function* deleteTimesheetSaga() {
+function* deleteTimesheetSaga({ payload }) {
   try {
     yield put(deleteTimesheet.request());
-    const response = yield api.deleteTimesheet();
+    const response = yield api.deleteTimesheet(payload);
     yield put(deleteTimesheet.success(response));
   } catch (error) {
     yield put(deleteTimesheet.failure(error.msg));
@@ -70,10 +72,10 @@ function* deleteTimesheetSaga() {
   }
 }
 
-function* reviewTimesheetSaga() {
+function* reviewTimesheetSaga({ payload }) {
   try {
     yield put(reviewTimesheet.request());
-    const response = yield api.reviewTimesheet();
+    const response = yield api.reviewTimesheet(payload);
     yield put(reviewTimesheet.success(response));
   } catch (error) {
     yield put(reviewTimesheet.failure(error.msg));

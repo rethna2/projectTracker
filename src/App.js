@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from './store';
 
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Project from './containers/Project';
 import Task from './containers/Task';
@@ -19,18 +19,23 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 const muiTheme = createMuiTheme({
   palette: {
-    primary: blue,
-    error: red,
-    secondary: pink
+    primary: {
+      main: '#0d3756'
+    },
+    secondary: {
+      main: '#ffff00'
+    },
+    error: red
   }
 });
 
 class App extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.token = window.localStorage.getItem('token');
     if (this.token) {
-      this.props.userInfo();
-      this.props.fetchProjects();
+      props.userInfo();
+      props.fetchProjects();
     }
   }
 
@@ -46,7 +51,7 @@ class App extends Component {
 
     if (!this.token || !userId) {
       return (
-        <MuiThemeProvider muiTheme={muiTheme}>
+        <MuiThemeProvider theme={muiTheme}>
           <ConnectedRouter history={history}>
             <div>
               <Route path="/" component={HomePage} />
@@ -57,7 +62,7 @@ class App extends Component {
     }
 
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
+      <MuiThemeProvider theme={muiTheme}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <ConnectedRouter history={history}>
             <div className="App">

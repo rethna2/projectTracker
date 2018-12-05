@@ -25,6 +25,17 @@ class TaskDetails extends Component {
     }
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      (this.props.updating && !nextProps.updating) ||
+      this.props.taskId !== nextProps.taskId
+    ) {
+      this.props.fetchTaskData({ taskId: nextProps.taskId });
+      this.props.fetchTaskTime({ taskId: nextProps.taskId });
+      this.setState({ timeId: null });
+    }
+  }
+
   render() {
     if (!this.props.taskId) {
       return (
@@ -32,9 +43,9 @@ class TaskDetails extends Component {
       );
     }
 
-    const { recentActivities, loading, timeList, timeLoading } = this.props;
+    const { recentActivities, loading, timeList } = this.props;
 
-    if (!recentActivities || loading || !timeList || timeLoading) {
+    if (loading || !recentActivities || !timeList) {
       return <div style={{ margin: 50 }}> Loading... </div>;
     }
 
@@ -65,6 +76,7 @@ class TaskDetails extends Component {
             }
             timeList={this.props.timeList}
             onCancel={() => this.setState({ timeId: null })}
+            updating={this.props.updating}
           />
         )}
         <RecentActivities recentActivities={this.props.recentActivities} />
@@ -76,9 +88,9 @@ class TaskDetails extends Component {
 export default connect(
   state => ({
     recentActivities: state.task.data,
-    loading: state.task.loading,
+    loading: state.task.loading && state.time.loading,
     timeList: state.time.data,
-    timeLoading: state.time.loading
+    updating: state.time.updating
   }),
   { fetchTaskData, fetchTaskTime }
 )(TaskDetails);

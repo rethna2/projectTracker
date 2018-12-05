@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import {
   Typography,
@@ -26,9 +27,9 @@ const comp = item => (
         fontSize: '0.7em'
       }}
     >
-      {item.type} :
+      {item.type}
     </span>{' '}
-    :<span style={{ padding: 5 }}>{item.data.name}</span>
+    <span style={{ padding: 5 }}>{item.data.name}</span>
   </span>
 );
 
@@ -70,7 +71,10 @@ class ProjectNotification extends Component {
               <Avatar>
                 <AccountCircle />
               </Avatar>
-              <ListItemText primary={comp(item)} secondary="Jan 9, 2014" />
+              <ListItemText
+                primary={comp(item)}
+                secondary={moment(item.createdAt).fromNow()}
+              />
               <Divider />
             </ListItem>
           ))}

@@ -20,10 +20,12 @@ import { TextField } from '../../forms';
 import createValidator from '../../logic/joiReduxForm';
 import { logTime, editTime, deleteTime } from '../../routines';
 
-const styles = () => ({
-  wrapper: {
-    borderLeft: '1px solid green',
-    paddingLeft: 20
+const styles = theme => ({
+  title: {
+    backgroundColor: theme.palette.primary.light
+  },
+  titleTxt: {
+    color: 'white'
   },
   marginTop15: {
     marginTop: 15
@@ -101,14 +103,12 @@ class LogWork extends Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title" className={classes.title}>
-          {timeId === 'new' ? 'Log Time' : 'Edit Time'}
+          <div className={classes.titleTxt}>
+            {timeId === 'new' ? 'Log Time' : 'Edit Time'}
+          </div>
         </DialogTitle>
         <DialogContent>
-          <form
-            className={classes.wrapper}
-            onSubmit={handleSubmit(this.timeFormSubmit)}
-          >
-            <Typography variant="h5">Log Time</Typography>
+          <form onSubmit={handleSubmit(this.timeFormSubmit)}>
             <div className={cx(classes.flex, classes.marginTop15)}>
               <Field
                 component={TextField}
@@ -176,11 +176,11 @@ class LogWork extends Component {
               </Button>
             ))}
           <div style={{ flexGrow: 1 }} />
+          {this.props.updating && <div style={{ padding: 5 }}>Updating...</div>}
           <Button onClick={this.props.onCancel} color="primary">
             Cancel
           </Button>
           <Button
-            submit
             variant="contained"
             color="primary"
             onClick={handleSubmit(this.timeFormSubmit)}
