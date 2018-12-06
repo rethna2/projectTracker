@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 
 import Button from '@material-ui/core/Button';
-import { validate } from '../../logic/login';
+import { createValidator } from '../../logic/validator';
 import { forgotPassword } from '../../routines';
 import { TextField } from '../../forms';
 
@@ -44,8 +44,8 @@ class ForgotPasswordForm extends Component {
 }
 
 ForgotPasswordForm = reduxForm({
-  form: 'forgot',
-  validate
+  form: 'forgotPassword',
+  validate: createValidator('forgotPassword')
 })(ForgotPasswordForm);
 
 export default withRouter(

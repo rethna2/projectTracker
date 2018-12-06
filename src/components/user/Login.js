@@ -5,8 +5,8 @@ import { Field, reduxForm } from 'redux-form';
 import { Button, Typography, withStyles } from '@material-ui/core';
 
 import cx from 'classnames';
+import { createValidator } from '../../logic/validator';
 
-import { validate } from '../../logic/login';
 import { login } from '../../routines';
 import { TextField, Checkbox } from '../../forms';
 const required = value => (value == null ? 'Required' : undefined);
@@ -99,7 +99,7 @@ class LoginForm extends Component {
 
 LoginForm = reduxForm({
   form: 'login',
-  validate
+  validate: createValidator('login')
 })(LoginForm);
 
 export default withRouter(

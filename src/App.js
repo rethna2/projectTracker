@@ -26,6 +26,22 @@ const muiTheme = createMuiTheme({
       main: '#ffff00'
     },
     error: red
+  },
+  typography: {
+    fontFamily: ['Arial', '"Helvetica Neue"', 'sans-serif']
+  },
+  overrides: {
+    MuiTable: {
+      root: {
+        backgroundColor: 'white',
+        boxShadow: '0 2px 1px 1px rgba(140, 150, 160, 0.5)'
+      }
+    },
+    MuiTableCell: {
+      root: {
+        padding: '5px 10px'
+      }
+    }
   }
 });
 

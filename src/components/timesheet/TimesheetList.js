@@ -29,7 +29,7 @@ class TimeSheetList extends Component {
               <TableRow>
                 <TableCell style={{ width: 300 }}>Project Name</TableCell>
                 <TableCell style={{ width: 200 }}>Duration</TableCell>
-                <TableCell style={{ width: 50 }}>Hours Spent</TableCell>
+                <TableCell style={{ width: 50 }}>Time Spent</TableCell>
                 <TableCell style={{ width: 50 }}>Points Done</TableCell>
                 <TableCell style={{ width: 50 }}>Status</TableCell>
                 <TableCell style={{ width: 50 }} />
@@ -45,7 +45,7 @@ class TimeSheetList extends Component {
                     )} - ${moment(item.startDate).format(
                       'MMM DD'
                     )}`}</TableCell>
-                    <TableCell>{item.hoursSpent}</TableCell>
+                    <TableCell>{item.timeSpent}</TableCell>
                     <TableCell>{item.pointsDone}</TableCell>
                     <TableCell>{item.status}</TableCell>
                     <TableCell>

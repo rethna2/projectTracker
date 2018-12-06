@@ -4,22 +4,10 @@ import { connect } from 'react-redux';
 
 import { Button, withStyles } from '@material-ui/core';
 import { Field, reduxForm } from 'redux-form';
-import Joi from 'joi';
-import createValidator from '../../logic/joiReduxForm';
-import { validate } from '../../logic/register';
+import { createValidator } from '../../logic/validator';
+
 import { register } from '../../routines';
 import { TextField } from '../../forms';
-
-const schema = {
-  name: Joi.string()
-    .min(6)
-    .max(30)
-    .required(),
-  emailId: Joi.string()
-    .email()
-    .required(),
-  password: Joi.string().required()
-};
 
 const styles = () => ({
   marginTop15: {
@@ -87,7 +75,7 @@ class RegisterForm extends Component {
 
 RegisterForm = reduxForm({
   form: 'register',
-  validate: createValidator(schema)
+  validate: createValidator('register')
 })(RegisterForm);
 
 export default withRouter(

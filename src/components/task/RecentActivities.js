@@ -33,7 +33,12 @@ class RecentActivities extends Component {
     const { recentActivities } = this.props;
 
     if (!recentActivities.length) {
-      return <div style={{ margin: 50 }}> No Recent Activities </div>;
+      return (
+        <Typography variant="subtitle1" style={{ margin: 50 }}>
+          {' '}
+          No Recent Activities{' '}
+        </Typography>
+      );
     }
 
     return (

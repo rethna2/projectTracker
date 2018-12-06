@@ -104,7 +104,7 @@ const transformData = data => {
     const d = data[i];
     const dateStr = moment(d.date).format('MMM DD, YYYY');
     const obj = {
-      taskName: 'yet to come',
+      taskName: d.task.name,
       timeSpent: d.timeSpent,
       pointsDone: d.pointsDone,
       comments: d.comments
@@ -153,25 +153,15 @@ class TimeSheetPopup extends Component {
     };
   }
 
-  onAddPerson = person => {
-    this.setState({ people: [...this.state.people, person] });
-  };
-
-  onRemovePerson = person => {
-    const index = this.state.people.indexOf(person);
-    const { people } = this.state;
-    this.setState({
-      people: [...people.slice(0, index), ...people.slice(index + 1)]
-    });
-  };
-
   onTimesheetSubmit = () => {
     const { projectId, from, to, timesheetId } = this.props.timesheetData;
     if (timesheetId) {
       this.props.editTimesheet({
         timesheetId,
         data: {
-          comments: this.state.comments
+          comments: this.state.comments,
+          pointsDone: this.totalPointsDone,
+          timeSpent: this.totalTimeSpent
         }
       });
     } else {
@@ -202,7 +192,9 @@ class TimeSheetPopup extends Component {
       timesheetId,
       data: {
         approverComments: this.state.approverComments,
-        status: isApprove ? 'approved' : 'rejected'
+        status: isApprove ? 'approved' : 'rejected',
+        pointsDone: this.totalPointsDone,
+        timeSpent: this.totalTimeSpent
       }
     });
   };
@@ -233,7 +225,7 @@ class TimeSheetPopup extends Component {
           <div className={classes.titleTxt}>TimeSheet</div>
         </DialogTitle>
         <DialogContent>
-          <Table>
+          <Table style={{ marginTop: 20, backgroundColor: '#ffb' }}>
             <TableHead displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
                 <TableCell style={{ width: 200 }}>Date</TableCell>
@@ -241,8 +233,6 @@ class TimeSheetPopup extends Component {
                 <TableCell style={{ width: 50 }}>Time Spent</TableCell>
                 <TableCell style={{ width: 50 }}>Points Done</TableCell>
                 <TableCell style={{ width: 400 }}>Comments</TableCell>
-
-                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody displayRowCheckbox={false}>

@@ -30,7 +30,7 @@ class TimeSheetApprovalList extends Component {
                 <TableCell style={{ width: 350 }}>Name</TableCell>
                 <TableCell style={{ width: 350 }}>Project Name</TableCell>
                 <TableCell style={{ width: 350 }}>Duration</TableCell>
-                <TableCell style={{ width: 50 }}>Hours Spent</TableCell>
+                <TableCell style={{ width: 50 }}>Time Spent</TableCell>
                 <TableCell style={{ width: 50 }}>Points Done</TableCell>
                 <TableCell style={{ width: 50 }}>View</TableCell>
                 <TableCell />
@@ -47,7 +47,7 @@ class TimeSheetApprovalList extends Component {
                     )} - ${moment(item.startDate).format(
                       'MMM DD'
                     )}`}</TableCell>
-                    <TableCell>{item.hoursSpent}</TableCell>
+                    <TableCell>{item.timeSpent}</TableCell>
                     <TableCell>{item.pointsDone}</TableCell>
                     <TableCell>
                       <Search

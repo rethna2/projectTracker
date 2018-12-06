@@ -12,24 +12,12 @@ import {
   withMobileDialog
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Joi from 'joi';
-import createValidator from '../../logic/joiReduxForm';
+
+import { createValidator } from '../../logic/validator';
 import { TextField } from '../../forms';
-import { validate } from '../../logic/project';
 import ManageTeam from './ManageTeam';
 import { addProject, editProject, deleteProject } from '../../routines';
 import { Grid } from '@material-ui/core';
-
-const schema = {
-  name: Joi.string()
-    .min(6)
-    .max(30)
-    .required(),
-  description: Joi.string(),
-  team: Joi.array()
-    .items(Joi.string())
-    .required()
-};
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -207,7 +195,7 @@ class ProjectForm extends Component {
 
 ProjectForm = reduxForm({
   form: 'project',
-  validate: createValidator(schema)
+  validate: createValidator('project')
 })(ProjectForm);
 
 export default withRouter(

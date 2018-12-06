@@ -5,7 +5,8 @@ import { Field, reduxForm } from 'redux-form';
 import Button from '@material-ui/core/Button';
 import { TextField } from '../../forms';
 
-import { validate } from '../../logic/login';
+import { createValidator } from '../../logic/validator';
+
 import { resetPassword } from '../../routines';
 
 class ResetPasswordForm extends Component {
@@ -47,7 +48,7 @@ class ResetPasswordForm extends Component {
 
 ResetPasswordForm = reduxForm({
   form: 'reset',
-  validate
+  validate: createValidator('resetPassword')
 })(ResetPasswordForm);
 
 export default withRouter(

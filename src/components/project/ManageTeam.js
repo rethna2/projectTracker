@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { TextField, Typography } from '@material-ui/core';
 
-let addRef = null;
+import { isValidEmail } from '../../logic/validator';
 
 const styles = theme => ({
   smallFont: {
@@ -19,67 +19,70 @@ const styles = theme => ({
 });
 
 class ManageTeam extends React.Component {
-
-  state={
+  state = {
     emailId: '',
-    error:false
-  }
-  onAdd =() => {
-    const present = this.props.people.find(item => item === this.state.emailId);
-    if(present){
-      this.setState({error: true, errorMsg: 'Already in team'})
-    }else{
-      this.props.onAdd(this.state.emailId);
-    this.setState({emailId: ''})
+    error: false
+  };
+  onAdd = () => {
+    if (!isValidEmail(this.state.emailId)) {
+      this.setState({ error: true, errorMsg: 'Invalid Email' });
+      return;
     }
-    
-  }
-  render(){
+    const present = this.props.people.find(item => item === this.state.emailId);
+    if (present) {
+      this.setState({ error: true, errorMsg: 'Already in team' });
+    } else {
+      this.props.onAdd(this.state.emailId);
+      this.setState({ emailId: '' });
+    }
+  };
+  render() {
     const { people, onAdd, onRemove, classes } = this.props;
     return (
       <div className="person">
-    <Typography variant="subheading">Manage Team</Typography>
+        <Typography variant="subheading">Manage Team</Typography>
 
-    <Typography variant="subtitle1" className={classes.smallFont}>
-      Add People
-    </Typography>
-    <div className={classes.flex}>
-      <TextField
-        name="userList"
-        error={this.state.error}
-        label={this.state.error && this.state.errorMsg}
-        onChange={e=>this.setState({emailId: e.target.value, error: false})}
-        value={this.state.emailId}
-        className={classes.grow}
-        onKeyPress={e => e.charCode === 13 && this.onAdd()}
-      />
-      <AddCircle
-        onClick={this.onAdd}
-        color="primary"
-      />
-    </div>
-    <div>
-      {people && (
-        <div>
-          <Typography variant="subtitle1" className={classes.smallFont}>
-            Remove People
-          </Typography>
-          <div style={{ maxHeight: 300, overflow: 'auto' }}>
-            {people.map(person => (
-              <div className="person-flex personlist">
-                <span style={{ padding: '5px 20px 5px 5px' }}>{person}</span>
-                <RemoveCircle
-                  onClick={() => onRemove(person)}
-                  color="primary"
-                />
-              </div>
-            ))}
-          </div>
+        <Typography variant="subtitle1" className={classes.smallFont}>
+          Add People
+        </Typography>
+        <div className={classes.flex}>
+          <TextField
+            name="userList"
+            error={this.state.error}
+            label={this.state.error && this.state.errorMsg}
+            onChange={e =>
+              this.setState({ emailId: e.target.value, error: false })
+            }
+            value={this.state.emailId}
+            className={classes.grow}
+            onKeyPress={e => e.charCode === 13 && this.onAdd()}
+          />
+          <AddCircle onClick={this.onAdd} color="primary" />
         </div>
-      )}
-    </div>
-  </div>
-    )
+        <div>
+          {people && (
+            <div>
+              <Typography variant="subtitle1" className={classes.smallFont}>
+                Remove People
+              </Typography>
+              <div style={{ maxHeight: 300, overflow: 'auto' }}>
+                {people.map(person => (
+                  <div className="person-flex personlist">
+                    <span style={{ padding: '5px 20px 5px 5px' }}>
+                      {person}
+                    </span>
+                    <RemoveCircle
+                      onClick={() => onRemove(person)}
+                      color="primary"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   }
 }
 

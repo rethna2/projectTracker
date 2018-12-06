@@ -16,23 +16,8 @@ import {
 } from '@material-ui/core';
 import { TextField, Select } from '../../forms';
 import { withStyles } from '@material-ui/core/styles';
-import Joi from 'joi';
-import createValidator from '../../logic/joiReduxForm';
-import { validate } from '../../logic/task';
+import { createValidator } from '../../logic/validator';
 import { addTask, editTask, deleteTask, fetchUser } from '../../routines';
-
-const schema = {
-  name: Joi.string()
-    .min(6)
-    .max(255)
-    .required(),
-  description: Joi.string()
-    .min(6)
-    .max(3000),
-  points: Joi.number(),
-  status: Joi.string().valid(['backlog', 'new', 'wip', 'review', 'done']),
-  assignedTo: Joi.string()
-};
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -218,7 +203,7 @@ class TaskForm extends Component {
 
 TaskForm = reduxForm({
   form: 'task',
-  validate: createValidator(schema)
+  validate: createValidator('task')
 })(TaskForm);
 
 export default withRouter(

@@ -10,13 +10,7 @@ import TimeSheetPopup from '../components/timesheet/TimesheetPopup';
 import { fetchMyTimesheets, fetchMyReviewTimesheets } from '../routines';
 import Loader from '../components/Loader';
 
-import {
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  Button
-} from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
 const styles = theme => ({
   wrapper: {
@@ -115,7 +109,9 @@ class Reports extends Component {
           </Button>
         )}
         <div>
-          <h4 className={classes.spacetop}>My Recent Timesheets </h4>
+          <Typography variant="h5" className={classes.spacetop}>
+            My Recent Timesheets
+          </Typography>
           <div>
             <TimeSheetList
               onEdit={this.onEditTimesheet}
@@ -124,7 +120,9 @@ class Reports extends Component {
           </div>
         </div>
         <div>
-          <h4 className={classes.spacetop}>Timesheets waiting for approval </h4>
+          <Typography variant="h5" className={classes.spacetop}>
+            Timesheets waiting for approval
+          </Typography>
           <div>
             <TimesheetReviewList
               onView={id => this.onEditTimesheet(id, true)}

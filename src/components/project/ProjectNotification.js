@@ -14,6 +14,7 @@ import { AccountCircle } from '@material-ui/icons';
 
 import { fetchProjectData } from '../../routines';
 
+// data.name is not available for project change
 const comp = item => (
   <span>
     <span style={{ color: 'green', fontSize: '0.7em' }}>
@@ -29,7 +30,7 @@ const comp = item => (
     >
       {item.type}
     </span>{' '}
-    <span style={{ padding: 5 }}>{item.data.name}</span>
+    <span style={{ padding: 5 }}>{item.data && item.data.name}</span>
   </span>
 );
 
@@ -49,15 +50,25 @@ class ProjectNotification extends Component {
   render() {
     if (!this.props.projectId) {
       return (
-        <div style={{ margin: 50 }}> Select a Project to see more details </div>
+        <Typography variant="subtitle1" style={{ margin: 50 }}>
+          Select a Project to see more details
+        </Typography>
       );
     }
     const { recentActivities } = this.props;
     if (!recentActivities || this.props.loading) {
-      return <div style={{ margin: 50 }}> Loading... </div>;
+      return (
+        <Typography variant="subtitle1" style={{ margin: 50 }}>
+          Loading...
+        </Typography>
+      );
     }
     if (!recentActivities.length) {
-      return <div style={{ margin: 50 }}> No Recent Activities </div>;
+      return (
+        <Typography variant="subtitle1" style={{ margin: 50 }}>
+          No Recent Activities
+        </Typography>
+      );
     }
 
     return (

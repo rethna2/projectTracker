@@ -43,9 +43,12 @@ class TaskTable extends Component {
                 <TableRow
                   style={{
                     cursor: 'pointer',
-                    backgroundColor: selectedTask === item._id ? 'yellow' : ''
+                    backgroundColor:
+                      selectedTask && selectedTask._id === item._id
+                        ? 'yellow'
+                        : ''
                   }}
-                  onClick={() => onSelect(item._id)}
+                  onClick={() => onSelect(item)}
                 >
                   <TableCell>
                     <Link

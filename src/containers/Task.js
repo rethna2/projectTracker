@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Route, withRouter } from 'react-router-dom';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 
 import { fetchTasks } from '../routines';
 import Loader from '../components/Loader';
@@ -46,7 +46,9 @@ class Tasks extends Component {
         <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
             <div className="headingTop" style={{ display: 'flex' }}>
-              <h3 style={{ flexGrow: 1 }}>Tasks</h3>
+              <Typography variant="h4" style={{ flexGrow: 1 }}>
+                Tasks
+              </Typography>
               <Link to={`/project/${projectId}/task/new`}>
                 <Button
                   color="primary"
@@ -81,7 +83,7 @@ class Tasks extends Component {
             </div>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TaskDetails taskId={selectedTask} projectId={projectId} />
+            <TaskDetails task={selectedTask} projectId={projectId} />
           </Grid>
         </Grid>
       </div>

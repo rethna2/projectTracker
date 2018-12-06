@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import ProjectTable from '../components/project/ProjectTable';
 import ProjectForm from '../components/project/ProjectForm';
 import Loader from '../components/Loader';
-import { Grid, Divider } from '@material-ui/core';
+import { Grid, Divider, Typography } from '@material-ui/core';
 import ProjectNotification from '../components/project/ProjectNotification';
 
 class Projects extends Component {
@@ -37,8 +37,10 @@ class Projects extends Component {
       <div className="page" style={{ margin: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
-            <div className="headingTop" style={{ display: 'flex' }}>
-              <h3 style={{ flexGrow: 1 }}>My Projects</h3>
+            <div style={{ display: 'flex', marginBottom: 20 }}>
+              <Typography variant="h4" style={{ flexGrow: 1 }}>
+                My Projects
+              </Typography>
               <Link to="/project/new">
                 <Button
                   color="primary"

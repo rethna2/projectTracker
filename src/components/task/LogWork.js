@@ -14,10 +14,8 @@ import {
 } from '@material-ui/core';
 import cx from 'classnames';
 import { Field, reduxForm } from 'redux-form';
-import Joi from 'joi';
 
 import { TextField } from '../../forms';
-import createValidator from '../../logic/joiReduxForm';
 import { logTime, editTime, deleteTime } from '../../routines';
 
 const styles = theme => ({
@@ -43,15 +41,6 @@ const styles = theme => ({
   }
 });
 
-const schema = {
-  timeSpent: Joi.number(),
-  pointsDone: Joi.number(),
-  //date: Joi.date(),
-  comments: Joi.string()
-    .min(6)
-    .max(3000)
-};
-
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
@@ -68,7 +57,7 @@ class LogWork extends Component {
   deleteTime = () => {
     this.props.deleteTime({
       projectId: this.props.projectId,
-      taskId: this.props.taskId,
+      taskId: this.props.task._id,
       timeId: this.props.timeId
     });
   };
@@ -78,10 +67,14 @@ class LogWork extends Component {
       timeSpent: Number(values.timeSpent),
       pointsDone: Number(values.pointsDone),
       date: this.state.selectedDate,
-      comments: values.comments
+      comments: values.comments,
+      task: {
+        id: this.props.task._id,
+        name: this.props.task.name
+      }
     };
     const projectId = this.props.projectId;
-    const taskId = this.props.taskId;
+    const taskId = this.props.task._id;
     const payload = { projectId, taskId, data };
     if (this.props.timeId === 'new') {
       this.props.logTime(payload);
@@ -194,8 +187,7 @@ class LogWork extends Component {
 }
 
 LogWork = reduxForm({
-  form: 'time',
-  validate: createValidator(schema)
+  form: 'logTime'
 })(LogWork);
 
 export default connect(
