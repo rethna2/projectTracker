@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -62,7 +61,6 @@ class CustomElements extends PureComponent {
   };
 
   render() {
-    const { selectedDate } = this.state;
     return (
       <div className="picker">
         <DatePicker

@@ -1,37 +1,35 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { ErrorOutline } from '@material-ui/icons';
 
-import { Button, withStyles } from '@material-ui/core';
+import { Button, withStyles, Typography } from '@material-ui/core';
 import { Field, reduxForm } from 'redux-form';
 import { createValidator } from '../../logic/validator';
 
-import { register } from '../../routines';
+import { register, registerHandler } from '../../routines';
 import { TextField } from '../../forms';
 
 const styles = () => ({
   marginTop15: {
     marginTop: 15
   },
-  btnWrap: { margin: 20, textAlign: 'right' }
+  btnWrap: { marginTop: 15, textAlign: 'right' }
 });
 
 class RegisterForm extends Component {
-  registerFormSubmit = values => {
-    const data = {
-      name: values.name,
-      emailId: values.emailId,
-      password: values.password
-    };
-    this.props.register(data);
-  };
   render() {
-    const { handleSubmit, pristine, submitting, classes } = this.props;
+    const { handleSubmit, pristine, submitting, classes, error } = this.props;
     return (
-      <form
-        className="formBody"
-        onSubmit={handleSubmit(this.registerFormSubmit.bind(this))}
-      >
+      <form className="formBody" onSubmit={handleSubmit(registerHandler)}>
+        {error && (
+          <Typography
+            variant="subtitle2"
+            style={{ color: 'red', marginBottom: 15 }}
+          >
+            <ErrorOutline /> {error}
+          </Typography>
+        )}
         <div>
           <Field
             name="name"
@@ -78,9 +76,4 @@ RegisterForm = reduxForm({
   validate: createValidator('register')
 })(RegisterForm);
 
-export default withRouter(
-  connect(
-    (state, props) => ({}),
-    { register }
-  )(withStyles(styles)(RegisterForm))
-);
+export default withRouter(connect()(withStyles(styles)(RegisterForm)));

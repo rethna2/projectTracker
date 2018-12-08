@@ -2,18 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { Button, Typography, withStyles } from '@material-ui/core';
-
+import { Button, withStyles, Typography } from '@material-ui/core';
+import { ErrorOutline } from '@material-ui/icons';
 import cx from 'classnames';
 import { createValidator } from '../../logic/validator';
 
-import { login } from '../../routines';
+import { loginHandler } from '../../routines';
 import { TextField, Checkbox } from '../../forms';
-const required = value => (value == null ? 'Required' : undefined);
-const email = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? 'Invalid email'
-    : undefined;
 
 const styles = () => ({
   marginTop15: {
@@ -29,26 +24,22 @@ const styles = () => ({
 });
 
 class LoginForm extends Component {
-  loginFormSubmit = values => {
-    const data = {
-      emailId: values.emailId,
-      password: values.password
-    };
-    if (values.checker == true) {
-      localStorage.setItem('rememberMe', JSON.stringify(data));
-    }
-
-    this.props.login(data);
-  };
-
   render() {
-    const { handleSubmit, pristine, submitting, classes } = this.props;
+    const { handleSubmit, pristine, submitting, classes, error } = this.props;
     return (
       <form
         className="formBody"
         name="form"
-        onSubmit={handleSubmit(this.loginFormSubmit)}
+        onSubmit={handleSubmit(loginHandler)}
       >
+        {error && (
+          <Typography
+            variant="subtitle2"
+            style={{ color: 'red', marginBottom: 15 }}
+          >
+            <ErrorOutline /> {error}
+          </Typography>
+        )}
         <div>
           <Field
             name="emailId"
@@ -56,7 +47,6 @@ class LoginForm extends Component {
             hintText="Email"
             label="Email"
             floatingLabelText="Email"
-            validate={[required, email]}
             fullWidth="true"
           />
         </div>
@@ -73,8 +63,10 @@ class LoginForm extends Component {
         </div>
         <div className={cx(classes.flexSpread, classes.marginTop15)}>
           <div className={classes.flexGrow}>
-            <Field name="rememberMe" component={Checkbox} />
-            <label>Remember Me</label>
+            <Typography variant="subtitle2">
+              {' '}
+              <Field name="rememberMe" component={Checkbox} /> Remember Me
+            </Typography>
           </div>
           <div>
             <Button
@@ -83,7 +75,7 @@ class LoginForm extends Component {
               color="primary"
               disabled={pristine || submitting}
             >
-              Login
+              Login{submitting && '...'}
             </Button>
           </div>
         </div>
@@ -103,16 +95,14 @@ LoginForm = reduxForm({
 })(LoginForm);
 
 export default withRouter(
-  connect(
-    (state, props) => {
-      const obj = JSON.parse(localStorage.getItem('rememberMe')) || {};
-      return {
-        initialValues: {
-          emailId: obj.emailId,
-          password: obj.password
-        }
-      };
-    },
-    { login }
-  )(withStyles(styles)(LoginForm))
+  connect((state, props) => {
+    const obj = JSON.parse(localStorage.getItem('rememberMe')) || {};
+    return {
+      initialValues: {
+        emailId: obj.emailId,
+        password: obj.password
+      },
+      error: state.user.error
+    };
+  })(withStyles(styles)(LoginForm))
 );

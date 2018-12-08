@@ -57,6 +57,10 @@ class App extends Component {
 
   componentWillReceiveProps() {
     this.token = window.localStorage.getItem('token');
+    if (this.token) {
+      this.props.userInfo();
+      this.props.fetchProjects();
+    }
   }
 
   render() {

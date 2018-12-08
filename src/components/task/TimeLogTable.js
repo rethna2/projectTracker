@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 import {
@@ -21,8 +20,6 @@ class TimeLogTable extends Component {
         </div>
       );
     } else {
-      const { selectedTask, onSelect } = this.props;
-
       return (
         <div>
           <Table>

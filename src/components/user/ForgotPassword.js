@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-
 import Button from '@material-ui/core/Button';
+
 import { createValidator } from '../../logic/validator';
 import { forgotPassword } from '../../routines';
 import { TextField } from '../../forms';
@@ -50,7 +50,7 @@ ForgotPasswordForm = reduxForm({
 
 export default withRouter(
   connect(
-    (state, props) => ({
+    state => ({
       msg: state.user.data && state.user.data.msg
     }),
     { forgotPassword }

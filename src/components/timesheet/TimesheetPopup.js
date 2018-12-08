@@ -202,7 +202,7 @@ class TimeSheetPopup extends Component {
   onTimesheetApprove = () => {};
 
   render() {
-    const { handleSubmit, pristine, reset, submitting, classes } = this.props;
+    const { classes } = this.props;
 
     let data = [];
     if (this.props.data) {

@@ -12,7 +12,6 @@ const initialState = {
   data: {},
   userData: [],
   loading: true,
-  loginState: false,
   error: null
 };
 
@@ -31,8 +30,7 @@ export default function registerReducer(state = initialState, action) {
     case login.TRIGGER:
       return {
         ...state,
-        loading: true,
-        loginState: false
+        loading: true
       };
     case login.FAILURE:
       return {
@@ -42,13 +40,11 @@ export default function registerReducer(state = initialState, action) {
     case login.SUCCESS:
       return {
         ...state,
-        data: action.payload,
-        loginState: true
+        data: action.payload
       };
     case login.FULFILL:
       return {
         ...state,
-        loginState: true,
         loading: false
       };
     case forgotPassword.FAILURE:

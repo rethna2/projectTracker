@@ -1,4 +1,4 @@
-import { createRoutine } from 'redux-saga-routines';
+import { createRoutine, bindRoutineToReduxForm } from 'redux-saga-routines';
 
 export const userInfo = createRoutine('USER_INFO');
 export const register = createRoutine('REGISTER');
@@ -34,3 +34,7 @@ export const generateTimesheet = createRoutine('GENERATE_TIMESHEET');
 export const editTimesheet = createRoutine('EDIT_TIMESHEET');
 export const deleteTimesheet = createRoutine('DELETE_TIMESHEET');
 export const reviewTimesheet = createRoutine('REVIEW_TIMESHEET');
+
+export const registerHandler = bindRoutineToReduxForm(register);
+export const loginHandler = bindRoutineToReduxForm(login);
+export const resetPasswordHandler = bindRoutineToReduxForm(resetPassword);

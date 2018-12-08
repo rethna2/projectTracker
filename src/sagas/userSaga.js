@@ -1,3 +1,8 @@
+import { takeEvery, delay } from 'redux-saga';
+import { push } from 'connected-react-router';
+import { call, put, fork } from 'redux-saga/effects';
+import { SubmissionError } from 'redux-form';
+
 import {
   register,
   login,
@@ -7,20 +12,17 @@ import {
   logout,
   fetchUser
 } from '../routines';
-import { takeEvery, delay } from 'redux-saga';
-import { push } from 'connected-react-router';
-import { call, put, fork } from 'redux-saga/effects';
 
 import * as api from '../api';
 
 function* registerSaga({ payload }) {
   try {
     yield put(register.request());
-    const response = yield api.register(payload);
+    const response = yield api.register(payload.values);
     yield put(register.success(response));
     localStorage.setItem('token', JSON.stringify(response));
   } catch (error) {
-    yield put(register.failure(error.msg));
+    yield put(register.failure(new SubmissionError({ _error: error.msg })));
   } finally {
     yield put(register.fulfill());
   }
@@ -29,11 +31,11 @@ function* registerSaga({ payload }) {
 function* loginSaga({ payload }) {
   try {
     yield put(login.request());
-    const response = yield api.login(payload);
+    const response = yield api.login(payload.values);
     yield put(login.success(response));
     localStorage.setItem('token', JSON.stringify(response));
   } catch (error) {
-    yield put(login.failure(error.msg));
+    yield put(login.failure(new SubmissionError({ _error: error.msg })));
   } finally {
     yield put(login.fulfill());
   }
@@ -54,12 +56,15 @@ function* forgotPasswordSaga({ payload }) {
 function* resetPasswordSaga({ payload }) {
   try {
     yield put(resetPassword.request());
-    const response = yield api.resetPassword(payload);
+    const response = yield api.resetPassword(payload.values);
     yield put(resetPassword.success(response));
     localStorage.setItem('token', JSON.stringify(response));
     yield put(push('/project'));
   } catch (error) {
-    yield put(resetPassword.failure(error.msg));
+    console.log(error);
+    yield put(
+      resetPassword.failure(new SubmissionError({ _error: 'Server Error' }))
+    );
   } finally {
     yield put(resetPassword.fulfill());
   }

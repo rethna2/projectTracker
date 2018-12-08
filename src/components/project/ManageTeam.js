@@ -37,7 +37,7 @@ class ManageTeam extends React.Component {
     }
   };
   render() {
-    const { people, onAdd, onRemove, classes } = this.props;
+    const { people, onRemove, classes } = this.props;
     return (
       <div className="person">
         <Typography variant="subheading">Manage Team</Typography>

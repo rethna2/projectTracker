@@ -89,7 +89,7 @@ class ProjectForm extends Component {
   };
 
   render() {
-    const { handleSubmit, pristine, reset, submitting, classes } = this.props;
+    const { handleSubmit, classes } = this.props;
     const projectId = this.props.match.params.projectId.toLowerCase();
     return (
       <Dialog

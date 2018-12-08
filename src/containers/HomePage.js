@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
+import { Grid, Card, CardContent } from '@material-ui/core';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 import LogIn from '../components/user/Login';
 import Register from '../components/user/Register';
 import ForgotPassword from '../components/user/ForgotPassword';
 import ResetPassword from '../components/user/ResetPassword';
-import Button from '@material-ui/core/Button';
-import { Grid, Card, CardContent } from '@material-ui/core';
-import withStyles from '@material-ui/core/styles/withStyles';
 import StyledCardHeader from '../styles/CardHeader';
 
 const styles = () => ({

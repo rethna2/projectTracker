@@ -2,34 +2,37 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import Button from '@material-ui/core/Button';
+import { Button, Typography } from '@material-ui/core';
+import { ErrorOutline } from '@material-ui/icons';
+
 import { TextField } from '../../forms';
-
 import { createValidator } from '../../logic/validator';
-
-import { resetPassword } from '../../routines';
+import { resetPasswordHandler } from '../../routines';
 
 class ResetPasswordForm extends Component {
-  constructor(props) {
-    super(props);
-    const token = this.props.match.params.token;
-  }
-
-  resetPasswordFormSubmit = values => {
+  resetPasswordFormSubmit = (values, ...args) => {
     const data = {
       password: values.password
     };
     const token = this.props.match.params.token;
     const emailId = this.props.match.params.emailId;
-    this.props.resetPassword({ token, emailId, data });
+    resetPasswordHandler({ token, emailId, data }, ...args);
   };
   render() {
-    const { handleSubmit, pristine, submitting } = this.props;
+    const { handleSubmit, pristine, submitting, error } = this.props;
     return (
       <form
         className="formBody"
         onSubmit={handleSubmit(this.resetPasswordFormSubmit)}
       >
+        {error && (
+          <Typography
+            variant="subtitle2"
+            style={{ color: 'red', marginBottom: 15 }}
+          >
+            <ErrorOutline /> {error}
+          </Typography>
+        )}
         <Field name="password" component={TextField} label="New Password" />
         <div style={{ marginTop: 20 }}>
           <Button
@@ -51,9 +54,4 @@ ResetPasswordForm = reduxForm({
   validate: createValidator('resetPassword')
 })(ResetPasswordForm);
 
-export default withRouter(
-  connect(
-    (state, props) => ({}),
-    { resetPassword }
-  )(ResetPasswordForm)
-);
+export default withRouter(connect()(ResetPasswordForm));

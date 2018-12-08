@@ -23,8 +23,7 @@ const comp = item => (
     <span
       style={{
         padding: 5,
-        color: 'white',
-        backgroundColor: 'blue',
+        color: 'blue',
         fontSize: '0.7em'
       }}
     >

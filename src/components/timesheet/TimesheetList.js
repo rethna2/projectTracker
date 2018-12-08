@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import {
   Table,
@@ -8,11 +7,11 @@ import {
   TableHead,
   TableRow
 } from '@material-ui/core';
-import Create from '@material-ui/icons/Create';
+import { Create } from '@material-ui/icons';
 
 class TimeSheetList extends Component {
   render() {
-    const data = this.props.list; // mockData;
+    const data = this.props.list;
     if (!data.length) {
       return (
         <div>
