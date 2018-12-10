@@ -13,6 +13,7 @@ import {
 import { AccountCircle } from '@material-ui/icons';
 
 import { fetchProjectData } from '../../routines';
+import BurnDownChart from './BurnDownChart';
 
 // data.name is not available for project change
 const comp = item => (
@@ -72,6 +73,21 @@ class ProjectNotification extends Component {
 
     return (
       <div style={{ borderLeft: '1px solid green' }}>
+        <div>
+          <Typography variant="h5" style={{ paddingLeft: 20 }}>
+            Burn Down Chart
+          </Typography>
+          <div
+            style={{
+              padding: 20,
+              margin: 20,
+              backgroundColor: 'white',
+              boxShadow: '0 2px 1px 1px rgba(140, 150, 160, 0.5)'
+            }}
+          >
+            <BurnDownChart />
+          </div>
+        </div>
         <Typography variant="h5" style={{ paddingLeft: 20 }}>
           Recent Activities
         </Typography>

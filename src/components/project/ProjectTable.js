@@ -42,7 +42,7 @@ class ProjectTable extends Component {
                     style={{
                       cursor: 'pointer',
                       backgroundColor:
-                        selectedProject === item._id ? 'yellow' : ''
+                        selectedProject === item._id ? '#89d9ff' : ''
                     }}
                     onClick={() => onSelect(item._id)}
                   >
