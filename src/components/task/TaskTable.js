@@ -6,7 +6,8 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Card
 } from '@material-ui/core';
 import Create from '@material-ui/icons/Create';
 
@@ -23,7 +24,7 @@ class TaskTable extends Component {
       const { selectedTask, onSelect } = this.props;
 
       return (
-        <div>
+        <Card>
           <Table>
             <TableHead displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
@@ -68,7 +69,7 @@ class TaskTable extends Component {
               ))}
             </TableBody>
           </Table>
-        </div>
+        </Card>
       );
     }
   }

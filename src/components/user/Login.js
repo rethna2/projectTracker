@@ -9,6 +9,7 @@ import { createValidator } from '../../logic/validator';
 
 import { loginHandler } from '../../routines';
 import { TextField, Checkbox } from '../../forms';
+import SubmitButton from '../general/SubmitButton';
 
 const styles = () => ({
   marginTop15: {
@@ -64,19 +65,22 @@ class LoginForm extends Component {
         <div className={cx(classes.flexSpread, classes.marginTop15)}>
           <div className={classes.flexGrow}>
             <Typography variant="subtitle2">
-              {' '}
-              <Field name="rememberMe" component={Checkbox} /> Remember Me
+              <label htmlFor="rembemberMe">
+                <Field name="rememberMe" component={Checkbox} color="primary" />
+                Remember Me
+              </label>
             </Typography>
           </div>
           <div>
-            <Button
+            <SubmitButton
               type="submit"
               variant="contained"
               color="primary"
               disabled={pristine || submitting}
+              submitting={submitting}
             >
-              Login{submitting && '...'}
-            </Button>
+              Login
+            </SubmitButton>
           </div>
         </div>
         <div className={classes.marginTop15}>

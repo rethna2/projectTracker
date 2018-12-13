@@ -9,8 +9,7 @@ import {
   userInfo,
   forgotPassword,
   resetPassword,
-  logout,
-  fetchUser
+  logout
 } from '../routines';
 
 import * as api from '../api';
@@ -21,6 +20,7 @@ function* registerSaga({ payload }) {
     const response = yield api.register(payload.values);
     yield put(register.success(response));
     localStorage.setItem('token', JSON.stringify(response));
+    yield put(push('/project'));
   } catch (error) {
     yield put(register.failure(new SubmissionError({ _error: error.msg })));
   } finally {
@@ -34,6 +34,7 @@ function* loginSaga({ payload }) {
     const response = yield api.login(payload.values);
     yield put(login.success(response));
     localStorage.setItem('token', JSON.stringify(response));
+    yield put(push('/project'));
   } catch (error) {
     yield put(login.failure(new SubmissionError({ _error: error.msg })));
   } finally {
@@ -82,18 +83,6 @@ function* userInfoSaga() {
   }
 }
 
-function* fetchUserSaga() {
-  try {
-    yield put(fetchUser.request());
-    const response = yield api.fetchUser();
-    yield put(fetchUser.success(response));
-  } catch (error) {
-    yield put(fetchUser.failure(error.msg));
-  } finally {
-    yield put(fetchUser.fulfill());
-  }
-}
-
 function* logoutSaga() {
   try {
     yield put(logout.request());
@@ -112,7 +101,6 @@ export default [
   fork(takeEvery, register.TRIGGER, registerSaga),
   fork(takeEvery, login.TRIGGER, loginSaga),
   fork(takeEvery, userInfo.TRIGGER, userInfoSaga),
-  fork(takeEvery, fetchUser.TRIGGER, fetchUserSaga),
   fork(takeEvery, forgotPassword.TRIGGER, forgotPasswordSaga),
   fork(takeEvery, resetPassword.TRIGGER, resetPasswordSaga),
   fork(takeEvery, logout.TRIGGER, logoutSaga)

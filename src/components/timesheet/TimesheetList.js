@@ -5,7 +5,8 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Card
 } from '@material-ui/core';
 import { Create } from '@material-ui/icons';
 
@@ -22,7 +23,7 @@ class TimeSheetList extends Component {
       );
     } else {
       return (
-        <div style={{ width: 1024, marginLeft: 30 }}>
+        <Card style={{ width: 1024, marginLeft: 30 }}>
           <Table>
             <TableHead displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
@@ -60,7 +61,7 @@ class TimeSheetList extends Component {
               })}
             </TableBody>
           </Table>
-        </div>
+        </Card>
       );
     }
   }

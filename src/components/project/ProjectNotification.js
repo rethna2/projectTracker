@@ -8,12 +8,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  Avatar
+  Avatar,
+  Button,
+  Card
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 
-import { fetchProjectData } from '../../routines';
+import { fetchProjectData, exportProject } from '../../routines';
 import BurnDownChart from './BurnDownChart';
+import Loader from '../Loader';
 
 // data.name is not available for project change
 const comp = item => (
@@ -29,7 +32,7 @@ const comp = item => (
       }}
     >
       {item.type}
-    </span>{' '}
+    </span>
     <span style={{ padding: 5 }}>{item.data && item.data.name}</span>
   </span>
 );
@@ -50,18 +53,16 @@ class ProjectNotification extends Component {
   render() {
     if (!this.props.projectId) {
       return (
-        <Typography variant="subtitle1" style={{ margin: 50 }}>
-          Select a Project to see more details
-        </Typography>
+        <Card style={{ marginTop: 50, padding: 20 }}>
+          <Typography variant="subtitle1">
+            Select a Project to see more details
+          </Typography>
+        </Card>
       );
     }
     const { recentActivities } = this.props;
     if (!recentActivities || this.props.loading) {
-      return (
-        <Typography variant="subtitle1" style={{ margin: 50 }}>
-          Loading...
-        </Typography>
-      );
+      return <Loader />;
     }
     if (!recentActivities.length) {
       return (
@@ -74,9 +75,21 @@ class ProjectNotification extends Component {
     return (
       <div style={{ borderLeft: '1px solid green' }}>
         <div>
-          <Typography variant="h5" style={{ paddingLeft: 20 }}>
-            Burn Down Chart
-          </Typography>
+          <div style={{ display: 'flex' }}>
+            <Typography variant="h5" style={{ paddingLeft: 20, flexGrow: 1 }}>
+              Burn Down Chart
+            </Typography>
+            <Button
+              color="primary"
+              onClick={() => {
+                this.props.exportProject({
+                  projectId: this.props.projectId
+                });
+              }}
+            >
+              Export Project
+            </Button>
+          </div>
           <div
             style={{
               padding: 20,
@@ -115,5 +128,5 @@ export default connect(
     recentActivities: state.project.data,
     loading: state.project.loading
   }),
-  { fetchProjectData }
+  { fetchProjectData, exportProject }
 )(ProjectNotification);

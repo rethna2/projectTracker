@@ -4,33 +4,44 @@ import {
   userInfo,
   forgotPassword,
   resetPassword,
-  logout,
-  fetchUser
+  logout
 } from '../routines';
 
 const initialState = {
   data: {},
   userData: [],
   loading: true,
+  loginCIP: false,
+  registerCIP: false,
   error: null
 };
 
 export default function registerReducer(state = initialState, action) {
   switch (action.type) {
-    case register.FAILURE:
+    case register.TRIGGER:
       return {
         ...state,
-        error: action.payload
+        registerCIP: true
       };
     case register.SUCCESS:
       return {
         ...state,
         data: action.payload
       };
+    case register.FAILURE:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case register.FULFILL:
+      return {
+        ...state,
+        registerCIP: false
+      };
     case login.TRIGGER:
       return {
         ...state,
-        loading: true
+        loginCIP: true
       };
     case login.FAILURE:
       return {
@@ -45,7 +56,7 @@ export default function registerReducer(state = initialState, action) {
     case login.FULFILL:
       return {
         ...state,
-        loading: false
+        loginCIP: false
       };
     case forgotPassword.FAILURE:
       return {
@@ -70,7 +81,6 @@ export default function registerReducer(state = initialState, action) {
     case userInfo.FAILURE:
       return {
         ...state,
-        loading: false,
         error: action.payload
       };
     case userInfo.SUCCESS:
@@ -82,16 +92,6 @@ export default function registerReducer(state = initialState, action) {
       return {
         ...state,
         loading: false
-      };
-    case fetchUser.FAILURE:
-      return {
-        ...state,
-        error: action.payload
-      };
-    case fetchUser.SUCCESS:
-      return {
-        ...state,
-        userData: action.payload
       };
     case logout.FAILURE:
       return {

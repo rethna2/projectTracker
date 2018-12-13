@@ -6,7 +6,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  Avatar
+  Avatar,
+  Card
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
 
@@ -43,23 +44,25 @@ class RecentActivities extends Component {
 
     return (
       <React.Fragment>
-        <Typography variant="h5" style={{ paddingLeft: 20 }}>
+        <Typography variant="h5" style={{ paddingLeft: 20, marginTop: 20 }}>
           Recent Activities
         </Typography>
-        <List>
-          {recentActivities.map(item => (
-            <ListItem key={item._id}>
-              <Avatar>
-                <AccountCircle />
-              </Avatar>
-              <ListItemText
-                primary={comp(item)}
-                secondary={moment(item.createdAt).fromNow()}
-              />
-              <Divider />
-            </ListItem>
-          ))}
-        </List>
+        <Card>
+          <List>
+            {recentActivities.map(item => (
+              <ListItem key={item._id}>
+                <Avatar>
+                  <AccountCircle />
+                </Avatar>
+                <ListItemText
+                  primary={comp(item)}
+                  secondary={moment(item.createdAt).fromNow()}
+                />
+                <Divider />
+              </ListItem>
+            ))}
+          </List>
+        </Card>
       </React.Fragment>
     );
   }

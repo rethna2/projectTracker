@@ -8,7 +8,9 @@ import {
   addProject,
   editProject,
   deleteProject,
-  fetchProjectData
+  fetchProjectData,
+  exportProject,
+  importProject
 } from '../routines';
 
 function* fetchProjectsSaga() {
@@ -78,10 +80,36 @@ function* deleteProjectSaga({ payload }) {
   }
 }
 
+function* exportProjectSaga({ payload }) {
+  try {
+    yield put(exportProject.request());
+    const response = yield api.exportProject(payload);
+    yield put(exportProject.success(response));
+  } catch (error) {
+    yield put(exportProject.failure(error.msg));
+  } finally {
+    yield put(exportProject.fulfill());
+  }
+}
+
+function* importProjectSaga({ payload }) {
+  try {
+    yield put(importProject.request());
+    const response = yield api.importProject(payload);
+    yield put(importProject.success(response));
+  } catch (error) {
+    yield put(importProject.failure(error.msg));
+  } finally {
+    yield put(importProject.fulfill());
+  }
+}
+
 export default [
   fork(takeEvery, fetchProjects.TRIGGER, fetchProjectsSaga),
   fork(takeEvery, fetchProjectData.TRIGGER, fetchProjectDataSaga),
   fork(takeEvery, addProject.TRIGGER, addProjectSaga),
   fork(takeEvery, editProject.TRIGGER, editProjectSaga),
-  fork(takeEvery, deleteProject.TRIGGER, deleteProjectSaga)
+  fork(takeEvery, deleteProject.TRIGGER, deleteProjectSaga),
+  fork(takeEvery, exportProject.TRIGGER, exportProjectSaga),
+  fork(takeEvery, importProject.TRIGGER, importProjectSaga)
 ];

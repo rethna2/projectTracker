@@ -9,6 +9,8 @@ import TaskTable from '../components/task/TaskTable';
 import TaskForm from '../components/task/TaskForm';
 import TaskDetails from './TaskDetails';
 
+import TitleBar from '../components/general/TitleBar';
+
 class Tasks extends Component {
   constructor(props) {
     super(props);
@@ -45,10 +47,7 @@ class Tasks extends Component {
       <div className="page" style={{ margin: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
-            <div className="headingTop" style={{ display: 'flex' }}>
-              <Typography variant="h4" style={{ flexGrow: 1 }}>
-                Tasks
-              </Typography>
+            <TitleBar label="Tasks">
               <Link to={`/project/${projectId}/task/new`}>
                 <Button
                   color="primary"
@@ -58,7 +57,7 @@ class Tasks extends Component {
                   Create New Task
                 </Button>
               </Link>
-            </div>
+            </TitleBar>
             <div className="section-sides">
               <Route
                 path="/project/:projectId/task/:taskId"
@@ -83,7 +82,9 @@ class Tasks extends Component {
             </div>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TaskDetails task={selectedTask} projectId={projectId} />
+            {list && list.length > 0 && (
+              <TaskDetails task={selectedTask} projectId={projectId} />
+            )}
           </Grid>
         </Grid>
       </div>

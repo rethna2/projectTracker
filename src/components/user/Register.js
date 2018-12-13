@@ -6,6 +6,7 @@ import { ErrorOutline } from '@material-ui/icons';
 import { Button, withStyles, Typography } from '@material-ui/core';
 import { Field, reduxForm } from 'redux-form';
 import { createValidator } from '../../logic/validator';
+import SubmitButton from '../general/SubmitButton';
 
 import { register, registerHandler } from '../../routines';
 import { TextField } from '../../forms';
@@ -57,14 +58,15 @@ class RegisterForm extends Component {
         </div>
 
         <div className={classes.btnWrap}>
-          <Button
+          <SubmitButton
             type="submit"
             variant="contained"
             color="primary"
             disabled={pristine || submitting}
+            submitting={submitting}
           >
             Register
-          </Button>
+          </SubmitButton>
         </div>
       </form>
     );

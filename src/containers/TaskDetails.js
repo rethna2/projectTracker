@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, Card } from '@material-ui/core';
 import { fetchTaskData, fetchTaskTime } from '../routines';
 import LogWork from '../components/task/LogWork';
 import TimeLogTable from '../components/task/TimeLogTable';
+import TitleBar from '../components/general/TitleBar';
 import RecentActivities from '../components/task/RecentActivities';
 import { createValidator } from '../logic/validator';
+import Loader from '../components/Loader';
 
 class TaskDetails extends Component {
   state = {
@@ -33,20 +35,18 @@ class TaskDetails extends Component {
   render() {
     if (!this.props.task) {
       return (
-        <Typography variant="subtitle1" style={{ margin: 50 }}>
-          Select a Task to see more details
-        </Typography>
+        <Card style={{ marginTop: 50, padding: 20 }}>
+          <Typography variant="subtitle1">
+            Select a Task to see more details
+          </Typography>
+        </Card>
       );
     }
 
     const { recentActivities, loading, timeList } = this.props;
 
     if (loading || !recentActivities || !timeList) {
-      return (
-        <Typography variant="subtitle1" style={{ margin: 50 }}>
-          Loading...
-        </Typography>
-      );
+      return <Loader />;
     }
 
     const initialValues =
@@ -55,18 +55,22 @@ class TaskDetails extends Component {
 
     return (
       <div style={{ borderLeft: '1px solid green', paddingLeft: 20 }}>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => this.setState({ timeId: 'new' })}
-        >
-          Log Time
-        </Button>
-        {!!timeList.length && (
+        <TitleBar label="Time Logged">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => this.setState({ timeId: 'new' })}
+          >
+            Log Time
+          </Button>
+        </TitleBar>
+        {!!timeList.length ? (
           <TimeLogTable
             list={timeList}
             onEdit={timeId => this.setState({ timeId })}
           />
+        ) : (
+          <div style={{ margin: 50 }}> No work logged yet </div>
         )}
 
         {this.state.timeId && (

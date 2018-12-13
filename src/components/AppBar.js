@@ -54,6 +54,7 @@ class MyAppBar extends Component {
     this.setState({ anchorEl: null });
     window.localStorage.removeItem('token');
     this.props.history.push('/');
+    window.location.reload();
   };
 
   handleTabChange = (event, tabPos) => {

@@ -17,7 +17,7 @@ import {
 import { TextField, Select } from '../../forms';
 import { withStyles } from '@material-ui/core/styles';
 import { createValidator } from '../../logic/validator';
-import { addTask, editTask, deleteTask, fetchUser } from '../../routines';
+import { addTask, editTask, deleteTask } from '../../routines';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -47,9 +47,6 @@ class TaskForm extends Component {
   state = {
     showConfirmDelete: false
   };
-  componentDidMount() {
-    //this.props.fetchUser();
-  }
 
   deleteTask = () => {
     this.props.deleteTask({
@@ -229,6 +226,6 @@ export default withRouter(
         team
       };
     },
-    { addTask, editTask, deleteTask, fetchUser }
+    { addTask, editTask, deleteTask }
   )(withStyles(styles)(TaskForm))
 );

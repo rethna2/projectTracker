@@ -5,7 +5,9 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Card,
+  Typography
 } from '@material-ui/core';
 import Create from '@material-ui/icons/Create';
 
@@ -15,13 +17,13 @@ class ProjectTable extends Component {
 
     if (!list.length) {
       return (
-        <div>
-          <p className="noProject">No Projects Available</p>
-        </div>
+        <Card style={{ padding: 20 }}>
+          <Typography variant="subtitle2">No Projects Available</Typography>
+        </Card>
       );
     } else {
       return (
-        <div>
+        <Card>
           <Table>
             <TableHead displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
@@ -70,7 +72,7 @@ class ProjectTable extends Component {
               })}
             </TableBody>
           </Table>
-        </div>
+        </Card>
       );
     }
   }

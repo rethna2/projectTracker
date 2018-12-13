@@ -52,8 +52,6 @@ export const resetPassword = ({ token, emailId, data }) =>
 
 export const userInfo = () => axios.get(`/api/user`).then(res => res.data);
 
-export const fetchUser = () => axios.get(`/api/users`).then(res => res.data);
-
 export const logout = () => axios.get(`/api/user/logout`).then(res => res.data);
 
 // project -----------------------------------------------------------------------
@@ -72,6 +70,12 @@ export const deleteProject = ({ projectId }) =>
 
 export const fetchProjectData = ({ projectId }) =>
   axios.get(`/api/recentactivity/${projectId}`).then(res => res.data);
+
+export const exportProject = ({ projectId }) =>
+  axios.get(`/api/project/export/${projectId}`).then(res => res.data);
+
+export const importProject = ({ data }) =>
+  axios.post(`/api/project/import/`, { ...data }).then(res => res.data);
 
 // task  -----------------------------------------------------------------------
 

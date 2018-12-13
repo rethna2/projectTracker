@@ -13,6 +13,8 @@ export const addProject = createRoutine('ADD_PROJECT');
 export const editProject = createRoutine('EDIT_PROJECT');
 export const deleteProject = createRoutine('DELETE_PROJECT');
 export const fetchProjectData = createRoutine('FETCH_PROJECT_DATA');
+export const exportProject = createRoutine('EXPORT_PROJECT');
+export const importProject = createRoutine('IMPORT_PROJECT');
 
 export const fetchTasks = createRoutine('FETCH_TASKS');
 export const addTask = createRoutine('ADD_TASK');

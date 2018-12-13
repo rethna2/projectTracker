@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { Link, Route, withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -6,12 +7,16 @@ import Button from '@material-ui/core/Button';
 import ProjectTable from '../components/project/ProjectTable';
 import ProjectForm from '../components/project/ProjectForm';
 import Loader from '../components/Loader';
+import { importProject } from '../routines';
 import { Grid, Divider, Typography } from '@material-ui/core';
 import ProjectNotification from '../components/project/ProjectNotification';
+import TitleBar from '../components/general/TitleBar';
+
 
 class Projects extends Component {
   constructor(props) {
     super(props);
+    this.fileInputRef = React.createRef();
     this.state = {
       isPopupOpen: false,
       index: -1,
@@ -27,6 +32,20 @@ class Projects extends Component {
     this.props.history.push('/project');
   };
 
+  triggerFileInput = () => {
+    this.fileInputRef.current.click();
+  };
+
+  onFilePick = e => {
+    var reader = new FileReader();
+    reader.onload = event => {
+      const data = JSON.parse(event.target.result);
+      console.log('data', data);
+      this.props.importProject({ data });
+    };
+    reader.readAsText(e.target.files[0]);
+  };
+
   render() {
     const { list, loadingList } = this.props;
     if (!list || loadingList) {
@@ -37,10 +56,17 @@ class Projects extends Component {
       <div className="page" style={{ margin: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
-            <div style={{ display: 'flex', marginBottom: 20 }}>
-              <Typography variant="h4" style={{ flexGrow: 1 }}>
-                My Projects
-              </Typography>
+          <TitleBar label="My Projects">
+              <input
+                type="file"
+                ref={this.fileInputRef}
+                style={{ display: 'none' }}
+                onChange={this.onFilePick}
+                accept="application/json"
+              />
+              <Button color="primary" onClick={this.triggerFileInput}>
+                Import Project
+              </Button>
               <Link to="/project/new">
                 <Button
                   color="primary"
@@ -50,7 +76,7 @@ class Projects extends Component {
                   Create New Project
                 </Button>
               </Link>
-            </div>
+            </TitleBar>
             <div className="section-sides">
               <div>
                 <Route
@@ -79,7 +105,9 @@ class Projects extends Component {
           </Grid>
           <Divider />
           <Grid item xs={12} sm={6}>
-            <ProjectNotification projectId={selectedProject} />
+            {list && list.length > 0 && (
+              <ProjectNotification projectId={selectedProject} />
+            )}
           </Grid>
         </Grid>
       </div>
@@ -87,7 +115,10 @@ class Projects extends Component {
   }
 }
 
-export default connect(state => ({
-  list: state.project.list,
-  loadingList: state.project.loadingList
-}))(withRouter(Projects));
+export default connect(
+  state => ({
+    list: state.project.list,
+    loadingList: state.project.loadingList
+  }),
+  { importProject }
+)(withRouter(Projects));

@@ -6,7 +6,8 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Card
 } from '@material-ui/core';
 import Create from '@material-ui/icons/Create';
 
@@ -21,7 +22,7 @@ class TimeLogTable extends Component {
       );
     } else {
       return (
-        <div>
+        <Card>
           <Table>
             <TableHead displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
@@ -49,7 +50,7 @@ class TimeLogTable extends Component {
               ))}
             </TableBody>
           </Table>
-        </div>
+        </Card>
       );
     }
   }
