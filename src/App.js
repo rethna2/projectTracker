@@ -4,6 +4,10 @@ import { Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from './store';
 
+import { create } from 'jss';
+import { createStyleManager } from 'jss-theme-reactor/styleManager';
+import jssPreset from 'jss-preset-default';
+
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import RootContainer from './containers/Root';
@@ -16,6 +20,7 @@ import { blue, pink, red } from '@material-ui/core/colors';
 
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+
 const muiTheme = createMuiTheme({
   palette: {
     primary: {
@@ -46,8 +51,16 @@ const muiTheme = createMuiTheme({
       root: {
         backgroundColor: '#89d9ff'
       }
+    },
+    flex: {
+      display: 'flex'
     }
   }
+});
+
+const styleManager = createStyleManager({
+  theme: muiTheme,
+  jss: create(jssPreset())
 });
 
 class App extends Component {

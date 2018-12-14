@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
+import { withStyles } from '@material-ui/core';
+
 import { history } from '../store';
 import AppBar from '../components/AppBar';
 import Project from './Project';
@@ -12,6 +14,16 @@ import Kanban from './Kanban';
 
 import { fetchProjects } from '../routines';
 
+const styles = theme => ({
+  root: {
+    '@global': {
+      flex: {
+        display: 'flex'
+      }
+    }
+  }
+});
+
 class RootComponent extends Component {
   constructor(props) {
     super(props);
@@ -19,9 +31,10 @@ class RootComponent extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <ConnectedRouter history={history}>
-        <div>
+        <div className={classes.root}>
           <AppBar />
           <Switch>
             <Route exact path="/" component={Project} />
@@ -43,4 +56,4 @@ class RootComponent extends Component {
 export default connect(
   state => ({}),
   { fetchProjects }
-)(RootComponent);
+)(withStyles(styles)(RootComponent));

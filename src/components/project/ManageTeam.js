@@ -10,9 +10,10 @@ const styles = theme => ({
   smallFont: {
     fontSize: '0.7em'
   },
+  /*
   flex: {
     display: 'flex'
-  },
+  },*/
   grow: {
     flexGrow: 1
   }

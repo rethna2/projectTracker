@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Typography, Card, withStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
@@ -31,6 +31,44 @@ const tasks = [
   { _id: 10, title: 'Tenth Task', status: 'done' }
 ];
 
+const styles = theme => {
+  console.log('theme', theme);
+  return {
+    flex: {
+      display: 'flex',
+      margin: '0 auto',
+      width: '90vw',
+      fontFamily: 'Arial, "Helvetica Neue", sans-serif'
+    },
+    title: {
+      margin: 20,
+      textAlign: 'center'
+    },
+    column: {
+      minWidth: 200,
+      width: '18vw',
+      height: '80vh',
+      margin: '0 auto',
+      // border: `1px solid ${theme.palette.primary.light}`,
+      backgroundColor: theme.palette.primary.light
+    },
+    columnHead: {
+      textAlign: 'center',
+      padding: 10,
+      fontSize: '1.2em',
+      backgroundColor: theme.palette.secondary.light
+    },
+    item: {
+      padding: 10,
+      margin: 10,
+      fontSize: '0.8em',
+      cursor: 'pointer',
+      // borderBottom: '1px solid green',
+      backgroundColor: 'white'
+    }
+  };
+};
+
 @DragDropContext(HTML5Backend)
 class Kanban extends React.Component {
   constructor(props) {
@@ -40,62 +78,35 @@ class Kanban extends React.Component {
     };
   }
   update = (id, status) => {
-    console.log('id', id, status);
     const { tasks } = this.state;
     const task = tasks.find(task => task._id === id);
     task.status = status;
     const taskIndex = tasks.indexOf(task);
-    console.log('task', task, taskIndex);
-    console.log(tasks);
     const newTasks = update(tasks, {
       [taskIndex]: { $set: task }
     });
-    console.log(newTasks);
     this.setState({ tasks: newTasks });
   };
 
   render() {
     const { tasks } = this.state;
+    const { classes } = this.props;
     return (
       <main>
-        <Typography variant="h4">Kanban Board</Typography>
-        <div style={{ display: 'flex' }}>
+        <Typography variant="h4" className={classes.title}>
+          Kanban Board
+        </Typography>
+        <div className={classes.flex}>
           {channels.map(channel => (
             <KanbanColumn status={channel}>
-              <section
-                style={{
-                  minWidth: 200,
-                  width: '18vw',
-                  height: '80vh',
-                  padding: 5,
-                  margin: '0 auto',
-                  border: '1px solid green'
-                }}
-              >
-                <div
-                  style={{
-                    textAlign: 'center',
-                    padding: 5,
-                    backgroundColor: 'yellow'
-                  }}
-                >
-                  {labelsMap[channel]}
-                </div>
+              <section className={classes.column}>
+                <div className={classes.columnHead}>{labelsMap[channel]}</div>
                 <div>
                   {tasks
                     .filter(item => item.status === channel)
                     .map(item => (
                       <KanbanItem id={item._id} onDrop={this.update}>
-                        <div
-                          style={{
-                            padding: 5,
-                            marginBottom: 5,
-                            border: '1px solid green',
-                            backgroundColor: 'white'
-                          }}
-                        >
-                          {item.title}
-                        </div>
+                        <Card className={classes.item}>{item.title}</Card>
                       </KanbanItem>
                     ))}
                 </div>
@@ -108,4 +119,4 @@ class Kanban extends React.Component {
   }
 }
 
-export default Kanban;
+export default withStyles(styles)(Kanban);
