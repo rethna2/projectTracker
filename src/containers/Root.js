@@ -9,6 +9,7 @@ import Project from './Project';
 import Task from './Task';
 import Timesheet from './Timesheet';
 import Kanban from './Kanban';
+import Pricing from './Pricing';
 
 import { fetchProjects } from '../routines';
 
@@ -29,6 +30,7 @@ class RootComponent extends Component {
             <Route path="/project" component={Project} />
             <Route path="/timesheet" component={Timesheet} />
             <Route path="/kanban" component={Kanban} />
+            <Route path="/pricing" component={Pricing} />
             <Route
               path="/"
               render={() => <div style={{ margin: 50 }}>Page Not Found </div>}
