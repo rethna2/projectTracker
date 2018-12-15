@@ -1,34 +1,24 @@
 const Joi = require('joi');
 
 export function createValidator(formName, ...props) {
-  let schema;
-  console.log('formName', formName);
   switch (formName) {
     case 'register':
-      schema = registerSchema;
-      break;
+      return validate(registerSchema);
     case 'login':
-      schema = loginSchema;
-      break;
+      return validate(loginSchema);
     case 'forgotPassword':
-      schema = forgotPasswordSchema;
-      break;
+      return validate(forgotPasswordSchema);
     case 'resetPassword':
-      schema = resetPasswordSchema;
-      break;
+      return validate(resetPasswordSchema);
     case 'project':
-      schema = projectSchema;
-      break;
+      return validate(projectSchema);
     case 'task':
-      schema = taskSchema;
-      break;
+      return validate(taskSchema);
     case 'logTime':
-      schema = logTimeSchema(...props);
-      break;
+      return validate(logTimeSchema(...props));
     default:
       throw new Error('Invalid formName');
   }
-  return validate(schema);
 }
 
 export function isValidEmail(email) {

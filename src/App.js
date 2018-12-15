@@ -4,19 +4,14 @@ import { Route } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from './store';
 
-import { create } from 'jss';
-import { createStyleManager } from 'jss-theme-reactor/styleManager';
-import jssPreset from 'jss-preset-default';
-
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import RootContainer from './containers/Root';
 
 import HomePage from './containers/HomePage';
-import AppBar from './components/AppBar';
 import { userInfo } from './routines';
 import Loader from './components/Loader';
-import { blue, pink, red } from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
 
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
@@ -35,13 +30,6 @@ const muiTheme = createMuiTheme({
     fontFamily: ['Arial', '"Helvetica Neue"', 'sans-serif']
   },
   overrides: {
-    /*
-    MuiTable: {
-      root: {
-        backgroundColor: 'white',
-        boxShadow: '0 2px 1px 1px rgba(140, 150, 160, 0.5)'
-      }
-    },*/
     MuiTableCell: {
       root: {
         padding: '5px 10px'
@@ -58,11 +46,6 @@ const muiTheme = createMuiTheme({
   }
 });
 
-const styleManager = createStyleManager({
-  theme: muiTheme,
-  jss: create(jssPreset())
-});
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -70,16 +53,6 @@ class App extends Component {
     if (this.token) {
       props.userInfo();
     }
-  }
-
-  componentWillReceiveProps() {
-    /*
-    this.token = window.localStorage.getItem('token');
-    if (this.token) {
-      this.props.userInfo();
-      this.props.fetchProjects();
-    }
-    */
   }
 
   render() {
