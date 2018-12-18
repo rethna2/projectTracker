@@ -2,6 +2,8 @@
 
 Project Tracker is a minimalistic project management cum timesheet generation tool for agile teams. This repo contains the FrontEnd code for the app. Please find the API (BackEnd code) [here](https://github.com/rethna2/projectTrackerAPI).
 
+Please checkout the app, hosted at [https://projtrack.netlify.com/](https://projtrack.netlify.com/)
+
 ## Guidelines:
 
 1. Grunt tasks like meeting, discussions, and repeated maintanace task should be handled outside the tool. The app will focus only on 'real' work.
