@@ -81,7 +81,6 @@ class TaskDetails extends Component {
             initialValues={initialValues}
             timeList={this.props.timeList}
             onCancel={() => this.setState({ timeId: null })}
-            updating={this.props.updating}
             validate={createValidator(
               'logTime',
               this.props.task,

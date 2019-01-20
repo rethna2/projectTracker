@@ -9,7 +9,7 @@ import { createValidator } from '../../logic/validator';
 
 import { loginHandler } from '../../routines';
 import { TextField, Checkbox } from '../../forms';
-import SubmitButton from '../general/SubmitButton';
+import ProgressButton from '../general/ProgressButton';
 
 const styles = () => ({
   marginTop15: {
@@ -36,9 +36,14 @@ class LoginForm extends Component {
         {error && (
           <Typography
             variant="subtitle2"
-            style={{ color: 'red', marginBottom: 15 }}
+            style={{
+              color: 'red',
+              marginBottom: 15,
+              display: 'inline-flex',
+              alignItems: 'center'
+            }}
           >
-            <ErrorOutline /> {error}
+            <ErrorOutline /> <span>{error}</span>
           </Typography>
         )}
         <div>
@@ -72,15 +77,15 @@ class LoginForm extends Component {
             </Typography>
           </div>
           <div>
-            <SubmitButton
+            <ProgressButton
               type="submit"
               variant="contained"
               color="primary"
               disabled={pristine || submitting}
-              submitting={submitting}
+              showProgress={submitting}
             >
               Login
-            </SubmitButton>
+            </ProgressButton>
           </div>
         </div>
         <div className={classes.marginTop15}>

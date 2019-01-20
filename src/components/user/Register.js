@@ -6,9 +6,9 @@ import { ErrorOutline } from '@material-ui/icons';
 import { Button, withStyles, Typography } from '@material-ui/core';
 import { Field, reduxForm } from 'redux-form';
 import { createValidator } from '../../logic/validator';
-import SubmitButton from '../general/SubmitButton';
+import ProgressButton from '../general/ProgressButton';
 
-import { register, registerHandler } from '../../routines';
+import { registerHandler } from '../../routines';
 import { TextField } from '../../forms';
 
 const styles = () => ({
@@ -26,9 +26,14 @@ class RegisterForm extends Component {
         {error && (
           <Typography
             variant="subtitle2"
-            style={{ color: 'red', marginBottom: 15 }}
+            style={{
+              color: 'red',
+              marginBottom: 15,
+              display: 'inline-flex',
+              alignItems: 'center'
+            }}
           >
-            <ErrorOutline /> {error}
+            <ErrorOutline /> <span>{error}</span>
           </Typography>
         )}
         <div>
@@ -58,15 +63,15 @@ class RegisterForm extends Component {
         </div>
 
         <div className={classes.btnWrap}>
-          <SubmitButton
+          <ProgressButton
             type="submit"
             variant="contained"
             color="primary"
             disabled={pristine || submitting}
-            submitting={submitting}
+            showProgress={submitting}
           >
             Register
-          </SubmitButton>
+          </ProgressButton>
         </div>
       </form>
     );

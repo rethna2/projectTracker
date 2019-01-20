@@ -7,6 +7,7 @@ import LogIn from '../components/user/Login';
 import Register from '../components/user/Register';
 import ForgotPassword from '../components/user/ForgotPassword';
 import ResetPassword from '../components/user/ResetPassword';
+import LandingBlock from '../components/user/LandingBlock';
 import StyledCardHeader from '../styles/CardHeader';
 
 const styles = () => ({
@@ -40,26 +41,29 @@ class HomePage extends Component {
             path="/"
             exact
             render={() => (
-              <div style={{ marginTop: 50 }}>
-                <Grid container spacing={40} justify="center">
-                  <Grid item xs={12} sm={4}>
-                    <Card>
-                      <StyledCardHeader title="Sign Up" />
-                      <CardContent>
-                        <Register />
-                      </CardContent>
-                    </Card>
+              <>
+                <LandingBlock />
+                <div style={{ marginTop: 50 }}>
+                  <Grid container spacing={40} justify="center">
+                    <Grid item xs={12} sm={4}>
+                      <Card>
+                        <StyledCardHeader title="Sign Up" />
+                        <CardContent>
+                          <Register />
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Card>
+                        <StyledCardHeader title="Login" />
+                        <CardContent>
+                          <LogIn />
+                        </CardContent>
+                      </Card>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Card>
-                      <StyledCardHeader title="Login" />
-                      <CardContent>
-                        <LogIn />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </div>
+                </div>
+              </>
             )}
           />
           <Route

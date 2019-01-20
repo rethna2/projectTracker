@@ -12,6 +12,7 @@ const initialState = {
   loadingList: false,
   loading: false,
   updating: false,
+  deleting: false,
   error: null
 };
 
@@ -61,17 +62,25 @@ export default function projectsReducer(state = initialState, action) {
 
     case addProject.TRIGGER:
     case editProject.TRIGGER:
-    case deleteProject.TRIGGER:
       return {
         ...state,
         updating: true
       };
     case addProject.FULFILL:
     case editProject.FULFILL:
-    case deleteProject.FULFILL:
       return {
         ...state,
         updating: false
+      };
+    case deleteProject.TRIGGER:
+      return {
+        ...state,
+        deleting: true
+      };
+    case deleteProject.FULFILL:
+      return {
+        ...state,
+        deleting: false
       };
     default:
       return state;

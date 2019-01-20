@@ -12,6 +12,7 @@ const initialState = {
   loadingList: false,
   loading: false,
   updating: false,
+  deleting: false,
   error: null
 };
 
@@ -59,17 +60,25 @@ export default function tasksReducer(state = initialState, action) {
       };
     case addTask.TRIGGER:
     case editTask.TRIGGER:
-    case deleteTask.TRIGGER:
       return {
         ...state,
         updating: true
       };
     case addTask.FULFILL:
     case editTask.FULFILL:
-    case deleteTask.FULFILL:
       return {
         ...state,
         updating: false
+      };
+    case deleteTask.TRIGGER:
+      return {
+        ...state,
+        deleting: true
+      };
+    case deleteTask.FULFILL:
+      return {
+        ...state,
+        deleting: false
       };
     default:
       return state;

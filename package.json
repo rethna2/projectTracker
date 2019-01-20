@@ -41,7 +41,6 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "joi": "^14.1.0",
-  
     "material-ui-pickers": "^2.0.2",
     "mini-css-extract-plugin": "0.4.3",
     "moment": "^2.22.2",
@@ -87,7 +86,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js"
   },
-  "proxy": "http://ec2-13-232-51-121.ap-south-1.compute.amazonaws.com",
+  "proxy": "http://ec2-13-127-117-126.ap-south-1.compute.amazonaws.com",
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.2.0",
     "eslint": "^5.9.0",

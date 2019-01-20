@@ -1,6 +1,6 @@
 import { takeEvery, delay } from 'redux-saga';
 import { push } from 'connected-react-router';
-import { call, put, fork } from 'redux-saga/effects';
+import { call, put, fork, select } from 'redux-saga/effects';
 import { SubmissionError } from 'redux-form';
 
 import {

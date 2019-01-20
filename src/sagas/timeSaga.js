@@ -7,7 +7,8 @@ import {
   editTime,
   deleteTime,
   fetchProjectTime,
-  fetchTaskTime
+  fetchTaskTime,
+  fetchTasks
 } from '../routines';
 import * as api from '../api';
 
@@ -16,6 +17,7 @@ function* logTimeSaga({ payload }) {
     yield put(logTime.request());
     const response = yield api.logTime(payload);
     yield put(logTime.success(response));
+    yield put(fetchTasks(payload.projectId));
   } catch (error) {
     yield put(logTime.failure(error.msg));
   } finally {
@@ -28,6 +30,7 @@ function* editTimeSaga({ payload }) {
     yield put(editTime.request());
     const response = yield api.editTime(payload);
     yield put(editTime.success(response));
+    fetchTasks(payload.projectId);
   } catch (error) {
     yield put(editTime.failure(error.msg));
   } finally {
@@ -40,6 +43,7 @@ function* deleteTimeSaga({ payload }) {
     yield put(deleteTime.request());
     const response = yield api.deleteTime(payload);
     yield put(deleteTime.success(response));
+    fetchTasks(payload.projectId);
   } catch (error) {
     yield put(deleteTime.failure(error.msg));
   } finally {

@@ -1,4 +1,4 @@
-import { takeEvery, delay } from 'redux-saga';
+import { takeLatest, delay } from 'redux-saga';
 import { call, put, fork } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
@@ -82,9 +82,9 @@ function* fetchTaskDataSaga({ payload }) {
 }
 
 export default [
-  fork(takeEvery, fetchTasks.TRIGGER, fetchTasksSaga),
-  fork(takeEvery, addTask.TRIGGER, addTaskSaga),
-  fork(takeEvery, editTask.TRIGGER, editTaskSaga),
-  fork(takeEvery, deleteTask.TRIGGER, deleteTaskSaga),
-  fork(takeEvery, fetchTaskData.TRIGGER, fetchTaskDataSaga)
+  fork(takeLatest, fetchTasks.TRIGGER, fetchTasksSaga),
+  fork(takeLatest, addTask.TRIGGER, addTaskSaga),
+  fork(takeLatest, editTask.TRIGGER, editTaskSaga),
+  fork(takeLatest, deleteTask.TRIGGER, deleteTaskSaga),
+  fork(takeLatest, fetchTaskData.TRIGGER, fetchTaskDataSaga)
 ];

@@ -14,6 +14,7 @@ import {
   InputLabel,
   Grid
 } from '@material-ui/core';
+import ProgressButton from '../general/ProgressButton';
 import { TextField, Select } from '../../forms';
 import { withStyles } from '@material-ui/core/styles';
 import { createValidator } from '../../logic/validator';
@@ -49,6 +50,9 @@ class TaskForm extends Component {
   };
 
   deleteTask = () => {
+    if (this.props.updating || this.props.deleting) {
+      return;
+    }
     this.props.deleteTask({
       id: this.props.match.params.taskId,
       projectId: this.props.match.params.projectId
@@ -56,6 +60,9 @@ class TaskForm extends Component {
   };
 
   taskFormSubmit = values => {
+    if (this.props.updating || this.props.deleting) {
+      return;
+    }
     const data = {
       name: values.name,
       description: values.description,
@@ -90,8 +97,8 @@ class TaskForm extends Component {
             {taskId === 'new' ? 'New' : 'Edit'} Task
           </div>
         </DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(this.taskFormSubmit)}>
+        <form onSubmit={handleSubmit(this.taskFormSubmit)}>
+          <DialogContent>
             <Grid container spacing={24} className={classes.wrapper}>
               <Grid item xs={12} sm={6}>
                 <div className={classes.spacetop}>
@@ -145,54 +152,52 @@ class TaskForm extends Component {
                 </div>
               </Grid>
             </Grid>
-            {this.props.isUpdating && (
-              <span className="valid-green"> Updating... </span>
-            )}
-          </form>
-        </DialogContent>
-        <DialogActions>
-          {taskId !== 'new' &&
-            (this.state.showConfirmDelete ? (
-              <React.Fragment>
-                <span className={classes.spaceLeft}> Are you sure? </span>
+          </DialogContent>
+          <DialogActions>
+            {taskId !== 'new' &&
+              (this.state.showConfirmDelete ? (
+                <React.Fragment>
+                  <span className={classes.spaceLeft}> Are you sure? </span>
+                  <ProgressButton
+                    className={classes.spaceLeft}
+                    onClick={this.deleteTask}
+                    variant="contained"
+                    showProgress={this.props.deleting}
+                  >
+                    Delete
+                  </ProgressButton>
+                  <Button
+                    className={classes.spaceLeft}
+                    onClick={() => this.setState({ showConfirmDelete: false })}
+                    color="error"
+                    variant="contained"
+                  >
+                    Cancel
+                  </Button>
+                </React.Fragment>
+              ) : (
                 <Button
-                  className={classes.spaceLeft}
-                  onClick={this.deleteTask}
+                  onClick={() => this.setState({ showConfirmDelete: true })}
                   color="error"
                   variant="contained"
                 >
-                  Delete
+                  Delete Task
                 </Button>
-                <Button
-                  className={classes.spaceLeft}
-                  onClick={() => this.setState({ showConfirmDelete: false })}
-                  color="error"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </React.Fragment>
-            ) : (
-              <Button
-                onClick={() => this.setState({ showConfirmDelete: true })}
-                color="error"
-                variant="contained"
-              >
-                Delete Task
-              </Button>
-            ))}
-          <div style={{ flexGrow: 1 }} />
-          <Button onClick={this.props.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={handleSubmit(this.taskFormSubmit)}
-          >
-            Save
-          </Button>
-        </DialogActions>
+              ))}
+            <div style={{ flexGrow: 1 }} />
+            <Button onClick={this.props.handleClose} color="primary">
+              Cancel
+            </Button>
+            <ProgressButton
+              type="submit"
+              color="primary"
+              variant="contained"
+              showProgress={this.props.updating}
+            >
+              Save
+            </ProgressButton>
+          </DialogActions>
+        </form>
       </Dialog>
     );
   }
@@ -219,7 +224,8 @@ export default withRouter(
       }
       return {
         userData: state.user.userData,
-        isUpdating: state.task.updating,
+        updating: state.task.updating,
+        deleting: state.task.deleting,
         initialValues:
           state.task.list &&
           state.task.list.find(task => task._id === props.match.params.taskId),

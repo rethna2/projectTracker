@@ -6,7 +6,7 @@ import update from 'immutability-helper';
 
 import KanbanColumn from '../components/kanban/KanbanColumn';
 import KanbanItem from '../components/kanban/KanbanItem';
-
+import { TextField } from '../forms';
 const channels = ['backlog', 'new', 'wip', 'review', 'done'];
 const labelsMap = {
   backlog: 'Backlog',
@@ -17,7 +17,7 @@ const labelsMap = {
 };
 
 //
-
+let idCounter = 11;
 const tasks = [
   { _id: 1, title: 'First Task', status: 'backlog' },
   { _id: 2, title: 'Second Task', status: 'backlog' },
@@ -74,7 +74,8 @@ class Kanban extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks
+      tasks,
+      newTask: ''
     };
   }
   update = (id, status) => {
@@ -88,6 +89,22 @@ class Kanban extends React.Component {
     this.setState({ tasks: newTasks });
   };
 
+  onNewTask = e => {
+    console.log('e.charCode', e.charCode, e);
+    if (e.charCode === 13) {
+      const newTasks = update(this.state.tasks, {
+        $push: [
+          {
+            _id: idCounter,
+            title: this.state.newTask,
+            status: 'backlog'
+          }
+        ]
+      });
+      idCounter++;
+      this.setState({ newTask: '', tasks: newTasks });
+    }
+  };
   render() {
     const { tasks } = this.state;
     const { classes } = this.props;
@@ -109,6 +126,27 @@ class Kanban extends React.Component {
                         <Card className={classes.item}>{item.title}</Card>
                       </KanbanItem>
                     ))}
+                  {channel === 'backlog' && (
+                    <div
+                      style={{
+                        backgroundColor: 'white',
+                        margin: 10,
+                        borderRadius: 3
+                      }}
+                    >
+                      <TextField
+                        name="taskName"
+                        label="Add new task"
+                        fullWidth="true"
+                        onChange={e =>
+                          this.setState({ newTask: e.target.value })
+                        }
+                        style={{ margin: 10 }}
+                        value={this.state.newTask}
+                        onKeyPress={this.onNewTask}
+                      />
+                    </div>
+                  )}
                 </div>
               </section>
             </KanbanColumn>

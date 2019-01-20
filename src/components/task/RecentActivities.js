@@ -10,24 +10,27 @@ import {
   Card
 } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core/styles';
 
-const comp = item => (
+const comp = (item, classes) => (
   <span>
-    <span style={{ color: 'green', fontSize: '0.7em' }}>
-      {item.user.name} :{' '}
-    </span>
-    <span
-      style={{
-        padding: 5,
-        color: 'white',
-        backgroundColor: 'blue',
-        fontSize: '0.7em'
-      }}
-    >
-      {item.type}
-    </span>
+    <span className={classes.displayName}>{item.user.name} : </span>
+    <span className={classes.actionName}>{item.type}</span>
   </span>
 );
+
+const styles = theme => ({
+  displayName: {
+    color: theme.palette.primary.main,
+    fontSize: '0.7em'
+  },
+  actionName: {
+    padding: 5,
+    color: 'white',
+    backgroundColor: theme.palette.primary.main,
+    fontSize: '0.7em'
+  }
+});
 
 class RecentActivities extends Component {
   render() {
@@ -55,7 +58,7 @@ class RecentActivities extends Component {
                   <AccountCircle />
                 </Avatar>
                 <ListItemText
-                  primary={comp(item)}
+                  primary={comp(item, this.props.classes)}
                   secondary={moment(item.createdAt).fromNow()}
                 />
                 <Divider />
@@ -68,4 +71,4 @@ class RecentActivities extends Component {
   }
 }
 
-export default RecentActivities;
+export default withStyles(styles)(RecentActivities);

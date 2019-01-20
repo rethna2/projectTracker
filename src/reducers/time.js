@@ -10,6 +10,7 @@ const initialState = {
   data: null, //will be used to store projectTime or taskTime
   loading: false,
   updating: false,
+  deleting: false,
   error: null
 };
 
@@ -17,7 +18,6 @@ export default function timeReducer(state = initialState, action) {
   switch (action.type) {
     case logTime.TRIGGER:
     case editTime.TRIGGER:
-    case deleteTime.TRIGGER:
       return {
         ...state,
         updating: true
@@ -31,10 +31,19 @@ export default function timeReducer(state = initialState, action) {
       };
     case logTime.FULFILL:
     case editTime.FULFILL:
-    case deleteTime.FULFILL:
       return {
         ...state,
         updating: false
+      };
+    case deleteTime.TRIGGER:
+      return {
+        ...state,
+        deleting: true
+      };
+    case deleteTime.FULFILL:
+      return {
+        ...state,
+        deleting: false
       };
     case fetchProjectTime.TRIGGER:
     case fetchTaskTime.TRIGGER:

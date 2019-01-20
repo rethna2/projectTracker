@@ -17,6 +17,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import { TextField } from '../../forms';
 import { logTime, editTime, deleteTime } from '../../routines';
+import ProgressButton from '../general/ProgressButton';
 
 const styles = theme => ({
   title: {
@@ -38,6 +39,9 @@ const styles = theme => ({
   },
   right: {
     textAlign: 'right'
+  },
+  spaceLeft: {
+    marginLeft: 20
   }
 });
 
@@ -55,6 +59,9 @@ class LogWork extends Component {
   };
 
   deleteTime = () => {
+    if (this.props.updating || this.props.deleting) {
+      return;
+    }
     this.props.deleteTime({
       projectId: this.props.projectId,
       taskId: this.props.task._id,
@@ -63,6 +70,9 @@ class LogWork extends Component {
   };
 
   timeFormSubmit = values => {
+    if (this.props.updating || this.props.deleting) {
+      return;
+    }
     const data = {
       timeSpent: Number(values.timeSpent),
       pointsDone: Number(values.pointsDone),
@@ -100,8 +110,8 @@ class LogWork extends Component {
             {timeId === 'new' ? 'Log Time' : 'Edit Time'}
           </div>
         </DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(this.timeFormSubmit)}>
+        <form onSubmit={handleSubmit(this.timeFormSubmit)}>
+          <DialogContent>
             <div className={cx(classes.flex, classes.marginTop15)}>
               <Field
                 component={TextField}
@@ -135,52 +145,51 @@ class LogWork extends Component {
                 fullWidth
               />
             </div>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          {this.props.timeId !== 'new' &&
-            (this.state.showConfirmDelete ? (
-              <React.Fragment>
-                <span className={classes.spaceLeft}> Are you sure? </span>
+          </DialogContent>
+          <DialogActions>
+            {this.props.timeId !== 'new' &&
+              (this.state.showConfirmDelete ? (
+                <React.Fragment>
+                  <span className={classes.spaceLeft}> Are you sure? </span>
+                  <ProgressButton
+                    className={classes.spaceLeft}
+                    onClick={this.deleteTime}
+                    showProgress={this.props.deleting}
+                    variant="contained"
+                  >
+                    Delete
+                  </ProgressButton>
+                  <Button
+                    className={classes.spaceLeft}
+                    onClick={() => this.setState({ showConfirmDelete: false })}
+                    variant="contained"
+                  >
+                    Cancel
+                  </Button>
+                </React.Fragment>
+              ) : (
                 <Button
-                  className={classes.spaceLeft}
-                  onClick={this.deleteTime}
+                  onClick={() => this.setState({ showConfirmDelete: true })}
                   color="error"
                   variant="contained"
                 >
-                  Delete
+                  Delete Time
                 </Button>
-                <Button
-                  className={classes.spaceLeft}
-                  onClick={() => this.setState({ showConfirmDelete: false })}
-                  color="error"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </React.Fragment>
-            ) : (
-              <Button
-                onClick={() => this.setState({ showConfirmDelete: true })}
-                color="error"
-                variant="contained"
-              >
-                Delete Time
-              </Button>
-            ))}
-          <div style={{ flexGrow: 1 }} />
-          {this.props.updating && <div style={{ padding: 5 }}>Updating...</div>}
-          <Button onClick={this.props.onCancel} color="primary">
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit(this.timeFormSubmit)}
-          >
-            Save
-          </Button>
-        </DialogActions>
+              ))}
+            <div style={{ flexGrow: 1 }} />
+            <Button onClick={this.props.onCancel} color="primary">
+              Cancel
+            </Button>
+            <ProgressButton
+              type="submit"
+              variant="contained"
+              color="primary"
+              showProgress={this.props.updating}
+            >
+              Save
+            </ProgressButton>
+          </DialogActions>
+        </form>
       </Dialog>
     );
   }
@@ -191,6 +200,9 @@ LogWork = reduxForm({
 })(LogWork);
 
 export default connect(
-  state => ({}),
+  state => ({
+    updating: state.time.updating,
+    deleting: state.time.deleting
+  }),
   { logTime, editTime, deleteTime }
 )(withStyles(styles)(LogWork));

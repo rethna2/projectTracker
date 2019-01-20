@@ -18,6 +18,7 @@ import { TextField } from '../../forms';
 import ManageTeam from './ManageTeam';
 import { addProject, editProject, deleteProject } from '../../routines';
 import { Grid } from '@material-ui/core';
+import ProgressButton from '../general/ProgressButton';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -67,12 +68,18 @@ class ProjectForm extends Component {
   };
 
   deleteProject = () => {
+    if (this.props.updating || this.props.deleting) {
+      return;
+    }
     this.props.deleteProject({
-      id: this.props.match.params.projectId
+      projectId: this.props.match.params.projectId
     });
   };
 
   projectFormSubmit = values => {
+    if (this.props.updating || this.props.deleting) {
+      return;
+    }
     if (!this.props.error) {
       const data = {
         name: values.name,
@@ -106,8 +113,8 @@ class ProjectForm extends Component {
             {projectId === 'new' ? 'New' : 'Edit'} Project
           </div>
         </DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(this.projectFormSubmit)}>
+        <form onSubmit={handleSubmit(this.projectFormSubmit)}>
+          <DialogContent>
             <Grid container spacing={24} className={classes.wrapper}>
               <Grid item xs={12} sm={6}>
                 <div className={classes.spacetop}>
@@ -139,55 +146,52 @@ class ProjectForm extends Component {
                 </div>
               </Grid>
             </Grid>
-            {this.props.isUpdating && (
-              <span className="valid-green"> Updating... </span>
-            )}
-          </form>
-        </DialogContent>
-        <DialogActions>
-          {projectId !== 'new' &&
-            (this.state.showConfirmDelete ? (
-              <React.Fragment>
-                <span className={classes.spaceLeft}> Are you sure? </span>
+          </DialogContent>
+          <DialogActions>
+            {projectId !== 'new' &&
+              (this.state.showConfirmDelete ? (
+                <React.Fragment>
+                  <span className={classes.spaceLeft}> Are you sure? </span>
+                  <ProgressButton
+                    className={classes.spaceLeft}
+                    onClick={this.deleteProject}
+                    variant="contained"
+                    showProgress={this.props.deleting}
+                  >
+                    Delete
+                  </ProgressButton>
+                  <Button
+                    className={classes.spaceLeft}
+                    onClick={() => this.setState({ showConfirmDelete: false })}
+                    variant="contained"
+                  >
+                    Cancel
+                  </Button>
+                </React.Fragment>
+              ) : (
                 <Button
-                  className={classes.spaceLeft}
-                  onClick={this.deleteProject}
+                  onClick={() => this.setState({ showConfirmDelete: true })}
                   color="error"
                   variant="contained"
                 >
-                  Delete
+                  Delete Project
                 </Button>
-                <Button
-                  className={classes.spaceLeft}
-                  onClick={() => this.setState({ showConfirmDelete: false })}
-                  color="error"
-                  variant="contained"
-                >
-                  Cancel
-                </Button>
-              </React.Fragment>
-            ) : (
-              <Button
-                onClick={() => this.setState({ showConfirmDelete: true })}
-                color="error"
-                variant="contained"
-              >
-                Delete Project
-              </Button>
-            ))}
+              ))}
 
-          <div style={{ flexGrow: 1 }} />
-          <Button onClick={this.props.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={handleSubmit(this.projectFormSubmit)}
-          >
-            Save
-          </Button>
-        </DialogActions>
+            <div style={{ flexGrow: 1 }} />
+            <Button onClick={this.props.handleClose} color="primary">
+              Cancel
+            </Button>
+            <ProgressButton
+              type="submit"
+              color="primary"
+              variant="contained"
+              showProgress={this.props.updating}
+            >
+              Save
+            </ProgressButton>
+          </DialogActions>
+        </form>
       </Dialog>
     );
   }
@@ -201,7 +205,8 @@ ProjectForm = reduxForm({
 export default withRouter(
   connect(
     (state, props) => ({
-      isUpdating: state.project.updating,
+      updating: state.project.updating,
+      deleting: state.project.deleting,
       error: state.project.error,
       initialValues: state.project.list.find(
         project => project._id === props.match.params.projectId
