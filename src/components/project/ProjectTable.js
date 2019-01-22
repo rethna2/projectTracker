@@ -25,7 +25,7 @@ class ProjectTable extends Component {
       return (
         <Card>
           <Table>
-            <TableHead displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
               <TableRow>
                 <TableCell />
                 <TableCell style={{ width: '100%' }}>Name</TableCell>
@@ -37,7 +37,7 @@ class ProjectTable extends Component {
                 <TableCell />
               </TableRow>
             </TableHead>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               {list.map(item => {
                 return (
                   <TableRow
@@ -46,6 +46,7 @@ class ProjectTable extends Component {
                       backgroundColor:
                         selectedProject === item._id ? '#89d9ff' : ''
                     }}
+                    key={item._id}
                     onClick={() => onSelect(item._id)}
                   >
                     <TableCell>

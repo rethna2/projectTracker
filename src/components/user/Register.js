@@ -37,20 +37,10 @@ class RegisterForm extends Component {
           </Typography>
         )}
         <div>
-          <Field
-            name="name"
-            component={TextField}
-            label="Name"
-            fullWidth="true"
-          />
+          <Field name="name" component={TextField} label="Name" fullWidth />
         </div>
         <div className={classes.marginTop15}>
-          <Field
-            name="emailId"
-            component={TextField}
-            label="Email"
-            fullWidth="true"
-          />
+          <Field name="emailId" component={TextField} label="Email" fullWidth />
         </div>
         <div className={classes.marginTop15}>
           <Field
@@ -58,7 +48,7 @@ class RegisterForm extends Component {
             type="password"
             component={TextField}
             label="Password"
-            fullWidth="true"
+            fullWidth
           />
         </div>
 

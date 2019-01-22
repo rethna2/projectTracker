@@ -1,6 +1,6 @@
-import { takeEvery, delay } from 'redux-saga';
+import { delay } from 'redux-saga';
 import { push } from 'connected-react-router';
-import { call, put, fork, select } from 'redux-saga/effects';
+import { call, put, fork, select, takeLatest } from 'redux-saga/effects';
 import { SubmissionError } from 'redux-form';
 
 import {
@@ -98,10 +98,10 @@ function* logoutSaga() {
 }
 
 export default [
-  fork(takeEvery, register.TRIGGER, registerSaga),
-  fork(takeEvery, login.TRIGGER, loginSaga),
-  fork(takeEvery, userInfo.TRIGGER, userInfoSaga),
-  fork(takeEvery, forgotPassword.TRIGGER, forgotPasswordSaga),
-  fork(takeEvery, resetPassword.TRIGGER, resetPasswordSaga),
-  fork(takeEvery, logout.TRIGGER, logoutSaga)
+  fork(takeLatest, register.TRIGGER, registerSaga),
+  fork(takeLatest, login.TRIGGER, loginSaga),
+  fork(takeLatest, userInfo.TRIGGER, userInfoSaga),
+  fork(takeLatest, forgotPassword.TRIGGER, forgotPasswordSaga),
+  fork(takeLatest, resetPassword.TRIGGER, resetPasswordSaga),
+  fork(takeLatest, logout.TRIGGER, logoutSaga)
 ];

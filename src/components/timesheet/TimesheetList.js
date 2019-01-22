@@ -25,7 +25,7 @@ class TimeSheetList extends Component {
       return (
         <Card style={{ width: 1024, marginLeft: 30 }}>
           <Table>
-            <TableHead displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
               <TableRow>
                 <TableCell style={{ width: 300 }}>Project Name</TableCell>
                 <TableCell style={{ width: 200 }}>Duration</TableCell>
@@ -35,10 +35,10 @@ class TimeSheetList extends Component {
                 <TableCell style={{ width: 50 }} />
               </TableRow>
             </TableHead>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               {data.map(item => {
                 return (
-                  <TableRow>
+                  <TableRow key={item._id}>
                     <TableCell>{item.project.name}</TableCell>
                     <TableCell>{`${moment(item.startDate).format(
                       'MMM DD'

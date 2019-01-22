@@ -47,24 +47,15 @@ class LoginForm extends Component {
           </Typography>
         )}
         <div>
-          <Field
-            name="emailId"
-            component={TextField}
-            hintText="Email"
-            label="Email"
-            floatingLabelText="Email"
-            fullWidth="true"
-          />
+          <Field name="emailId" component={TextField} label="Email" fullWidth />
         </div>
         <div className={classes.marginTop15}>
           <Field
             name="password"
             type="password"
             component={TextField}
-            hintText="Password"
             label="Password"
-            floatingLabelText="Password"
-            fullWidth="true"
+            fullWidth
           />
         </div>
         <div className={cx(classes.flexSpread, classes.marginTop15)}>

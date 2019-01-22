@@ -24,7 +24,7 @@ class TimeLogTable extends Component {
       return (
         <Card>
           <Table>
-            <TableHead displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
               <TableRow>
                 <TableCell />
                 <TableCell style={{ width: '100%' }}>Date</TableCell>
@@ -32,7 +32,7 @@ class TimeLogTable extends Component {
                 <TableCell style={{ width: 100 }}>Time Spent</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               {list.map(item => (
                 <TableRow>
                   <TableCell>

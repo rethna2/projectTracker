@@ -1,6 +1,4 @@
-import { takeEvery, delay } from 'redux-saga';
-import { call, put, fork } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
+import { takeLatest, put, fork } from 'redux-saga/effects';
 
 import {
   logTime,
@@ -76,9 +74,9 @@ function* fetchTaskTimeSaga({ payload }) {
 }
 
 export default [
-  fork(takeEvery, logTime.TRIGGER, logTimeSaga),
-  fork(takeEvery, editTime.TRIGGER, editTimeSaga),
-  fork(takeEvery, deleteTime.TRIGGER, deleteTimeSaga),
-  fork(takeEvery, fetchProjectTime.TRIGGER, fetchProjectTimeSaga),
-  fork(takeEvery, fetchTaskTime.TRIGGER, fetchTaskTimeSaga)
+  fork(takeLatest, logTime.TRIGGER, logTimeSaga),
+  fork(takeLatest, editTime.TRIGGER, editTimeSaga),
+  fork(takeLatest, deleteTime.TRIGGER, deleteTimeSaga),
+  fork(takeLatest, fetchProjectTime.TRIGGER, fetchProjectTimeSaga),
+  fork(takeLatest, fetchTaskTime.TRIGGER, fetchTaskTimeSaga)
 ];

@@ -137,7 +137,7 @@ class Kanban extends React.Component {
                       <TextField
                         name="taskName"
                         label="Add new task"
-                        fullWidth="true"
+                        fullWidth
                         onChange={e =>
                           this.setState({ newTask: e.target.value })
                         }

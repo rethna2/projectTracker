@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import * as yup from 'yup';
 
 export function createValidator(formName, ...props) {
   switch (formName) {
@@ -28,97 +28,95 @@ export function isValidEmail(email) {
 
 function validate(schema) {
   return values => {
-    const result = Joi.validate(values, schema, { abortEarly: false });
-    if (result.error === null) {
-      return {};
+    let error;
+    try {
+      const result = schema.validateSync(values, { abortEarly: true });
+    } catch (e) {
+      console.log('error', e);
+      error = {
+        [e.path]: e.message
+      };
     }
-
-    const errors = result.error.details.reduce((all, cur) => {
-      const allErrors = Object.assign({}, all);
-      const path = cur.path[cur.path.length - 1];
-      const message = cur.message;
-      if (Object.prototype.hasOwnProperty.call(allErrors, path)) {
-        allErrors[path] += message;
-      } else {
-        if (message.indexOf(`"${path}"`) === -1) {
-          allErrors[path] = message.match(/".*"/);
-        } else {
-          allErrors[path] = message;
-        }
-      }
-      return allErrors;
-    }, {});
-
-    return errors;
+    console.log('next');
+    return error;
   };
 }
 
-const registerSchema = {
-  name: Joi.string()
+const registerSchema = yup.object().shape({
+  name: yup
+    .string()
     .min(6)
     .max(30)
     .required(),
-  emailId: Joi.string()
+  emailId: yup
+    .string()
     .email()
     .required(),
-  password: Joi.string().required()
-};
+  password: yup.string().required()
+});
 
-const loginSchema = {
-  emailId: Joi.string()
+const loginSchema = yup.object().shape({
+  emailId: yup
+    .string()
     .email()
     .required(),
-  password: Joi.string().required()
-};
+  password: yup.string().required()
+});
 
-const forgotPasswordSchema = {
-  emailId: Joi.string()
+const forgotPasswordSchema = yup.object().shape({
+  emailId: yup
+    .string()
     .email()
     .required()
-};
+});
 
-const resetPasswordSchema = {
-  password: Joi.string().required()
-};
+const resetPasswordSchema = yup.object().shape({
+  password: yup.string().required()
+});
 
-const projectSchema = {
-  name: Joi.string()
+const projectSchema = yup.object().shape({
+  name: yup
+    .string()
     .min(6)
     .max(30)
     .required(),
-  description: Joi.string(),
-  team: Joi.array()
-    .items(Joi.string())
-    .required()
-};
+  description: yup.string(),
+  team: yup.array().of(yup.string())
+  //.required()
+});
 
-const taskSchema = {
-  name: Joi.string()
+const taskSchema = yup.object().shape({
+  name: yup
+    .string()
     .min(6)
     .max(255)
     .required(),
-  description: Joi.string()
+  description: yup
+    .string()
     .min(6)
     .max(3000),
-  points: Joi.number(),
-  status: Joi.string().valid(['backlog', 'new', 'wip', 'review', 'done']),
-  assignedTo: Joi.string()
-};
-
-const logTimeSchema = (task, initialValues) => ({
-  timeSpent: Joi.number()
-    .min(0)
-    .max(8),
-  pointsDone: Joi.number()
-    .min(0)
-    .max(
-      task.points -
-        task.pointsDone +
-        ((initialValues && initialValues.pointsDone) || 0)
-    )
-    .label('Must be less than total points'),
-  //date: Joi.date(),
-  comments: Joi.string()
-    .min(6)
-    .max(3000)
+  points: yup.number(),
+  status: yup.string().matches(/(backlog|new|wip|review|done)/),
+  assignedTo: yup.string()
 });
+
+const logTimeSchema = (task, initialValues) =>
+  yup.object().shape({
+    timeSpent: yup
+      .number()
+      .min(0)
+      .max(8),
+    pointsDone: yup
+      .number()
+      .min(0)
+      .max(
+        task.points -
+          task.pointsDone +
+          ((initialValues && initialValues.pointsDone) || 0)
+      )
+      .label('Must be less than total points'),
+    comments: yup
+      .string()
+      .min(6)
+      .max(3000)
+  });

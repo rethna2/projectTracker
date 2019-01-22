@@ -26,7 +26,7 @@ class TaskTable extends Component {
       return (
         <Card>
           <Table>
-            <TableHead displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
               <TableRow>
                 <TableCell />
                 <TableCell style={{ width: '100%' }}>Task Name</TableCell>
@@ -39,9 +39,10 @@ class TaskTable extends Component {
                 <TableCell style={{ width: 50 }}>Time Spent</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               {list.map(item => (
                 <TableRow
+                  key={item._id}
                   style={{
                     cursor: 'pointer',
                     backgroundColor:

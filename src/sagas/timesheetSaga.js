@@ -1,5 +1,5 @@
-import { takeEvery, delay } from 'redux-saga';
-import { call, put, fork } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+import { takeLatest, call, put, fork } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import * as api from '../api';
 import {
@@ -85,10 +85,14 @@ function* reviewTimesheetSaga({ payload }) {
 }
 
 export default [
-  fork(takeEvery, fetchMyTimesheets.TRIGGER, fetchMyTimesheetsSaga),
-  fork(takeEvery, fetchMyReviewTimesheets.TRIGGER, fetchMyReviewTimesheetsSaga),
-  fork(takeEvery, generateTimesheet.TRIGGER, generateTimesheetSaga),
-  fork(takeEvery, editTimesheet.TRIGGER, editTimesheetSaga),
-  fork(takeEvery, deleteTimesheet.TRIGGER, deleteTimesheetSaga),
-  fork(takeEvery, reviewTimesheet.TRIGGER, reviewTimesheetSaga)
+  fork(takeLatest, fetchMyTimesheets.TRIGGER, fetchMyTimesheetsSaga),
+  fork(
+    takeLatest,
+    fetchMyReviewTimesheets.TRIGGER,
+    fetchMyReviewTimesheetsSaga
+  ),
+  fork(takeLatest, generateTimesheet.TRIGGER, generateTimesheetSaga),
+  fork(takeLatest, editTimesheet.TRIGGER, editTimesheetSaga),
+  fork(takeLatest, deleteTimesheet.TRIGGER, deleteTimesheetSaga),
+  fork(takeLatest, reviewTimesheet.TRIGGER, reviewTimesheetSaga)
 ];

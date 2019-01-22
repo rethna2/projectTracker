@@ -1,5 +1,5 @@
-import { takeEvery, delay } from 'redux-saga';
-import { call, put, fork } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+import { call, put, fork, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
 import * as api from '../api';
@@ -105,11 +105,11 @@ function* importProjectSaga({ payload }) {
 }
 
 export default [
-  fork(takeEvery, fetchProjects.TRIGGER, fetchProjectsSaga),
-  fork(takeEvery, fetchProjectData.TRIGGER, fetchProjectDataSaga),
-  fork(takeEvery, addProject.TRIGGER, addProjectSaga),
-  fork(takeEvery, editProject.TRIGGER, editProjectSaga),
-  fork(takeEvery, deleteProject.TRIGGER, deleteProjectSaga),
-  fork(takeEvery, exportProject.TRIGGER, exportProjectSaga),
-  fork(takeEvery, importProject.TRIGGER, importProjectSaga)
+  fork(takeLatest, fetchProjects.TRIGGER, fetchProjectsSaga),
+  fork(takeLatest, fetchProjectData.TRIGGER, fetchProjectDataSaga),
+  fork(takeLatest, addProject.TRIGGER, addProjectSaga),
+  fork(takeLatest, editProject.TRIGGER, editProjectSaga),
+  fork(takeLatest, deleteProject.TRIGGER, deleteProjectSaga),
+  fork(takeLatest, exportProject.TRIGGER, exportProjectSaga),
+  fork(takeLatest, importProject.TRIGGER, importProjectSaga)
 ];

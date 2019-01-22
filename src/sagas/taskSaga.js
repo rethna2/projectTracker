@@ -1,5 +1,4 @@
-import { takeLatest, delay } from 'redux-saga';
-import { call, put, fork } from 'redux-saga/effects';
+import { put, fork, takeLatest } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
 import {

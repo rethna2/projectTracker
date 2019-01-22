@@ -226,7 +226,7 @@ class TimeSheetPopup extends Component {
         </DialogTitle>
         <DialogContent>
           <Table style={{ marginTop: 20, backgroundColor: '#ffb' }}>
-            <TableHead displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
               <TableRow>
                 <TableCell style={{ width: 200 }}>Date</TableCell>
                 <TableCell style={{ width: 400 }}>Task</TableCell>
@@ -235,7 +235,7 @@ class TimeSheetPopup extends Component {
                 <TableCell style={{ width: 400 }}>Comments</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               {data.map(item => (
                 <React.Fragment>
                   <TableRow>

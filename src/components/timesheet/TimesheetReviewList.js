@@ -26,7 +26,7 @@ class TimeSheetApprovalList extends Component {
       return (
         <Card style={{ width: 1024, marginLeft: 30 }}>
           <Table>
-            <TableHead displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
               <TableRow>
                 <TableCell style={{ width: 350 }}>Name</TableCell>
                 <TableCell style={{ width: 350 }}>Project Name</TableCell>
@@ -37,10 +37,10 @@ class TimeSheetApprovalList extends Component {
                 <TableCell />
               </TableRow>
             </TableHead>
-            <TableBody displayRowCheckbox={false}>
+            <TableBody>
               {data.map(item => {
                 return (
-                  <TableRow>
+                  <TableRow key={item._id}>
                     <TableCell>{item.people.name}</TableCell>
                     <TableCell>{item.project.name}</TableCell>
                     <TableCell>{`${moment(item.startDate).format(
