@@ -69,7 +69,6 @@ const styles = theme => {
   };
 };
 
-@DragDropContext(HTML5Backend)
 class Kanban extends React.Component {
   constructor(props) {
     super(props);
@@ -157,4 +156,4 @@ class Kanban extends React.Component {
   }
 }
 
-export default withStyles(styles)(Kanban);
+export default withStyles(styles)(DragDropContext(HTML5Backend)(Kanban));

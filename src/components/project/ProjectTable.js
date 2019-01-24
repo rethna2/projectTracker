@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Table,
@@ -13,6 +14,7 @@ import Create from '@material-ui/icons/Create';
 
 class ProjectTable extends Component {
   render() {
+    console.log('props', this.props);
     const { list, selectedProject, onSelect } = this.props;
 
     if (!list.length) {
@@ -78,5 +80,12 @@ class ProjectTable extends Component {
     }
   }
 }
+
+ProjectTable.propTypes = {
+  list: PropTypes.array.isRequired,
+  selectedProject: PropTypes.string,
+  onSelect: PropTypes.func.isRequired,
+  handleOpen: PropTypes.func.isRequired
+};
 
 export default ProjectTable;

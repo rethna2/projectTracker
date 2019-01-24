@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
@@ -142,6 +143,14 @@ class GenerateTimesheetBar extends React.Component {
     );
   }
 }
+
+GenerateTimesheetBar.propTypes = {
+  onGenerate: PropTypes.func.isRequired,
+  emailId: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired,
+  projects: PropTypes.array.isRequired,
+  onCloseBar: PropTypes.func.isRequired
+};
 
 export default connect(state => ({
   projects: state.project.list || [],

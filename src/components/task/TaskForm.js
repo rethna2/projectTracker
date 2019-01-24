@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
@@ -87,7 +88,6 @@ class TaskForm extends Component {
         open={true}
         TransitionComponent={Transition}
         keepMounted
-        maxWidth="900"
         onClose={this.props.handleClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
@@ -169,7 +169,6 @@ class TaskForm extends Component {
                   <Button
                     className={classes.spaceLeft}
                     onClick={() => this.setState({ showConfirmDelete: false })}
-                    color="error"
                     variant="contained"
                   >
                     Cancel
@@ -178,7 +177,6 @@ class TaskForm extends Component {
               ) : (
                 <Button
                   onClick={() => this.setState({ showConfirmDelete: true })}
-                  color="error"
                   variant="contained"
                 >
                   Delete Task
@@ -202,6 +200,19 @@ class TaskForm extends Component {
     );
   }
 }
+
+TaskForm.propTypes = {
+  deleting: PropTypes.bool.isRequired,
+  updating: PropTypes.bool.isRequired,
+  addTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  team: PropTypes.array.isRequired
+};
 
 TaskForm = reduxForm({
   form: 'task',

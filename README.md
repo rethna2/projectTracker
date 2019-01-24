@@ -1,5 +1,11 @@
 # Project Tracker
 
+![Coverage lines](coverage/badge-lines.svg)
+![Coverage functions](coverage/badge-functions.svg)
+![Coverage branches](coverage/badge-branches.svg)
+![Coverage statements](coverage/badge-statements.svg)
+
+
 Project Tracker is a minimalistic project management cum timesheet generation tool for agile teams. This repo contains the FrontEnd code for the app. Please find the API (BackEnd code) [here](https://github.com/rethna2/projectTrackerAPI).
 
 Please checkout the app, hosted at [https://projtrack.netlify.com/](https://projtrack.netlify.com/)

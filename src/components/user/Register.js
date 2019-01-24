@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ErrorOutline } from '@material-ui/icons';
@@ -67,6 +68,14 @@ class RegisterForm extends Component {
     );
   }
 }
+
+RegisterForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  classes: PropTypes.object.isRequired,
+  error: PropTypes.object
+};
 
 RegisterForm = reduxForm({
   form: 'register',

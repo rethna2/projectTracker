@@ -96,6 +96,8 @@ class ProjectForm extends Component {
   };
 
   render() {
+    console.log('render');
+    console.log(this.props);
     const { handleSubmit, classes } = this.props;
     const projectId = this.props.match.params.projectId.toLowerCase();
     return (

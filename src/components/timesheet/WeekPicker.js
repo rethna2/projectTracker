@@ -6,10 +6,6 @@ import { DatePicker } from 'material-ui-pickers';
 import { IconButton, withStyles } from '@material-ui/core';
 
 class CustomElements extends PureComponent {
-  static propTypes = {
-    classes: PropTypes.object.isRequired
-  };
-
   state = {
     selectedDate: new Date()
   };
@@ -74,6 +70,12 @@ class CustomElements extends PureComponent {
     );
   }
 }
+
+CustomElements.propTypes = {
+  classes: PropTypes.object.isRequired,
+  onDateChange: PropTypes.func.isRequired,
+  date: PropTypes.array.isRequired
+};
 
 const styles = theme => ({
   dayWrapper: {

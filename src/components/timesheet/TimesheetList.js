@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
   Table,
@@ -66,5 +67,10 @@ class TimeSheetList extends Component {
     }
   }
 }
+
+TimeSheetList.propTypes = {
+  list: PropTypes.array.isRequired,
+  onEdit: PropTypes.func.isRequired
+};
 
 export default TimeSheetList;

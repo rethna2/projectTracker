@@ -21,14 +21,13 @@ const boxSource = {
   }
 };
 
-@DragSource('kanbanItem', boxSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))
 class KanbanItem extends React.Component {
   render() {
     return this.props.connectDragSource(<div>{this.props.children}</div>);
   }
 }
 
-export default KanbanItem;
+export default DragSource('kanbanItem', boxSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+}))(KanbanItem);

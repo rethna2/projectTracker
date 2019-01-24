@@ -32,12 +32,10 @@ function validate(schema) {
     try {
       const result = schema.validateSync(values, { abortEarly: true });
     } catch (e) {
-      console.log('error', e);
       error = {
         [e.path]: e.message
       };
     }
-    console.log('next');
     return error;
   };
 }

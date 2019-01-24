@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
@@ -216,8 +217,7 @@ class TimeSheetPopup extends Component {
         open={true}
         TransitionComponent={Transition}
         keepMounted
-        maxWidth="900"
-        onClose={this.props.handleClose}
+        onClose={this.props.onClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
@@ -351,6 +351,20 @@ class TimeSheetPopup extends Component {
     );
   }
 }
+
+TimeSheetPopup.propTypes = {
+  timesheetData: PropTypes.object.isRequired,
+  fetchProjectTime: PropTypes.func.isRequired,
+  editTimesheet: PropTypes.func.isRequired,
+  generateTimesheet: PropTypes.func.isRequired,
+  deleteTimesheet: PropTypes.func.isRequired,
+  reviewTimesheet: PropTypes.func.isRequired,
+  projects: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired,
+  isReviewer: PropTypes.bool.isRequired,
+  updating: PropTypes.bool.isRequired
+};
 
 export default connect(
   state => ({

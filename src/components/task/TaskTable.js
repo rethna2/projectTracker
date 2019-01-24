@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import {
@@ -75,5 +76,13 @@ class TaskTable extends Component {
     }
   }
 }
+
+TaskTable.propTypes = {
+  list: PropTypes.array.isRequired,
+  selectedTask: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  projectId: PropTypes.string.isRequired,
+  handleOpen: PropTypes.func.isRequired
+};
 
 export default TaskTable;

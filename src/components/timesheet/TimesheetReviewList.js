@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Table,
@@ -66,5 +67,10 @@ class TimeSheetApprovalList extends Component {
     }
   }
 }
+
+TimeSheetApprovalList.propTypes = {
+  list: PropTypes.array.isRequired,
+  onView: PropTypes.func.isRequired
+};
 
 export default TimeSheetApprovalList;

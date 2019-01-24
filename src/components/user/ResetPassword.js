@@ -33,13 +33,18 @@ class ResetPasswordForm extends Component {
             <ErrorOutline /> {error}
           </Typography>
         )}
-        <Field name="password" component={TextField} label="New Password" />
+        <Field
+          name="password"
+          type="password"
+          component={TextField}
+          label="New Password"
+        />
         <div style={{ marginTop: 20 }}>
           <Button
             type="submit"
             variant="contained"
             disabled={pristine || submitting}
-            primary={true}
+            color="primary"
           >
             Update Password
           </Button>

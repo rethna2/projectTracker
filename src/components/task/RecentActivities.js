@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
   Typography,
@@ -70,5 +71,10 @@ class RecentActivities extends Component {
     );
   }
 }
+
+RecentActivities.PropTypes = {
+  recentActivities: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired
+};
 
 export default withStyles(styles)(RecentActivities);

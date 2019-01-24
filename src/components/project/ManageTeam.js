@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { AddCircle, RemoveCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -86,5 +87,12 @@ class ManageTeam extends React.Component {
     );
   }
 }
+
+ManageTeam.propTypes = {
+  people: PropTypes.array.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired
+};
 
 export default withStyles(styles)(ManageTeam);
