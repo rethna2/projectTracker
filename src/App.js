@@ -22,7 +22,7 @@ const muiTheme = createMuiTheme({
       main: '#0d3756'
     },
     secondary: {
-      main: '#89d9ff'
+      main: '#2496ea'
     },
     error: red
   },
@@ -33,11 +33,14 @@ const muiTheme = createMuiTheme({
     MuiTableCell: {
       root: {
         padding: '5px 10px'
+      },
+      head: {
+        color: 'white'
       }
     },
     MuiTableHead: {
       root: {
-        backgroundColor: '#89d9ff'
+        backgroundColor: '#2496ea'
       }
     },
     flex: {

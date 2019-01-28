@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { Link, Route, withRouter } from 'react-router-dom';
@@ -11,7 +12,6 @@ import { importProject } from '../routines';
 import { Grid, Divider, Typography } from '@material-ui/core';
 import ProjectNotification from '../components/project/ProjectNotification';
 import TitleBar from '../components/general/TitleBar';
-
 
 class Projects extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class Projects extends Component {
       <div className="page" style={{ margin: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={6}>
-          <TitleBar label="My Projects">
+            <TitleBar label="My Projects">
               <input
                 type="file"
                 ref={this.fileInputRef}
@@ -114,6 +114,13 @@ class Projects extends Component {
     );
   }
 }
+
+Projects.propTypes = {
+  list: PropTypes.array,
+  loadingList: PropTypes.bool.isRequired,
+  history: PropTypes.object.isRequired,
+  importProject: PropTypes.func.isRequired
+};
 
 export default connect(
   state => ({

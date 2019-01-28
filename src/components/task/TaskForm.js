@@ -88,6 +88,7 @@ class TaskForm extends Component {
         open={true}
         TransitionComponent={Transition}
         keepMounted
+        maxWidth="lg"
         onClose={this.props.handleClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
@@ -110,14 +111,14 @@ class TaskForm extends Component {
                   />
                 </div>
                 <div className={classes.spacetop}>
-                  <Field
-                    name="description"
-                    component={TextField}
-                    label="Task Description"
-                    multiline
-                    fullWidth
-                    rows={5}
-                  />
+                  <FormControl style={{ width: 200 }}>
+                    <InputLabel htmlFor="assignedTo">Assigned To</InputLabel>
+                    <Field name="assignedTo" component={Select}>
+                      {this.props.team.map(item => (
+                        <MenuItem value={item}>{item}</MenuItem>
+                      ))}
+                    </Field>
+                  </FormControl>
                 </div>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -140,18 +141,18 @@ class TaskForm extends Component {
                     label="Tasks points"
                   />
                 </div>
-                <div className={classes.spacetop}>
-                  <FormControl style={{ width: 200 }}>
-                    <InputLabel htmlFor="assignedTo">Assigned To</InputLabel>
-                    <Field name="assignedTo" component={Select}>
-                      {this.props.team.map(item => (
-                        <MenuItem value={item}>{item}</MenuItem>
-                      ))}
-                    </Field>
-                  </FormControl>
-                </div>
               </Grid>
             </Grid>
+            <div className={classes.spacetop}>
+              <Field
+                name="description"
+                component={TextField}
+                label="Task Description"
+                multiline
+                fullWidth
+                rows={5}
+              />
+            </div>
           </DialogContent>
           <DialogActions>
             {taskId !== 'new' &&
@@ -221,28 +222,14 @@ TaskForm = reduxForm({
 
 export default withRouter(
   connect(
-    (state, props) => {
-      const project =
-        state.project.list &&
-        state.project.list.find(
-          project => project._id === props.match.params.projectId
-        );
-      let team;
-      if (project) {
-        team = project.team;
-      } else {
-        team = [];
-      }
-      return {
-        userData: state.user.userData,
-        updating: state.task.updating,
-        deleting: state.task.deleting,
-        initialValues:
-          state.task.list &&
-          state.task.list.find(task => task._id === props.match.params.taskId),
-        team
-      };
-    },
+    (state, props) => ({
+      userData: state.user.userData,
+      updating: state.task.updating,
+      deleting: state.task.deleting,
+      initialValues:
+        state.task.list &&
+        state.task.list.find(task => task._id === props.match.params.taskId)
+    }),
     { addTask, editTask, deleteTask }
   )(withStyles(styles)(TaskForm))
 );

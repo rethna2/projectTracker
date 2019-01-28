@@ -109,7 +109,8 @@
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
-      "react-app-polyfill/jsdom"
+      "react-app-polyfill/jsdom",
+      "jest-dom/extend-expect"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Typography, Card, withStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -32,7 +33,6 @@ const tasks = [
 ];
 
 const styles = theme => {
-  console.log('theme', theme);
   return {
     flex: {
       display: 'flex',
@@ -89,7 +89,6 @@ class Kanban extends React.Component {
   };
 
   onNewTask = e => {
-    console.log('e.charCode', e.charCode, e);
     if (e.charCode === 13) {
       const newTasks = update(this.state.tasks, {
         $push: [
@@ -114,14 +113,18 @@ class Kanban extends React.Component {
         </Typography>
         <div className={classes.flex}>
           {channels.map(channel => (
-            <KanbanColumn status={channel}>
+            <KanbanColumn key={channel} status={channel}>
               <section className={classes.column}>
                 <div className={classes.columnHead}>{labelsMap[channel]}</div>
                 <div>
                   {tasks
                     .filter(item => item.status === channel)
                     .map(item => (
-                      <KanbanItem id={item._id} onDrop={this.update}>
+                      <KanbanItem
+                        key={item._id}
+                        id={item._id}
+                        onDrop={this.update}
+                      >
                         <Card className={classes.item}>{item.title}</Card>
                       </KanbanItem>
                     ))}
@@ -155,5 +158,9 @@ class Kanban extends React.Component {
     );
   }
 }
+
+Kanban.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
 export default withStyles(styles)(DragDropContext(HTML5Backend)(Kanban));

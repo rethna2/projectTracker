@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-
+import tickIcon from '../../img/tick.svg';
 const styles = theme => {
   return {
     wrapper: {
@@ -28,43 +28,52 @@ const styles = theme => {
     },
     introTxt: {
       textAlign: 'center',
-      marginTop: 100,
-      transform: 'rotate(-10deg)'
+      display: 'inline-block',
+      marginTop: 60,
+      transform: 'rotate(-10deg)',
+      padding: 20,
+      backgroundColor: '#2496ea',
+      borderRadius: 4,
+      color: 'white',
+      boxShadow: '#666666a3 2px 2px 2px 2px'
     },
     features: {
-      marginTop: 70,
+      marginTop: 50,
+      display: 'inline-block',
+      margin: 5,
+      textAlign: 'left',
+      backgroundColor: 'white',
+      boxShadow: '#bbbbbb 2px 2px 2px 2px',
+      borderRadius: 4,
+
       '& h6': {
-        textDecoration: 'underline'
+        color: 'white',
+        backgroundColor: theme.palette.primary.main,
+        padding: '5px 10px'
+      },
+      '& ul': {
+        padding: '0 40px'
+      },
+      '& li': {
+        listStyleImage: `url(${tickIcon})`,
+        marginBottom: 8,
+        borderBottom: '1px solid #ddd'
       }
     }
   };
 };
 
 const LandingBlock = ({ classes }) => (
-  <div>
-    <AppBar position="static" className={classes.wrapper}>
-      <Toolbar>
-        <Typography
-          className={classes.grow}
-          variant="h5"
-          color="inherit"
-          noWrap
-        >
-          Project Tracker
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    <Grid container spacing={40} justify="center">
-      <Grid item xs={12} md={6}>
-        <Typography variant="h4" className={classes.introTxt}>
-          A simple, straight forward
-          <br />
-          App for managing <br />
-          agile projects, <br />
-          team and time.
-        </Typography>
-      </Grid>
-      <Grid item xs={12} md={4} className={classes.features}>
+  <div style={{ textAlign: 'center', marginRight: 40 }}>
+    <Typography variant="h4" className={classes.introTxt}>
+      A simple, straight forward
+      <br />
+      App for managing <br />
+      agile projects, <br />
+      team and time.
+    </Typography>
+    <div>
+      <section className={classes.features}>
         <Typography variant="h6">Features </Typography>
         <ul className="feature">
           <li>Manage Projects and Tasks</li>
@@ -75,8 +84,8 @@ const LandingBlock = ({ classes }) => (
           <li>Rich Text Documentation</li>
           <li>Export/Import projects</li>
         </ul>
-      </Grid>
-    </Grid>
+      </section>
+    </div>
   </div>
 );
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { Route, Switch } from 'react-router-dom';
@@ -40,6 +41,10 @@ class RootComponent extends Component {
     );
   }
 }
+
+RootComponent.propTypes = {
+  fetchProjects: PropTypes.func.isRequired
+};
 
 export default connect(
   state => ({}),

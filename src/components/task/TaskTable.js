@@ -12,9 +12,11 @@ import {
 } from '@material-ui/core';
 import Create from '@material-ui/icons/Create';
 
+import { filterTasks } from '../../logic/transforms';
+
 class TaskTable extends Component {
   render() {
-    const { list } = this.props;
+    const { list, filters } = this.props;
     if (!list.length) {
       return (
         <div>
@@ -41,14 +43,14 @@ class TaskTable extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {list.map(item => (
+              {filterTasks(list, filters).map(item => (
                 <TableRow
                   key={item._id}
                   style={{
                     cursor: 'pointer',
                     backgroundColor:
                       selectedTask && selectedTask._id === item._id
-                        ? 'yellow'
+                        ? '#aad7fb'
                         : ''
                   }}
                   onClick={() => onSelect(item)}

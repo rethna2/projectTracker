@@ -2,11 +2,6 @@ body {
   font-family: Arial, 'Helvetica Neue', sans-serif;
 }
 
-.feature li {
-  list-style-image: url(img/tick.svg);
-  margin-bottom: 5px;
-}
-
 .spaceLeft20 {
   margin-left: 20px;
 }

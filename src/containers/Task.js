@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { Button, Grid, Typography } from '@material-ui/core';
@@ -7,6 +8,7 @@ import { fetchTasks } from '../routines';
 import Loader from '../components/Loader';
 import TaskTable from '../components/task/TaskTable';
 import TaskForm from '../components/task/TaskForm';
+import FilterBar from '../components/task/FilterBar';
 import TaskDetails from './TaskDetails';
 
 import TitleBar from '../components/general/TitleBar';
@@ -17,7 +19,11 @@ class Tasks extends Component {
     this.state = {
       isPopupOpen: false,
       index: -1,
-      selectedTask: null
+      selectedTask: null,
+      filters: {
+        status: '',
+        assignedTo: ''
+      }
     };
   }
 
@@ -35,8 +41,18 @@ class Tasks extends Component {
     );
   };
 
+  handleFilterChange = (name, value) => {
+    this.setState({
+      filters: {
+        ...this.state.filters,
+        [name]: value
+      }
+    });
+  };
+
   render() {
-    const { list, loadingList } = this.props;
+    const { list, loadingList, team } = this.props;
+    const { filters } = this.state;
 
     if (!list || loadingList) {
       return <Loader />;
@@ -58,18 +74,12 @@ class Tasks extends Component {
                 </Button>
               </Link>
             </TitleBar>
+            <FilterBar
+              filters={filters}
+              onChange={this.handleFilterChange}
+              team={team}
+            />
             <div className="section-sides">
-              <Route
-                path="/project/:projectId/task/:taskId"
-                exact
-                render={() => (
-                  <TaskForm
-                    handleClose={this.handleClose}
-                    data={index === -1 ? {} : list[index]}
-                    taskFormSubmit={this.taskFormSubmit}
-                  />
-                )}
-              />
               <div className="table">
                 <TaskTable
                   list={list}
@@ -77,6 +87,7 @@ class Tasks extends Component {
                   onSelect={selectedTask => this.setState({ selectedTask })}
                   handleOpen={this.handleOpen}
                   projectId={projectId}
+                  filters={filters}
                 />
               </div>
             </div>
@@ -87,15 +98,49 @@ class Tasks extends Component {
             )}
           </Grid>
         </Grid>
+        <Route
+          path="/project/:projectId/task/:taskId"
+          exact
+          render={() => (
+            <TaskForm
+              handleClose={this.handleClose}
+              data={index === -1 ? {} : list[index]}
+              taskFormSubmit={this.taskFormSubmit}
+              team={team}
+            />
+          )}
+        />
       </div>
     );
   }
 }
 
+Tasks.propTypes = {
+  fetchTasks: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  list: PropTypes.array.isRequired,
+  loadingList: PropTypes.bool.isRequired
+};
+
 export default connect(
-  state => ({
-    list: state.task.list,
-    loadingList: state.task.loadingList
-  }),
+  (state, props) => {
+    const project =
+      state.project.list &&
+      state.project.list.find(
+        project => project._id === props.match.params.projectId
+      );
+    let team;
+    if (project) {
+      team = project.team;
+    } else {
+      team = [];
+    }
+    return {
+      list: state.task.list,
+      loadingList: state.task.loadingList,
+      team
+    };
+  },
   { fetchTasks }
 )(withRouter(Tasks));

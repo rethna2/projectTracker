@@ -13,10 +13,18 @@ import {
   Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import logo from '../img/logoWhite.svg';
 import { AccountCircle, Notifications } from '@material-ui/icons';
 
 const styles = theme => {
   return {
+    logo: {
+      background: `url(${logo})`,
+      backgroundSize: 'cover',
+      width: 40,
+      height: 40,
+      marginRight: 20
+    },
     wrapper: {
       backgroundColor: theme.palette.primary.main
     },
@@ -73,6 +81,7 @@ class MyAppBar extends Component {
       <div>
         <AppBar position="static" className={classes.wrapper}>
           <Toolbar>
+            <div className={classes.logo} />
             <Typography
               className={classes.grow}
               variant="h5"

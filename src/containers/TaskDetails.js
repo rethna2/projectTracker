@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Typography, Card } from '@material-ui/core';
 import { fetchTaskData, fetchTaskTime } from '../routines';
@@ -93,6 +94,17 @@ class TaskDetails extends Component {
     );
   }
 }
+
+TaskDetails.propTypes = {
+  task: PropTypes.object.isRequired,
+  fetchTaskData: PropTypes.func.isRequired,
+  fetchTaskTime: PropTypes.func.isRequired,
+  updating: PropTypes.bool.isRequired,
+  recentActivities: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  timeList: PropTypes.array.isRequired,
+  projectId: PropTypes.string.isRequired
+};
 
 export default connect(
   state => ({
