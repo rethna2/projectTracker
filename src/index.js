@@ -6,6 +6,8 @@ import store from './store';
 
 import registerServiceWorker from './registerServiceWorker';
 import './style.css';
+import './draft.css';
+
 const rootEl = document.getElementById('root');
 
 ReactDOM.render(

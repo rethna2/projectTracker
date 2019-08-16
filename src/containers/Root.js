@@ -13,11 +13,12 @@ import Timesheet from './Timesheet';
 import Kanban from './Kanban';
 
 import { fetchProjects } from '../routines';
+import Notes from './Notes';
 
 class RootComponent extends Component {
   constructor(props) {
     super(props);
-    props.fetchProjects();
+    //props.fetchProjects();
   }
 
   render() {
@@ -31,6 +32,7 @@ class RootComponent extends Component {
             <Route path="/project" component={Project} />
             <Route path="/timesheet" component={Timesheet} />
             <Route path="/kanban" component={Kanban} />
+            <Route path="/notes" component={Notes} />
             <Route
               path="/"
               render={() => <div style={{ margin: 50 }}>Page Not Found </div>}

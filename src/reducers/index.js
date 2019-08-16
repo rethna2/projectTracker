@@ -7,6 +7,7 @@ import task from './task';
 import time from './time';
 import user from './user';
 import timesheet from './timesheet';
+import message from './message';
 
 export default history =>
   combineReducers({
@@ -16,5 +17,6 @@ export default history =>
     task,
     time,
     timesheet,
+    message,
     form: formReducer
   });

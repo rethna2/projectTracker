@@ -9,6 +9,8 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import RootContainer from './containers/Root';
 
 import HomePage from './containers/HomePage';
+import Notes from './containers/Notes';
+
 import { userInfo } from './routines';
 import Loader from './components/Loader';
 import { red } from '@material-ui/core/colors';
@@ -54,13 +56,13 @@ class App extends Component {
     super(props);
     this.token = window.localStorage.getItem('token');
     if (this.token) {
-      props.userInfo();
+      //props.userInfo();
     }
   }
 
   render() {
     const { userId, loading } = this.props;
-    if (this.token && loading) {
+    if (false && this.token && loading) {
       return <Loader />;
     }
 
@@ -69,7 +71,8 @@ class App extends Component {
         <MuiThemeProvider theme={muiTheme}>
           <ConnectedRouter history={history}>
             <div>
-              <Route path="/" component={HomePage} />
+              <Route path="/notes" component={Notes} />
+              {/*<Route path="/" component={HomePage} />*/}
             </div>
           </ConnectedRouter>
         </MuiThemeProvider>
